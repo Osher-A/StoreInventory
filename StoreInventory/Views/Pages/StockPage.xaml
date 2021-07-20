@@ -1,0 +1,234 @@
+﻿<Page x:Class="StoreInventory.Views.Pages.StockPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:local="clr-namespace:StoreInventory.Views.Pages"
+      xmlns:viewModel="clr-namespace:StoreInventory.ViewModel"
+      xmlns:enums="clr-namespace:StoreInventory.Enums"
+      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+      xmlns:converters="clr-namespace:StoreInventory.Views.Converters"
+      d:DataContext="{d:DesignInstance Type=viewModel:StockViewModel}"
+      mc:Ignorable="d" 
+      d:DesignHeight="1000" d:DesignWidth="885"
+      Title="Stock Page"
+      Height="Auto"
+      VerticalAlignment="Top"
+      >
+    <Page.Resources>
+
+        <ResourceDictionary>
+            <viewModel:StockViewModel  x:Key="vm"/>
+            <converters:DefaultIntConverter x:Key="intConv"/>
+            <converters:DefaultUnitTypeMultiConverter x:Key="unitTypeConv"/>
+            <ObjectDataProvider x:Key="UnitType" ObjectType="{x:Type sys:Enum}" MethodName="GetNames" >
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="enums:UnitType" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+        </ResourceDictionary>
+
+    </Page.Resources>
+    <ScrollViewer  VerticalScrollBarVisibility="Auto" Style="{StaticResource MahApps.Styles.ScrollViewer}" >
+        <GroupBox  BorderThickness="5" Header="Stock Manager" Style="{StaticResource MahApps.Styles.GroupBox}" >
+            <Viewbox Height="{Binding RelativeSource={RelativeSource 
+            FindAncestor,
+            AncestorType=controls:MetroWindow},
+            Path=ActualHeight}"
+            Width="{Binding RelativeSource={RelativeSource 
+            FindAncestor,
+            AncestorType=controls:MetroWindow},
+            Path=ActualWidth}" 
+            Stretch="Uniform">
+                <Grid Background="{DynamicResource MahApps.Brushes.Accent4}" DataContext="{StaticResource vm}" diag:PresentationTraceSources.TraceLevel="High">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="20"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="1"
+                    Content="_Id: "
+                       Target="{Binding ElementName=IdTextBox}"
+                    Grid.Column="4"
+                   />
+                    <TextBox Name="IdTextBox"
+                    Grid.Row="1" 
+                    Grid.Column="5"
+                     controls:ControlsHelper.IsReadOnly="True"       
+                    Text="{Binding SelectedStock.Product.Id, Mode=OneWay, Converter={StaticResource intConv}}"
+                       />
+
+                    <Label Grid.Row="2"
+                    Grid.Column="1"
+                    Content="_Name:"
+                       Target="{Binding ElementName=NameTextBox}"/>
+                    <TextBox Name="NameTextBox"
+                    Grid.Row="2"
+                    Grid.Column="2"
+                     Text="{Binding SelectedStock.Product.Name, Mode=TwoWay}"  />
+
+                    <Label Grid.Row="3"
+                    Grid.Column="1"
+                    VerticalAlignment="Top"
+                    Margin="{StaticResource ControlMargin}"
+                    Content="_Description:"
+                       Target="{Binding ElementName=DescriptionTextBox}"/>
+                    <TextBox Name="DescriptionTextBox"
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            Grid.RowSpan="2"
+                    VerticalAlignment="Center" 
+                    VerticalContentAlignment="Top"
+                    SpellCheck.IsEnabled="True"
+                    Height="60"
+                    Text="{Binding SelectedStock.Product.Description,Mode=TwoWay}"/>
+
+                    <Image Grid.Row="2"
+                           Grid.RowSpan="3"
+                           Grid.Column="5"
+                           Height="100"
+                           Stretch="Uniform"
+                           Source="{Binding SelectedStock.Product.Image}">
+
+                    </Image>
+                    <TextBlock Grid.Row="5"
+                               Grid.Column="5"
+                               Text="Select a photo to upload"
+                               TextDecorations="Underline"
+                               HorizontalAlignment="Center"
+                               >
+                        <TextBlock.Resources>
+                            <Style TargetType="TextBlock" >
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.SystemControlHyperlinkText}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Resources>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown" >
+                                <i:InvokeCommandAction Command="{Binding ImageCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBlock>
+                    <Label Grid.Row="2"
+                    Grid.Column="7"
+                    Content="_Category:"
+                      Target="{Binding ElementName=CategoryComboBox}"     />
+                    <ComboBox Name="CategoryComboBox"
+                    Grid.Row="2"
+                    Grid.Column="8"
+                    ItemsSource="{Binding Categories}" 
+                      Text="{Binding SelectedStock.Product.Category.Name, Mode=TwoWay}">
+                    </ComboBox>
+
+                    <Label Grid.Row="3"
+                    Grid.Column="7"
+                    Content="_Quantity:"
+                       Target="{Binding ElementName=QuantityTextBox}"
+                   />
+                    <TextBox Name="QuantityTextBox"
+                    Grid.Row="3"
+                    Grid.Column="8"
+                    Width="50"
+                    Text="{Binding SelectedStock.QuantityInStock, Mode=TwoWay, Converter={StaticResource intConv}}"/>
+
+                    <ComboBox Grid.Row="3"
+                    Grid.Column="8"
+                    Width="90"
+                    HorizontalAlignment="Right"
+                    controls:TextBoxHelper.Watermark="Unit Type"
+                          ItemsSource="{Binding Source={StaticResource UnitType}}">
+                        <ComboBox.Text>
+                            <MultiBinding Converter="{StaticResource unitTypeConv}">
+                                <Binding Path="SelectedStock.Product.UnitType" />
+                                <Binding ElementName="QuantityTextBox" Path="Text"/>
+                            </MultiBinding>
+                        </ComboBox.Text>
+                    </ComboBox>
+                    <Label Grid.Row="4"
+                    Grid.Column="7"
+                    Content="_Price:"
+                       Target="{Binding ElementName=PriceTextBox}"
+                    Margin="{StaticResource ControlMargin}"
+                       />
+                    <TextBox Name="PriceTextBox"
+                    Grid.Row="4"
+                    Grid.Column="8"
+                    Width="50"
+                         Text="{Binding SelectedStock.Product.Price, Mode=TwoWay, StringFormat={} {0:C}, ConverterCulture=en-GB, Converter={StaticResource intConv}}"/>
+
+                    <StackPanel Orientation="Horizontal"
+                    Grid.Row="7"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="8">
+                        <Button 
+                        Content="_Save"/>
+                        <Button
+                        Content="_Update"/>
+                        <Button 
+                        Content="_Delete"/>
+                        <Button 
+                        Content="_New"
+                        Command="{Binding newProductToStockCommand }"/>
+                        <Button 
+                        Content="_Close"
+                        Margin="0,5"/>
+                    </StackPanel>
+
+                    <TextBox Grid.Row="8"
+                    Grid.Column="8"
+                    Margin="0,20,0,10"     
+                    Style="{StaticResource SearchTextBox}"
+                    controls:TextBoxHelper.Watermark="Search ..."/>
+
+                    <DataGrid x:Name="DataGrid"
+                        DataContext="{StaticResource vm}"
+                        Width="700"
+                        MinHeight="500"
+                      Grid.Row="9"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="8"
+                        ItemsSource="{Binding GetStocks}"
+                        SelectedItem="{Binding SelectedStock}"      
+                               AutoGenerateColumns="False"
+                        RowHeight="40">
+                        <!--SelectedValue="{Binding SelectedProduct, Mode=OneWayToSource}"
+                              SelectedValuePath="Product"-->
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Product.Id}" Width="*"/>
+                            <DataGridTextColumn Header="Category" Binding="{Binding Product.Category.Name}" Width="*"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Product.Name}" Width="*" />
+                            <DataGridTextColumn Header="Description" Binding="{Binding Product.Description}" Width="2*"/>
+                            <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, ConverterCulture=en-GB, StringFormat=' \{0:C\}'}" Width="*"/>
+                            <DataGridTextColumn Header="Quantity In Stock" Binding="{Binding QuantityInStock}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Viewbox>
+        </GroupBox>
+    </ScrollViewer>
+</Page>
