@@ -1,6 +1,7 @@
 ﻿using MyLibrary.Extentions;
 using MyLibrary.Utilities;
 using StoreInventory.DAL;
+using StoreInventory.DAL.Interfaces;
 using StoreInventory.DTO;
 using System;
 using System.Collections.Generic;
@@ -12,36 +13,33 @@ namespace StoreInventory.Services
 {
     public class StockService
     {
-        private CategoryRepository _categoryRepos = new CategoryRepository();
-        
+        private ICategoryRepository _categoryRepos;
+        private IStockRepository _stockRepository;
+
+        public StockService(IStockRepository stockRepository, ICategoryRepository categoryRepository)
+        {
+            _stockRepository = stockRepository;
+            _categoryRepos = categoryRepository;
+        }
+
         public ObservableCollection<DTO.Stock> GetStocks()
         {
-            var stockRepository = new StockRepository();
-            var modelStocks = stockRepository.GetStocks();
-           return ConvertToDtoStock(modelStocks).OrderBy(s => s.Product.Name).ToObservableCollection();
+           var modelStocks = _stockRepository.GetStocks();
+           return ConvertToDtoStock(modelStocks).OrderBy(s => s.Product.Category.Name).ToObservableCollection();
         }
 
         public ObservableCollection<DTO.Category> GetCategories()
         {
             return Categories().ToObservableCollection();
         }
+
         private IEnumerable<DTO.Stock> ConvertToDtoStock(List<Model.Stock> modelStocks)
         {
             foreach (var stock in modelStocks)
             {
-                var dtoStock = new DTO.Stock();
-                var dtoProduct = MyMapper.Mapper(stock.Product, new DTO.Product ());
-                dtoStock.Product = dtoProduct;
-                dtoStock.Product.Category = GetCategory(stock.Product.CategoryId);
-                dtoStock.QuantityInStock = stock.QuantityInStock;
+                var dtoStock = (DTO.Stock)stock;
                 yield return dtoStock;
             }
-        }
-
-        private DTO.Category GetCategory(int categoryId)
-        {
-            DTO.Category dtoCategory = (DTO.Category)_categoryRepos.GetCategory(categoryId);
-            return dtoCategory;
         }
         private IEnumerable<DTO.Category> Categories()
         {

@@ -7,18 +7,13 @@ using System.IO;
 using System.Text;
 using System.Windows.Media.Imaging;
 using System.Windows;
+using System.Windows.Controls;
 
 
 namespace StoreInventory.Services
 {
     public class ImageService
     {
-        public BitmapImage ByteArrayToBitmapImage(byte[] byteArray)
-        {
-            var converter = new ImageConverter();
-            BitmapImage image = (BitmapImage)converter.ConvertTo(byteArray, typeof(BitmapImage));
-            return image;
-        }
         public byte[] GetUsersImage()
         {
             byte[] byteImage; 

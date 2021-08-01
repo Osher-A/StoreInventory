@@ -7,7 +7,7 @@ using System.Text;
 
 namespace StoreInventory.DTO 
 {
-    public class Product: IMapper, INotifyPropertyChanged
+    public class Product: INotifyPropertyChanged
     {
         private int _id;
 
@@ -116,12 +116,25 @@ namespace StoreInventory.DTO
         {
             DTO.Product dtoProduct = new DTO.Product();
             dtoProduct.Id = product.Id;
-            dtoProduct.Category = new Category { Name = product.Category.Name };
+            dtoProduct.Category = (DTO.Category)product.Category;
             dtoProduct.Name = product.Name;
             dtoProduct.Description = product.Description;
             dtoProduct.Price = product.Price;
+            dtoProduct.Image = product.Image;
 
             return dtoProduct;
+        }
+
+        public static explicit operator Model.Product(DTO.Product product)
+        {
+            Model.Product modelProduct = new Model.Product();
+
+            modelProduct.Name = product.Name;
+            modelProduct.Description = product.Description;
+            modelProduct.Price = product.Price;
+            modelProduct.Image = product.Image;
+
+            return modelProduct;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

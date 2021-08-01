@@ -8,19 +8,19 @@ using StoreInventory;
 using StoreInventory.Services;
 using StoreInventory.DTO;
 
-namespace Unit_Tests.ServicesTests
+namespace UnitTests.ServicesTests
 {
     [TestFixture]
-    public class ProductSearchServiceTests
+    public class ProductServiceTests
     {
         private Mock<IProductRepository> _mockRepository;
-        private ProductService _productSearchService;
+        private ProductService _productService;
         [SetUp]
         public void SetUp()
         {
             _mockRepository = new Mock<IProductRepository>();
             _mockRepository.Setup(mr => mr.GetProducts()).Returns(ModelProducts());
-            _productSearchService = new ProductService(_mockRepository.Object);
+            _productService = new ProductService(_mockRepository.Object);
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace Unit_Tests.ServicesTests
             //Arrange
 
             //Act
-           var dtoProducts = _productSearchService.AllProducts;
+           var dtoProducts = _productService.AllProducts;
 
             // Assert
             Assert.That(dtoProducts, Is.TypeOf<List<StoreInventory.DTO.Product>>());
@@ -40,51 +40,47 @@ namespace Unit_Tests.ServicesTests
         public void ValidProductToAdd_IfNewPropertyIsValid_ReturnTrue()
         {
             // Arrange
-            var newProduct = new StoreInventory.DTO.Stock()
-            {
-                Product = new StoreInventory.DTO.Product
-                {
-                    Id = 1,
-                    Category = new StoreInventory.DTO.Category { Name = "Food" },
-                    Name = "Danish",
-                    Description = "Yummy Danish",
-                    Price = 1.50f
-                },
-                QuantityInStock = 8
-            } ;
 
+            var newProduct = new StoreInventory.DTO.Product
+            {
+                Id = 1,
+                Category = new StoreInventory.DTO.Category { Name = "Food" },
+                Name = "Danish",
+                Description = "Yummy Danish",
+                Price = 1.50f
+            };
+             
             // Act
-           var isValid = _productSearchService.ValidProductToAdd(newProduct);
+            _productService.AddNewProduct(newProduct);
 
             //Assert
-            Assert.That(isValid == true);
+            _mockRepository.Verify(mr => mr.AddingProduct(It.IsAny<Product>()));
         }
         [Test]
-        [TestCase(0, "", "Bun", "Yummy Bun", 1.05f, 3) ]
-        [TestCase(0, "Home", "", "Large Clock", 12.05f, 2)]
-        [TestCase(0, "Food", "Coke", "", 1.50f, 5)]
-        [TestCase(0, "Home", "Bin", "Large Bin", 0, 1)]
-        [TestCase(0, "Food", "Cheese", "Hard Cheese", 1.05f, 0)]
+        [TestCase(0, "", "Bun", "Yummy Bun", 1.05f) ]
+        [TestCase(0, "Home", "", "Large Clock", 12.05f)]
+        [TestCase(0, "Food", "Coke", "", 1.50f)]
+        [TestCase(0, "Home", "Bin", "Large Bin", 0)]
 
         public void ValidProductToAdd_IfNewPropertyHasNotBeenFullySet_ReturnFalse
-            (int id,string categoryName, string name, string description, float price, int quantity)
+            (int id,string categoryName, string name, string description, float price)
         {
             // Arrange
-            var newStock = new StoreInventory.DTO.Stock()
-            { Product = new StoreInventory.DTO.Product
+            var newProduct = new StoreInventory.DTO.Product
             {
                 Id = id,
                 Name = name,
                 Description = description,
                 Price = price,
                 Category = new StoreInventory.DTO.Category { Name = categoryName }
-            }, QuantityInStock = quantity };
+            };
 
             // Act
-            var isValid = _productSearchService.ValidProductToAdd(newStock);
+            _productService.AddNewProduct(newProduct);
 
             //Assert
-            Assert.That(isValid == false);
+            _mockRepository.Verify(mr => mr.AddingProduct(It.IsAny<Product>()), Times.Never());
+
         }
 
         [Test]
@@ -101,7 +97,7 @@ namespace Unit_Tests.ServicesTests
             };
 
             //Act
-            var productExists = _productSearchService.ExistingProduct(existingProduct);
+            var productExists = _productService.ExistingProduct(existingProduct);
 
             //Assert
             Assert.That(productExists, Is.True);
@@ -121,7 +117,7 @@ namespace Unit_Tests.ServicesTests
             };
 
             //Act
-           var productExists = _productSearchService.ExistingProduct(newProduct);
+           var productExists = _productService.ExistingProduct(newProduct);
 
             //Assert
             Assert.That(productExists == false);

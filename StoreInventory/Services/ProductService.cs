@@ -9,14 +9,16 @@ using System.Linq;
 using System.Text;
 using MahApps.Metro;
 using StoreInventory.DAL.Interfaces;
+using System.Threading.Tasks;
 
 namespace StoreInventory.Services
 {
     public class ProductService
     {
         private IProductRepository _productRepository;
-        public static Action<string> MessageBoxEvent;
-
+        public Action<string, string> OkMessageBoxEvent;
+        public Action<string, string> OkAndCancelMessageBoxEvent;
+        public static bool UsersConfirmation { get; set; }
         public List<DTO.Product> AllProducts { get; private set; }
        
         public ProductService() { }
@@ -26,18 +28,34 @@ namespace StoreInventory.Services
             AllProducts = ConvertToDtoProducts(_productRepository.GetProducts()).ToList();
         }
 
-        public bool ValidProductToAdd(DTO.Stock newStock)
+        public void UpdateProduct(DTO.Product dtoProduct)
         {
-            if (string.IsNullOrWhiteSpace(newStock.Product.Name) || string.IsNullOrWhiteSpace(newStock.Product.Description)
-                || string.IsNullOrWhiteSpace(newStock.Product.Category.Name) || newStock.Product.Price == 0f || newStock.QuantityInStock == 0 )
+            _productRepository.EditingProduct(dtoProduct);
+        }
+
+        public void DeleteProduct(int productId)
+        {
+            OkAndCancelMessageBoxEvent?.Invoke("Warning!","Are you sure you would like to delete this product!");
+            if (UsersConfirmation)
+                _productRepository.DeletingProduct(productId);
+        }
+
+        public void AddNewProduct(DTO.Product newProduct)
+        {
+            if (ValidProductToAdd(newProduct))
+                _productRepository.AddingProduct(newProduct);
+        }
+        private bool ValidProductToAdd(DTO.Product newProduct)
+        {
+            if (string.IsNullOrWhiteSpace(newProduct.Name) || string.IsNullOrWhiteSpace(newProduct.Description)
+                || string.IsNullOrWhiteSpace(newProduct.Category.Name) || newProduct.Price == 0f )
             {
-                MessageBoxEvent?.Invoke("You forgot to fill in or select one of the boxes!");
+                OkMessageBoxEvent?.Invoke("Missing Details!","You forgot to fill in or select one of the boxes!");
                 return false;
             }
             else
                 return true;
         }
-       
         public bool ExistingProduct(DTO.Product newProduct)
         {
             if (newProduct.Id != 0)

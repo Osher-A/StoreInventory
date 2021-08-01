@@ -1,4 +1,5 @@
-﻿using StoreInventory.Model;
+﻿using StoreInventory.DAL.Interfaces;
+using StoreInventory.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace StoreInventory.DAL
 {
-    class CategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         public List<Category> GetCategories()
         {
@@ -20,7 +21,7 @@ namespace StoreInventory.DAL
 
         public Category GetCategory(int categoryId)
         {
-            using(var db = new StoreContext())
+            using (var db = new StoreContext())
             {
                 return db.Categories.Find(categoryId);
             }
@@ -29,7 +30,7 @@ namespace StoreInventory.DAL
         {
             var newCategory = new Category();
             newCategory.Name = categoryName;
-            using(var db = new StoreContext())
+            using (var db = new StoreContext())
             {
                 db.Categories.Add(newCategory);
                 db.SaveChanges();
@@ -37,7 +38,7 @@ namespace StoreInventory.DAL
         }
         public void EditingCategory(int categoryId, string editedName)
         {
-            using(var db = new StoreContext())
+            using (var db = new StoreContext())
             {
                 db.Categories.Find(categoryId).Name = editedName;
                 db.SaveChanges();
@@ -45,12 +46,12 @@ namespace StoreInventory.DAL
         }
         public void DeletingCategory(int categaryId)
         {
-            using(var db = new StoreContext())
+            using (var db = new StoreContext())
             {
                 db.Categories.Remove(db.Categories.Find(categaryId));
                 db.SaveChanges();
             }
         }
-        
+
     }
 }

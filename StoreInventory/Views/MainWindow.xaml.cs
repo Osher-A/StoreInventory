@@ -25,16 +25,24 @@ namespace StoreInventory.Views
     public partial class MainWindow : MetroWindow
     {
         private StockPage _mainWindowContentPage = new StockPage();
+        private ProductService _productService = new ProductService();
         public MainWindow()
         {
             InitializeComponent();
-            var productService = new ProductService();
-            ProductService.MessageBoxEvent += MahAppsMessageBox;
-        }
 
-        private async void MahAppsMessageBox(string message)
+            _productService.OkMessageBoxEvent += MahAppsOKMessageBox;
+            _productService.OkAndCancelMessageBoxEvent += MahAppsOkAndCancelMessageBox;
+        }
+        private async void MahAppsOKMessageBox(string heading, string message)
         {
-            await this.ShowMessageAsync("Missing Details!", message, MessageDialogStyle.Affirmative);
+           await this.ShowMessageAsync(heading, message, MessageDialogStyle.Affirmative);
+        }
+        private async void MahAppsOkAndCancelMessageBox(string heading, string message)
+        {
+            if (await this.ShowMessageAsync(heading, message, MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
+                ProductService.UsersConfirmation = true;
+            else
+                ProductService.UsersConfirmation = false;
         }
 
         private void MainWindowFrame_Loaded(object sender, RoutedEventArgs e)

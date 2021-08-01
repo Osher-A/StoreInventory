@@ -27,7 +27,7 @@ namespace StoreInventory.DAL
         }
         public void AddingProduct(DTO.Product newDtoProduct)
         {
-            Product newModelProduct = MyMapper.Mapper(newDtoProduct, new Product());
+            Product newModelProduct = (Model.Product)newDtoProduct;
 
             using (var db = new StoreContext())
             {
@@ -36,16 +36,23 @@ namespace StoreInventory.DAL
             }
         }
         
-        public void EditingProduct(DTO.Product productToEdit)
+        public void EditingProduct(DTO.Product dtoProduct)
         {
             using (var db = new StoreContext())
             {
-                Product modelProduct = db.Products.Find(productToEdit.Id);
-                MyMapper.Mapper(productToEdit, modelProduct);
+                Product modelProduct = db.Products.Find(dtoProduct.Id);
+                UpdatingProduct(modelProduct, dtoProduct);
                 db.SaveChanges();
+                    
             }
         }
-
+        private void UpdatingProduct(Model.Product modelProduct, DTO.Product dtoProduct)
+        {
+            modelProduct.Name = dtoProduct.Name;
+            modelProduct.Description = dtoProduct.Description;
+            modelProduct.Price = dtoProduct.Price;
+            modelProduct.Image = dtoProduct.Image;
+        }
         public void DeletingProduct(int productId)
         {
             using (var db = new StoreContext())
@@ -54,6 +61,8 @@ namespace StoreInventory.DAL
                 db.SaveChanges();
             }
         }
+
+        
 
     }
 }

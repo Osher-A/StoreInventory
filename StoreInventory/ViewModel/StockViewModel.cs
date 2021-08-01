@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -17,7 +18,7 @@ namespace StoreInventory.ViewModel
     public class StockViewModel : INotifyPropertyChanged
     {
         private IProductRepository _productRepository = new ProductRepository();
-        private StockService _stockService = new StockService();
+        private StockService _stockService = new StockService(new StockRepository(), new CategoryRepository());
         private ProductService _productService;
         private ImageService _imageService = new ImageService();
 
@@ -31,26 +32,68 @@ namespace StoreInventory.ViewModel
                 OnPropertyChanged(nameof(SelectedStock));
             }
         }
-        public BitmapImage SelectedImage { get; private set; } 
-        public ICommand NewProductToStockCommand { get; set; }
+       
+        public ICommand ClearFormCommand { get; set; }
         public ICommand UpdateProductCommand { get; set; }
+        public ICommand AddNewProductCommand { get; set; }
+        public ICommand DeleteProductCommand { get; set; }
         public ICommand ImageCommand { get; set; }
+        public ICommand SearchCommand { get; set; }
         public ObservableCollection<Stock> GetStocks { get; set; } = new ObservableCollection<Stock>();
         public ObservableCollection<Category> Categories { get; set; }
         
         public StockViewModel()
         {
             _productService = new ProductService(_productRepository);
-            SelectedImage = (SelectedStock.Product.Image != null) ? _imageService.ByteArrayToBitmapImage(SelectedStock.Product.Image) : new BitmapImage();
             LoadData();
-            NewProductToStockCommand = new CustomCommand(AddNewProduct, CanAddNewProduct);
+            ClearFormCommand = new CustomCommand(ClearForm, CanClearForm);
             ImageCommand = new CustomCommand(AddImage, CanAddImage);
             UpdateProductCommand = new CustomCommand(UpdateProduct, CanUpDateProduct);
+            AddNewProductCommand = new CustomCommand(AddNewProduct, CanAddNewProduct);
+            DeleteProductCommand = new CustomCommand(DeleteProduct, CanDeleteProduct);
+            SearchCommand = new CustomCommand(SearchProducts, CanSearchProducts);
+        }
+
+        private bool CanSearchProducts(object obj)
+        {
+            return true;
+        }
+
+        private void SearchProducts(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DeleteProduct(object obj)
+        {
+            _productService.DeleteProduct(SelectedStock.Product.Id);
+        }
+
+        private bool CanDeleteProduct(object obj)
+        {
+            if (SelectedStock.Product.Id != 0)
+                return true;
+            else
+                return false;
+        }
+
+        private void AddNewProduct(object obj)
+        {
+            _productService.AddNewProduct(SelectedStock.Product);
+            LoadData();
+            SelectedStock = new Stock() { Product = new Product() };
+        }
+
+        private bool CanAddNewProduct(object obj)
+        {
+            return !_productService.ExistingProduct(SelectedStock.Product);
         }
 
         private void UpdateProduct(object obj)
         {
-            throw new NotImplementedException();
+            _productService.UpdateProduct(SelectedStock.Product);
+            LoadData();
+            SelectedStock = new Stock() { Product = new Product() };
         }
 
         private bool CanUpDateProduct(object obj)
@@ -60,8 +103,7 @@ namespace StoreInventory.ViewModel
 
         private void AddImage(object obj)
         {
-            var usersImage = _imageService.GetUsersImage();
-            SelectedStock.Product.Image = usersImage;
+           SelectedStock.Product.Image = _imageService.GetUsersImage();
         }
 
         private bool CanAddImage(object obj)
@@ -69,18 +111,14 @@ namespace StoreInventory.ViewModel
             return true;
         }
 
-        private void AddNewProduct(object obj)
+        private void ClearForm(object obj)
         {
-            if (_productService.ValidProductToAdd(SelectedStock))
-            {
-                _productRepository.AddingProduct(SelectedStock.Product);
-                LoadData();
-            }
+            SelectedStock = new Stock() { Product = new Product() };
         }
 
-        private bool CanAddNewProduct(object obj)
+        private bool CanClearForm(object obj)
         {
-            return !_productService.ExistingProduct(SelectedStock.Product);
+            return true;
         }
 
         private void LoadData()

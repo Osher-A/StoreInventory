@@ -76,9 +76,10 @@
                     <TextBox Name="IdTextBox"
                     Grid.Row="1" 
                     Grid.Column="5"
-                     controls:ControlsHelper.IsReadOnly="True"       
+                    controls:ControlsHelper.IsReadOnly="True"       
                     Text="{Binding SelectedStock.Product.Id, Mode=OneWay, Converter={StaticResource intConv}}"
-                       />
+                     IsReadOnly="True"
+                     Background="{StaticResource MahApps.Brushes.Control.Disabled}"/>
 
                     <Label Grid.Row="2"
                     Grid.Column="1"
@@ -87,7 +88,7 @@
                     <TextBox Name="NameTextBox"
                     Grid.Row="2"
                     Grid.Column="2"
-                     Text="{Binding SelectedStock.Product.Name, Mode=TwoWay}"  />
+                     Text="{Binding SelectedStock.Product.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
 
                     <Label Grid.Row="3"
                     Grid.Column="1"
@@ -103,14 +104,14 @@
                     VerticalContentAlignment="Top"
                     SpellCheck.IsEnabled="True"
                     Height="60"
-                    Text="{Binding SelectedStock.Product.Description,Mode=TwoWay}"/>
+                    Text="{Binding SelectedStock.Product.Description,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <Image Grid.Row="2"
                            Grid.RowSpan="3"
                            Grid.Column="5"
                            Height="100"
                            Stretch="Uniform"
-                           Source="{Binding SelectedStock.Product.Image}">
+                           Source="{Binding  SelectedStock.Product.Image}">
 
                     </Image>
                     <TextBlock Grid.Row="5"
@@ -142,7 +143,7 @@
                     Grid.Row="2"
                     Grid.Column="8"
                     ItemsSource="{Binding Categories}" 
-                      Text="{Binding SelectedStock.Product.Category.Name, Mode=TwoWay}">
+                      Text="{Binding SelectedStock.Product.Category.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     </ComboBox>
 
                     <Label Grid.Row="3"
@@ -154,7 +155,9 @@
                     Grid.Row="3"
                     Grid.Column="8"
                     Width="50"
-                    Text="{Binding SelectedStock.QuantityInStock, Mode=TwoWay, Converter={StaticResource intConv}}"/>
+                    Text="{Binding SelectedStock.QuantityInStock, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource intConv}}" 
+                    IsReadOnly="True"
+                    Background="{StaticResource MahApps.Brushes.Control.Disabled}"/>
 
                     <ComboBox Grid.Row="3"
                     Grid.Column="8"
@@ -164,7 +167,7 @@
                           ItemsSource="{Binding Source={StaticResource UnitType}}">
                         <ComboBox.Text>
                             <MultiBinding Converter="{StaticResource unitTypeConv}">
-                                <Binding Path="SelectedStock.Product.UnitType" />
+                                <Binding Path="SelectedStock.Product.UnitType" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
                                 <Binding ElementName="QuantityTextBox" Path="Text"/>
                             </MultiBinding>
                         </ComboBox.Text>
@@ -179,21 +182,23 @@
                     Grid.Row="4"
                     Grid.Column="8"
                     Width="50"
-                         Text="{Binding SelectedStock.Product.Price, Mode=TwoWay, StringFormat={} {0:C}, ConverterCulture=en-GB, Converter={StaticResource intConv}}"/>
+                         Text="{Binding SelectedStock.Product.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={} {0:C}, ConverterCulture=en-GB, Converter={StaticResource intConv}}"/>
 
                     <StackPanel Orientation="Horizontal"
                     Grid.Row="7"
                     Grid.Column="1"
                     Grid.ColumnSpan="8">
                         <Button 
-                        Content="_Save"/>
+                        Content="_Add New"
+                            Command="{Binding AddNewProductCommand}"/>
                         <Button
-                        Content="_Update"/>
+                        Content="_Update"
+                            Command="{Binding UpdateProductCommand}"/>
                         <Button 
                         Content="_Delete"/>
                         <Button 
-                        Content="_New"
-                        Command="{Binding newProductToStockCommand }"/>
+                        Content="_Clear"
+                        Command="{Binding clearFormCommand }"/>
                         <Button 
                         Content="_Close"
                         Margin="0,5"/>
@@ -203,7 +208,14 @@
                     Grid.Column="8"
                     Margin="0,20,0,10"     
                     Style="{StaticResource SearchTextBox}"
-                    controls:TextBoxHelper.Watermark="Search ..."/>
+                    controls:TextBoxHelper.Watermark="Search ...">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger  EventName="PropertyChanged">
+                                <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                            </i:EventTrigger>
+                            
+                        </i:Interaction.Triggers>
+                    </TextBox>
 
                     <DataGrid x:Name="DataGrid"
                         DataContext="{StaticResource vm}"
@@ -224,7 +236,7 @@
                             <DataGridTextColumn Header="Name" Binding="{Binding Product.Name}" Width="*" />
                             <DataGridTextColumn Header="Description" Binding="{Binding Product.Description}" Width="2*"/>
                             <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, ConverterCulture=en-GB, StringFormat=' \{0:C\}'}" Width="*"/>
-                            <DataGridTextColumn Header="Quantity In Stock" Binding="{Binding QuantityInStock}" Width="*"/>
+                            <DataGridTextColumn Header="Quantity" Binding="{Binding QuantityInStock}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
