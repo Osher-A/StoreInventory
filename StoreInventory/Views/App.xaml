@@ -13,7 +13,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <Thickness x:Key="ControlMargin">0 5 0 0</Thickness>
-
+            
             <Style TargetType="TextBlock" x:Key="Title" BasedOn="{StaticResource MahApps.Styles.TextBlock}">
                 <Setter Property="FontFamily" Value="{StaticResource MahApps.Fonts.Family.Header}"/>
                 <Setter Property="FontSize" Value="25"/>
@@ -60,12 +60,22 @@
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Setter Property="Padding" Value="5"/>
             </Style>
+            <Style x:Key="MyDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell.Azure}">
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="controls:DataGridHelper.CellPadding" Value="5"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+            </Style>
             <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell.Azure}">
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Setter Property="controls:DataGridHelper.CellPadding" Value="5"/>
                 <Setter Property="SnapsToDevicePixels" Value="True"/>
             </Style>
+            <Style TargetType="TabControl" BasedOn="{StaticResource MahApps.Styles.TabControl.Animated}">
+            </Style>
+            <Style TargetType="TabItem" BasedOn="{StaticResource MahApps.Styles.TabItem}">
+                <Setter Property="BorderThickness" Value="1"/>
 
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,7 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using StoreInventory.DAL;
-using StoreInventory.DAL.Interfaces;
+using StoreInventory.Interfaces;
 using StoreInventory.Services;
 using System;
 using System.Collections.Generic;
@@ -20,21 +20,21 @@ namespace UnitTests.ServicesTests
         public void GetStocks_WhenCalled_ReturnsConvertedListOfDTOStocksOrderedByCategories()
         {
             //Arrange
-            _mockRepository.Setup(mr => mr.GetStocks()).Returns(ModelStocks());
+            _mockRepository.Setup(mr => mr.GetAllStocks()).Returns(ModelStocks());
             _mockCategoryRepos.Setup(cr => cr.GetCategories()).Returns(Categories());
             var stockService = new StockService(_mockRepository.Object, _mockCategoryRepos.Object);
 
             //Act
-            var dtoStocks = stockService.GetStocks();
+            var dtoStocks = stockService.GetStocks;
 
             //Assert
             Assert.That(dtoStocks, Is.TypeOf<ObservableCollection<StoreInventory.DTO.Stock>>());
             Assert.That(dtoStocks[0].Product.Category.Name == "Clothes");
         }
 
-        private List<StoreInventory.Model.Stock> ModelStocks()
+        private List<IStock> ModelStocks()
         {
-            return new List<StoreInventory.Model.Stock>
+            return new List<IStock>
             {
                 new StoreInventory.Model.Stock
                 {
@@ -80,9 +80,9 @@ namespace UnitTests.ServicesTests
                 }
             };
         }
-        private List<StoreInventory.Model.Category> Categories()
+        private List<ICategory> Categories()
         {
-            return new List<StoreInventory.Model.Category>
+            return new List<ICategory>
             {
                new StoreInventory.Model.Category{Id = 1, Name = "Food"},
                new StoreInventory.Model.Category{Id = 2, Name = "Clothes"},

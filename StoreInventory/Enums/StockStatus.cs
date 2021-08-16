@@ -4,11 +4,10 @@ using System.Text;
 
 namespace StoreInventory.Enums
 {
-    public enum UnitType
+    public enum StockStatus
     {
-            Single = 1,
-            Packet,
-            Box,
-            Kilo
+        WellStocked = 1,
+        LowInStock,
+        OutOfStock
     }
 }

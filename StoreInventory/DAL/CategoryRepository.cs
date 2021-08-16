@@ -1,4 +1,4 @@
-﻿using StoreInventory.DAL.Interfaces;
+﻿using StoreInventory.Interfaces;
 using StoreInventory.Model;
 using System;
 using System.Collections.Generic;
@@ -9,17 +9,17 @@ namespace StoreInventory.DAL
 {
     public class CategoryRepository : ICategoryRepository
     {
-        public List<Category> GetCategories()
+        public List<ICategory> GetCategories()
         {
-            List<Category> categories;
+            List<ICategory> categories;
             using (var db = new StoreContext())
             {
-                categories = db.Categories.OrderBy(c => c.Name).ToList();
+                categories = db.Categories.OrderBy(c => c.Name).ToList<ICategory>();
             }
             return categories;
         }
 
-        public Category GetCategory(int categoryId)
+        public ICategory GetCategory(int categoryId)
         {
             using (var db = new StoreContext())
             {

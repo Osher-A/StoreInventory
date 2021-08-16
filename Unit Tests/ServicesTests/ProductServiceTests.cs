@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Moq;
-using StoreInventory.DAL.Interfaces;
+using StoreInventory.Interfaces;
 using StoreInventory;
 using StoreInventory.Services;
 using StoreInventory.DTO;
@@ -14,13 +14,13 @@ namespace UnitTests.ServicesTests
     public class ProductServiceTests
     {
         private Mock<IProductRepository> _mockRepository;
-        private ProductService _productService;
+        private ProductDataService _productService;
         [SetUp]
         public void SetUp()
         {
             _mockRepository = new Mock<IProductRepository>();
             _mockRepository.Setup(mr => mr.GetProducts()).Returns(ModelProducts());
-            _productService = new ProductService(_mockRepository.Object);
+            _productService = new ProductDataService(_mockRepository.Object);
         }
 
         [Test]
@@ -123,9 +123,9 @@ namespace UnitTests.ServicesTests
             Assert.That(productExists == false);
         }
 
-        private List<StoreInventory.Model.Product> ModelProducts()
+        private List<IProduct> ModelProducts()
         {
-            return new List<StoreInventory.Model.Product>
+            return new List<IProduct>
             {
                 new StoreInventory.Model.Product
                 {

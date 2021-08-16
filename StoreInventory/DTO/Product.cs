@@ -1,5 +1,6 @@
 ﻿using MyLibrary.Utilities;
 using StoreInventory.Enums;
+using StoreInventory.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace StoreInventory.DTO 
 {
-    public class Product: INotifyPropertyChanged
+    public class Product: IProduct, INotifyPropertyChanged
     {
         private int _id;
 
@@ -44,9 +45,9 @@ namespace StoreInventory.DTO
             }
         }
 
-        private Category _category;
+        private ICategory _category;
 
-        public Category Category
+        public ICategory Category
         {
             get { return _category; }
             set
@@ -92,9 +93,9 @@ namespace StoreInventory.DTO
                 OnPropertyChanged(nameof(Image));
             }
         }
-        private Stock _stock;
+        private IStock _stock;
 
-        public Stock Stock
+        public IStock Stock
         {
             get { return _stock; }
             set
@@ -104,35 +105,28 @@ namespace StoreInventory.DTO
             }
         }
 
-        public List<StockIn> StockIns { get; set; }
-        public List<OrderProduct> OrdersProducts { get; set; }
-        public Product()
-        {
-            StockIns = new List<StockIn>();
-            OrdersProducts = new List<OrderProduct>();
-        }
-
         public static explicit operator DTO.Product(Model.Product product)
         {
             DTO.Product dtoProduct = new DTO.Product();
             dtoProduct.Id = product.Id;
-            dtoProduct.Category = (DTO.Category)product.Category;
+            dtoProduct.Category = (DTO.Category)(Model.Category)product.Category;
             dtoProduct.Name = product.Name;
             dtoProduct.Description = product.Description;
             dtoProduct.Price = product.Price;
             dtoProduct.Image = product.Image;
+            dtoProduct.UnitType = product.UnitType;
 
             return dtoProduct;
         }
 
-        public static explicit operator Model.Product(DTO.Product product)
+        public static explicit operator Model.Product(DTO.Product dtoProduct)
         {
             Model.Product modelProduct = new Model.Product();
 
-            modelProduct.Name = product.Name;
-            modelProduct.Description = product.Description;
-            modelProduct.Price = product.Price;
-            modelProduct.Image = product.Image;
+            modelProduct.Name = dtoProduct.Name;
+            modelProduct.Description = dtoProduct.Description;
+            modelProduct.Price = dtoProduct.Price;
+            modelProduct.Image = dtoProduct.Image;
 
             return modelProduct;
         }

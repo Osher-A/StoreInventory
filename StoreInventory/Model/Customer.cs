@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using MyLibrary.Utilities;
+using StoreInventory.Interfaces;
 
 namespace StoreInventory.Model
 {
-     public class Customer : IMapper
+    public class Customer : IMapper, ICustomer
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }

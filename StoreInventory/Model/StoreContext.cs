@@ -25,15 +25,15 @@ namespace StoreInventory.Model
         {
             modelBuilder.Entity<Category>()
                 .HasMany(c => c.Products)
-                .WithOne(p => p.Category);
+                .WithOne(p => (Category)p.Category);
 
             modelBuilder.Entity<Customer>()
                 .HasMany(c => c.Orders)
-                .WithOne(o => o.Customer);
+                .WithOne(o => (Customer)o.Customer);
 
             modelBuilder.Entity<Order>()
                 .HasMany(o => o.OrdersProducts)
-                .WithOne(so => so.Order);
+                .WithOne(so => (Order)so.Order);
 
             modelBuilder.Entity<Order>()
                 .Property(o => o.TotalPrice)
@@ -41,6 +41,9 @@ namespace StoreInventory.Model
 
             modelBuilder.Entity<OrderProduct>()
                 .HasKey(op => new { op.OrderId, op.ProductId });
+            modelBuilder.Entity<Stock>()
+                .Ignore(s => s.StockStatus);
+                
 
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
         }

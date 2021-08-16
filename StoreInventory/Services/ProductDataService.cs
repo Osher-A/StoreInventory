@@ -1,36 +1,27 @@
-﻿using MyLibrary.Extentions;
-using MyLibrary.Utilities;
-using StoreInventory.DAL;
-using StoreInventory.DTO;
+﻿using StoreInventory.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using MahApps.Metro;
-using StoreInventory.DAL.Interfaces;
-using System.Threading.Tasks;
 
 namespace StoreInventory.Services
 {
-    public class ProductService
+    public class ProductDataService
     {
         private IProductRepository _productRepository;
         public Action<string, string> OkMessageBoxEvent;
         public Action<string, string> OkAndCancelMessageBoxEvent;
         public static bool UsersConfirmation { get; set; }
-        public List<DTO.Product> AllProducts { get; private set; }
-       
-        public ProductService() { }
-        public ProductService(IProductRepository productRepository)
+        
+       public List<DTO.Product> AllProducts { get; private set; }
+        public ProductDataService() { }
+        public ProductDataService(IProductRepository productRepository)
         {
             _productRepository = productRepository;
-            AllProducts = ConvertToDtoProducts(_productRepository.GetProducts()).ToList();
+            AllProducts = (List<DTO.Product>)ConvertToDtoProducts(_productRepository.GetProducts()) ;
         }
 
-        public void UpdateProduct(DTO.Product dtoProduct)
+        public void UpdateProduct(IProduct usersProduct)
         {
-            _productRepository.EditingProduct(dtoProduct);
+            _productRepository.EditingProduct(usersProduct);
         }
 
         public void DeleteProduct(int productId)
@@ -40,12 +31,12 @@ namespace StoreInventory.Services
                 _productRepository.DeletingProduct(productId);
         }
 
-        public void AddNewProduct(DTO.Product newProduct)
+        public void AddNewProduct(IProduct newProduct)
         {
             if (ValidProductToAdd(newProduct))
                 _productRepository.AddingProduct(newProduct);
         }
-        private bool ValidProductToAdd(DTO.Product newProduct)
+        private bool ValidProductToAdd(IProduct newProduct)
         {
             if (string.IsNullOrWhiteSpace(newProduct.Name) || string.IsNullOrWhiteSpace(newProduct.Description)
                 || string.IsNullOrWhiteSpace(newProduct.Category.Name) || newProduct.Price == 0f )
@@ -56,30 +47,30 @@ namespace StoreInventory.Services
             else
                 return true;
         }
-        public bool ExistingProduct(DTO.Product newProduct)
+        public bool ExistingProduct(IProduct newProduct)
         {
             if (newProduct.Id != 0)
                 return true;
 
-            if (newProduct.Name != null)
+            if (!string.IsNullOrWhiteSpace(newProduct.Name) && !string.IsNullOrWhiteSpace(newProduct.Category.Name))
             {
                 if (AllProducts.Exists(p => string.Equals(p.Category.Name.Trim(), newProduct.Category.Name.Trim(), StringComparison.OrdinalIgnoreCase))
                  && AllProducts.Exists(p => string.Equals(p.Name.Trim(), newProduct.Name.Trim(), StringComparison.OrdinalIgnoreCase))
-                 && AllProducts.Exists(p => string.Equals(p.Description.Trim(), newProduct.Description.Trim(), StringComparison.OrdinalIgnoreCase))
-                  && AllProducts.Exists(p => p.Price == newProduct.Price))
+                 && AllProducts.Exists(p => string.Equals(p.Description.Trim(), newProduct.Description.Trim(), StringComparison.OrdinalIgnoreCase)))
                       return true;
             }
 
              return false;
         }
-        private IEnumerable<DTO.Product> ConvertToDtoProducts(List<Model.Product> products)
+        private IEnumerable<DTO.Product> ConvertToDtoProducts(List<IProduct> products)
         {
             var dtoProducts = new List<DTO.Product>();
             foreach (var product in products)
-            { 
-                //This cast has been made possible through the explicit operator in the product class.
+            {
+                Model.Product modelProduct = (Model.Product)product;
 
-                DTO.Product dtoProduct = (DTO.Product)product; 
+                //This cast has been made possible through the explicit operator in the product class.
+                DTO.Product dtoProduct = (DTO.Product)modelProduct; 
                 dtoProducts.Add(dtoProduct);
             }
             return dtoProducts;

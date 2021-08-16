@@ -1,14 +1,15 @@
 ﻿using MyLibrary.Utilities;
+using StoreInventory.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace StoreInventory.Model
 {
-    public class Order : IMapper
+    public class Order : IOrder
     {
         public int Id { get; set; }
-        public Customer Customer { get; set; }
+        public ICustomer Customer { get; set; } 
         public int CustomerId { get; set; }
         public DateTime OrderDate { get; set; }
         public float TotalPrice { get; set; }

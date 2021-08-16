@@ -1,7 +1,7 @@
 ﻿using MyLibrary;
 using MyLibrary.Utilities;
 using StoreInventory.DAL;
-using StoreInventory.DAL.Interfaces;
+using StoreInventory.Interfaces;
 using StoreInventory.DTO;
 using StoreInventory.Services;
 using System;
@@ -12,6 +12,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Windows;
 
 namespace StoreInventory.ViewModel
 {
@@ -19,32 +20,97 @@ namespace StoreInventory.ViewModel
     {
         private IProductRepository _productRepository = new ProductRepository();
         private StockService _stockService = new StockService(new StockRepository(), new CategoryRepository());
-        private ProductService _productService;
+        private ProductDataService _productService;
         private ImageService _imageService = new ImageService();
 
-        private DTO.Stock _selectedStock = new Stock() { Product = new Product() };
+
+        private ObservableCollection<Stock> _getStocks;
+
+        public ObservableCollection<Stock> GetStocks
+        {
+            get { return _getStocks; }
+            private set
+            {
+                _getStocks = value;
+                OnPropertyChanged(nameof(GetStocks));
+            }
+        }
+        private ObservableCollection<Stock> _lowInStockProducts;
+
+        public ObservableCollection<Stock> LowInStockProducts
+        {
+            get { return _lowInStockProducts; }
+            private set
+            {
+                _lowInStockProducts = value;
+                OnPropertyChanged(nameof(LowInStockProducts));
+            }
+        }
+
+        private ObservableCollection<Stock> _outOfStockProducts;
+
+        public ObservableCollection<Stock> OutOfStockProducts
+        {
+            get { return _outOfStockProducts; }
+            private set
+            {
+                _outOfStockProducts = value;
+                OnPropertyChanged(nameof(OutOfStockProducts));
+            }
+        }
+        public ObservableCollection<Category> Categories { get; set; }
+
+        private DTO.Stock _selectedStock = new Stock() { Product = new Product() { Category = new Category() } };
         public DTO.Stock SelectedStock
         {
-            get { return _selectedStock; }
+            get
+            {
+                if (_selectedStock.Product.Image == null && !string.IsNullOrWhiteSpace(_selectedStock.Product.Name))
+                    ImageUploadVisibility = Visibility.Visible;
+                else
+                    ImageUploadVisibility = Visibility.Collapsed;
+                return _selectedStock;                                
+            }
             set
             {
                 _selectedStock = value;
                 OnPropertyChanged(nameof(SelectedStock));
+            }                                                                 
+        }
+        private string _searchInput;
+
+        public string SearchInput
+        {
+            get { return _searchInput; }
+            set
+            { 
+                _searchInput = value;
+                OnPropertyChanged(nameof(SearchInput));
             }
         }
-       
+
+        private Visibility _imageUploadVisibility;
+        public Visibility ImageUploadVisibility
+        {
+            get { return _imageUploadVisibility; }
+            set
+            {
+                _imageUploadVisibility = value;
+                OnPropertyChanged(nameof(ImageUploadVisibility));
+            }
+        }
         public ICommand ClearFormCommand { get; set; }
         public ICommand UpdateProductCommand { get; set; }
         public ICommand AddNewProductCommand { get; set; }
         public ICommand DeleteProductCommand { get; set; }
         public ICommand ImageCommand { get; set; }
         public ICommand SearchCommand { get; set; }
-        public ObservableCollection<Stock> GetStocks { get; set; } = new ObservableCollection<Stock>();
-        public ObservableCollection<Category> Categories { get; set; }
+       
         
         public StockViewModel()
         {
-            _productService = new ProductService(_productRepository);
+            _getStocks = new ObservableCollection<Stock>();
+            _productService = new ProductDataService(_productRepository);
             LoadData();
             ClearFormCommand = new CustomCommand(ClearForm, CanClearForm);
             ImageCommand = new CustomCommand(AddImage, CanAddImage);
@@ -61,7 +127,7 @@ namespace StoreInventory.ViewModel
 
         private void SearchProducts(object obj)
         {
-            throw new NotImplementedException();
+           GetStocks = _stockService.SearchStocks(SearchInput, _productRepository);
         }
 
         private void DeleteProduct(object obj)
@@ -123,7 +189,9 @@ namespace StoreInventory.ViewModel
 
         private void LoadData()
         {
-            GetStocks = _stockService.GetStocks();
+            GetStocks = _stockService.GetStocks;
+            LowInStockProducts = _stockService.GetLowInStockProducts();
+            OutOfStockProducts = _stockService.GetOutOfStockProducts();
             Categories = _stockService.GetCategories();
         }
 

@@ -5,29 +5,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using StoreInventory.DAL.Interfaces;
+using StoreInventory.Interfaces;
 
 namespace StoreInventory.DAL
 {
     public class ProductRepository : IProductRepository
     {
-        public List<Product> GetProducts()
+        public List<IProduct> GetProducts()
         {
-            List<Product> products;
+            List<IProduct> products;
             using (var db = new StoreContext())
             {
                 products = db.Products
                      .Include(p => p.Category)
                      .OrderBy(p => p.Category.Name)
-                     .ThenBy(p => p.Name)
-                     .ToList();
+                     .ThenBy(p => p.Name).ToList<IProduct>();
             }
 
             return products;
         }
-        public void AddingProduct(DTO.Product newDtoProduct)
+        public void AddingProduct(IProduct newusersProduct)
         {
-            Product newModelProduct = (Model.Product)newDtoProduct;
+            Product newModelProduct = new Product();
+            MapUsersProductToModel(newModelProduct, newusersProduct);
 
             using (var db = new StoreContext())
             {
@@ -36,22 +36,23 @@ namespace StoreInventory.DAL
             }
         }
         
-        public void EditingProduct(DTO.Product dtoProduct)
+        public void EditingProduct(IProduct usersProduct)
         {
             using (var db = new StoreContext())
             {
-                Product modelProduct = db.Products.Find(dtoProduct.Id);
-                UpdatingProduct(modelProduct, dtoProduct);
+                Product modelProduct = db.Products.Find(usersProduct.Id);
+                MapUsersProductToModel(modelProduct, usersProduct);
                 db.SaveChanges();
                     
             }
         }
-        private void UpdatingProduct(Model.Product modelProduct, DTO.Product dtoProduct)
+        private void MapUsersProductToModel(Model.Product modelProduct, IProduct usersProduct)
         {
-            modelProduct.Name = dtoProduct.Name;
-            modelProduct.Description = dtoProduct.Description;
-            modelProduct.Price = dtoProduct.Price;
-            modelProduct.Image = dtoProduct.Image;
+            modelProduct.Name = usersProduct.Name;
+            modelProduct.Description = usersProduct.Description;
+            modelProduct.Price = usersProduct.Price;
+            modelProduct.Image = usersProduct.Image;
+            modelProduct.CategoryId = usersProduct.CategoryId;
         }
         public void DeletingProduct(int productId)
         {

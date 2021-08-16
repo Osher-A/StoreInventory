@@ -12,13 +12,13 @@ namespace StoreInventory.Migrations.Configurations
         public void Configure(EntityTypeBuilder<Product> builder)
         {
          builder.HasMany(p => p.StockIns)
-                .WithOne(si => si.Product);
+                .WithOne(si => (Product)si.Product);
 
          builder.HasMany(p => p.OrdersProducts)
-                .WithOne(so => so.Product);
+                .WithOne(so => (Product)so.Product);
 
-         builder.HasOne(p => p.Stock)
-                .WithOne(s => s.Product);
+         builder.HasOne(p => (Stock)p.Stock)
+                .WithOne(s => (Product)s.Product);
         }
     }
 }

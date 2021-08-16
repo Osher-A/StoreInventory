@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="StoreInventory.Views.UserControls.GridUserControl"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+            xmlns:viewModel="clr-namespace:StoreInventory.ViewModel"
+            xmlns:enums="clr-namespace:StoreInventory.Enums"
+            xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+            xmlns:sys="clr-namespace:System;assembly=mscorlib"
+            xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+            xmlns:converters="clr-namespace:StoreInventory.Views.Converters"
+            d:DataContext="{d:DesignInstance Type=viewModel:StockViewModel}"
+            xmlns:local="clr-namespace:StoreInventory.Views.UserControls"
+            mc:Ignorable="d" 
+            d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <viewModel:StockViewModel x:Key="vm"/>
+            <converters:DefaultIntConverter x:Key="intConv"/>
+            <converters:StockStatusConverter x:Key="stockStatusConv"/>
+
+            <ObjectDataProvider x:Key="UnitType" ObjectType="{x:Type sys:Enum}" MethodName="GetNames" >
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="enums:UnitType" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <ObjectDataProvider x:Key="Status" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="enums:StockStatus"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <DataGrid 
+            x:Name="DataGrid"
+                        Width="700"
+                        MinHeight="500"
+                        ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType=local:GridUserControl}}"
+                        SelectedItem="{Binding SelectedStock}"      
+                               AutoGenerateColumns="False"
+                        RowHeight="40">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Product.Id}" Width="*"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding Product.Category.Name}" Width="*"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Product.Name}" Width="*" />
+                <DataGridTextColumn Header="Description" Binding="{Binding Product.Description}" Width="2*"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, ConverterCulture=en-GB, StringFormat=' \{0:C\}'}" Width="*"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding QuantityInStock}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>    
+    </Grid>
+</UserControl>

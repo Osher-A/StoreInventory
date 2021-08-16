@@ -25,7 +25,7 @@ namespace StoreInventory.Views
     public partial class MainWindow : MetroWindow
     {
         private StockPage _mainWindowContentPage = new StockPage();
-        private ProductService _productService = new ProductService();
+        private ProductDataService _productService = new ProductDataService();
         public MainWindow()
         {
             InitializeComponent();
@@ -40,9 +40,9 @@ namespace StoreInventory.Views
         private async void MahAppsOkAndCancelMessageBox(string heading, string message)
         {
             if (await this.ShowMessageAsync(heading, message, MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
-                ProductService.UsersConfirmation = true;
+                ProductDataService.UsersConfirmation = true;
             else
-                ProductService.UsersConfirmation = false;
+                ProductDataService.UsersConfirmation = false;
         }
 
         private void MainWindowFrame_Loaded(object sender, RoutedEventArgs e)

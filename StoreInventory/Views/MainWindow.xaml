@@ -8,10 +8,9 @@
         mc:Ignorable="d"
          Name="mainWindow"             
         GlowBrush="{DynamicResource AccentColorBrush}"
-        WindowState="Maximized" 
-        MaxWidth="1000"
-        UseNoneWindowStyle="True"
-        ResizeMode="CanResizeWithGrip" HorizontalAlignment="Stretch" VerticalAlignment="Top" >
+        UseNoneWindowStyle="False"
+        ResizeMode="CanResizeWithGrip" HorizontalAlignment="Stretch" VerticalAlignment="Top" 
+         Height="1000"             >
         <controls:MetroWindow.Flyouts>
             <controls:FlyoutsControl x:Name="FlyoutControl">
                 <controls:Flyout x:Name="StockOutList"
@@ -21,7 +20,7 @@
                         Header="Stock Out List"
                         Position="Right"
                         Theme="Inverse"
-                        IsOpen="True"
+                        IsOpen="False"
                          IsModal="True"
                         >
                     <Grid>

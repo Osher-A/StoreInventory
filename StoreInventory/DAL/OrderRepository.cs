@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MyLibrary.Utilities;
+using StoreInventory.Interfaces;
 
 namespace StoreInventory.DAL
 {
@@ -36,25 +37,25 @@ namespace StoreInventory.DAL
             return order;
         }
 
-        public void AddingOrder(DTO.Order newOrder)
-        {
-            Order newModelOrder = MyMapper.Mapper(newOrder, new Order());
-            using(var db = new StoreContext())
-            {
-                db.Orders.Add(newModelOrder);
-                db.SaveChanges();
-            }
-        }
+        //public void AddingOrder(IOrder newOrder)
+        //{
+        //    Order newModelOrder = MyMapper.Mapper(newOrder, new Order());
+        //    using(var db = new StoreContext())
+        //    {
+        //        db.Orders.Add(newModelOrder);
+        //        db.SaveChanges();
+        //    }
+        //}
 
-        public void EditingOrder(DTO.Order orderToEdit)
-        {
-            using(var db = new StoreContext())
-            {
-                Order modelOrder =  db.Orders.Find(orderToEdit.Id);
-                MyMapper.Mapper(orderToEdit, modelOrder);
-                db.SaveChanges();
-            }
-        }
+        //public void EditingOrder(DTO.Order orderToEdit)
+        //{
+        //    using(var db = new StoreContext())
+        //    {
+        //        Order modelOrder =  db.Orders.Find(orderToEdit.Id);
+        //        MyMapper.Mapper(orderToEdit, modelOrder);
+        //        db.SaveChanges();
+        //    }
+        //}
 
         public void DeletingOrder(int orderId)
         {

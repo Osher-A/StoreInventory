@@ -11,6 +11,7 @@
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
       xmlns:converters="clr-namespace:StoreInventory.Views.Converters"
+      xmlns:uc="clr-namespace:StoreInventory.Views.UserControls"
       d:DataContext="{d:DesignInstance Type=viewModel:StockViewModel}"
       mc:Ignorable="d" 
       d:DesignHeight="1000" d:DesignWidth="885"
@@ -21,40 +22,39 @@
     <Page.Resources>
 
         <ResourceDictionary>
-            <viewModel:StockViewModel  x:Key="vm"/>
+            <viewModel:StockViewModel x:Key="vm"/>
             <converters:DefaultIntConverter x:Key="intConv"/>
-            <converters:DefaultUnitTypeMultiConverter x:Key="unitTypeConv"/>
+            <converters:StockStatusConverter x:Key="stockStatusConv"/>
+
             <ObjectDataProvider x:Key="UnitType" ObjectType="{x:Type sys:Enum}" MethodName="GetNames" >
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="enums:UnitType" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-        </ResourceDictionary>
 
+            <ObjectDataProvider x:Key="Status" ObjectType="{x:Type sys:Enum}" MethodName="GetNames">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="enums:StockStatus"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+        </ResourceDictionary>
     </Page.Resources>
-    <ScrollViewer  VerticalScrollBarVisibility="Auto" Style="{StaticResource MahApps.Styles.ScrollViewer}" >
+
+    <ScrollViewer   VerticalScrollBarVisibility="Auto" Style="{StaticResource MahApps.Styles.ScrollViewer}" >
         <GroupBox  BorderThickness="5" Header="Stock Manager" Style="{StaticResource MahApps.Styles.GroupBox}" >
-            <Viewbox Height="{Binding RelativeSource={RelativeSource 
-            FindAncestor,
-            AncestorType=controls:MetroWindow},
-            Path=ActualHeight}"
-            Width="{Binding RelativeSource={RelativeSource 
-            FindAncestor,
-            AncestorType=controls:MetroWindow},
-            Path=ActualWidth}" 
+            <Viewbox 
             Stretch="Uniform">
-                <Grid Background="{DynamicResource MahApps.Brushes.Accent4}" DataContext="{StaticResource vm}" diag:PresentationTraceSources.TraceLevel="High">
+                <Grid Background="{DynamicResource MahApps.Brushes.Accent4}" DataContext="{StaticResource vm}" diag:PresentationTraceSources.TraceLevel="High" Opacity="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="20" />
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition />
                         <RowDefinition />
-                        <RowDefinition Height="20"/>
-                        <RowDefinition Height="20"/>
                         <RowDefinition />
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20"/>
@@ -88,7 +88,8 @@
                     <TextBox Name="NameTextBox"
                     Grid.Row="2"
                     Grid.Column="2"
-                     Text="{Binding SelectedStock.Product.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                    SpellCheck.IsEnabled="True"       
+                    Text="{Binding SelectedStock.Product.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
 
                     <Label Grid.Row="3"
                     Grid.Column="1"
@@ -106,7 +107,8 @@
                     Height="60"
                     Text="{Binding SelectedStock.Product.Description,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <Image Grid.Row="2"
+                    <Image x:Name="ProductImage"
+                           Grid.Row="2"
                            Grid.RowSpan="3"
                            Grid.Column="5"
                            Height="100"
@@ -135,6 +137,7 @@
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBlock>
+                    
                     <Label Grid.Row="2"
                     Grid.Column="7"
                     Content="_Category:"
@@ -155,23 +158,21 @@
                     Grid.Row="3"
                     Grid.Column="8"
                     Width="50"
-                    Text="{Binding SelectedStock.QuantityInStock, Mode=OneWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource intConv}}" 
+                    Text="{Binding SelectedStock.QuantityInStock, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource intConv}}" 
                     IsReadOnly="True"
                     Background="{StaticResource MahApps.Brushes.Control.Disabled}"/>
+                    <!-- Quantity TextBox is disabled since the only way to change the quantity is via the stockIn page -->
 
                     <ComboBox Grid.Row="3"
                     Grid.Column="8"
                     Width="90"
                     HorizontalAlignment="Right"
                     controls:TextBoxHelper.Watermark="Unit Type"
-                          ItemsSource="{Binding Source={StaticResource UnitType}}">
-                        <ComboBox.Text>
-                            <MultiBinding Converter="{StaticResource unitTypeConv}">
-                                <Binding Path="SelectedStock.Product.UnitType" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
-                                <Binding ElementName="QuantityTextBox" Path="Text"/>
-                            </MultiBinding>
-                        </ComboBox.Text>
+                          ItemsSource="{Binding Source={StaticResource UnitType}}"
+                           Text="{Binding SelectedStock.Product.UnitType, Mode=TwoWay}">
+
                     </ComboBox>
+
                     <Label Grid.Row="4"
                     Grid.Column="7"
                     Content="_Price:"
@@ -184,10 +185,31 @@
                     Width="50"
                          Text="{Binding SelectedStock.Product.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={} {0:C}, ConverterCulture=en-GB, Converter={StaticResource intConv}}"/>
 
+                    <TextBox Grid.Row="4"
+                             Grid.Column="8"
+                             Width="90"
+                             Height="{Binding ElementName=PriceTextBox, Path=ActualHeight}"
+                             Margin="{Binding ElementName=PriceTextBox, Path=Margin}"
+                             HorizontalAlignment="Right"
+                             VerticalContentAlignment="Center"
+                             HorizontalContentAlignment="Left"
+                             Padding="2"
+                             Text="{Binding SelectedStock.StockStatus, Mode=OneWay, Converter={StaticResource stockStatusConv},FallbackValue='Stock status'}">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Style.Triggers>
+                                    <Trigger Property="Text" Value="Stock status">
+                                        <Setter Property="Foreground" Value="LightGray"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+
                     <StackPanel Orientation="Horizontal"
-                    Grid.Row="7"
+                    Grid.Row="6"
                     Grid.Column="1"
-                    Grid.ColumnSpan="8">
+                    Grid.ColumnSpan="8" >
                         <Button 
                         Content="_Add New"
                             Command="{Binding AddNewProductCommand}"/>
@@ -198,47 +220,106 @@
                         Content="_Delete"/>
                         <Button 
                         Content="_Clear"
-                        Command="{Binding clearFormCommand }"/>
+                        Command="{Binding ClearFormCommand }"/>
                         <Button 
                         Content="_Close"
                         Margin="0,5"/>
                     </StackPanel>
+                    <Separator Grid.Row="7"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="10"
+                               VerticalAlignment="Bottom"
+                               BorderThickness="5"
+                               Background="{StaticResource MahApps.Brushes.Accent}"/>
 
-                    <TextBox Grid.Row="8"
-                    Grid.Column="8"
-                    Margin="0,20,0,10"     
-                    Style="{StaticResource SearchTextBox}"
-                    controls:TextBoxHelper.Watermark="Search ...">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger  EventName="PropertyChanged">
-                                <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
-                            </i:EventTrigger>
-                            
-                        </i:Interaction.Triggers>
-                    </TextBox>
+                    <TabControl Grid.Row="8" Grid.Column="1"  Grid.ColumnSpan="8" Margin="0,5">
+                        <TabItem Header="All products" IsSelected="True" >
+                            <StackPanel Background="{StaticResource MahApps.Brushes.Accent4}">
+                                <TextBox 
+                                        Text="{Binding SearchInput, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"         
+                                        Width="200"
+                                        HorizontalAlignment="Right"
+                                        Margin="0,5,2,5"
+                                        Style="{StaticResource SearchTextBox}"
+                                        controls:TextBoxHelper.Watermark="Search ...">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger  EventName="SelectionChanged">
+                                            <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
 
-                    <DataGrid x:Name="DataGrid"
-                        DataContext="{StaticResource vm}"
-                        Width="700"
-                        MinHeight="500"
-                      Grid.Row="9"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="8"
-                        ItemsSource="{Binding GetStocks}"
-                        SelectedItem="{Binding SelectedStock}"      
-                               AutoGenerateColumns="False"
-                        RowHeight="40">
-                        <!--SelectedValue="{Binding SelectedProduct, Mode=OneWayToSource}"
-                              SelectedValuePath="Product"-->
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Id" Binding="{Binding Product.Id}" Width="*"/>
-                            <DataGridTextColumn Header="Category" Binding="{Binding Product.Category.Name}" Width="*"/>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Product.Name}" Width="*" />
-                            <DataGridTextColumn Header="Description" Binding="{Binding Product.Description}" Width="2*"/>
-                            <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, ConverterCulture=en-GB, StringFormat=' \{0:C\}'}" Width="*"/>
-                            <DataGridTextColumn Header="Quantity" Binding="{Binding QuantityInStock}" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                                <DataGrid x:Name="DataGrid"
+                                    Width="700"
+                                    MinHeight="500"
+                                    ItemsSource="{Binding GetStocks}"
+                                    SelectedItem="{Binding SelectedStock}"      
+                                   AutoGenerateColumns="False"
+                                   RowHeight="40"
+                              >
+                                    <!--<i:Interaction.Triggers>
+                            <ei:DataTrigger Binding="{}" Value="Red" >
+                                <ei:ControlStoryboardAction Storyboard="{StaticResource MyAnimation}"
+                                                            ControlStoryboardOption="Play"/>
+                            </ei:DataTrigger>
+
+                        </i:Interaction.Triggers>-->
+
+                                    <DataGrid.Resources>
+                                        <Style TargetType="DataGridCell" x:Key="AnimatedCell" BasedOn="{StaticResource MyDataGridCell}">
+                                            <Style.Triggers>
+                                                <DataTrigger
+                                                  Binding="{Binding StockStatus}" Value="OutOfStock">
+                                                    <DataTrigger.EnterActions>
+                                                        <BeginStoryboard >
+                                                            <Storyboard Name="Animate" AutoReverse="True" RepeatBehavior="Forever">
+                                                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="Opacity">
+                                                                    <EasingDoubleKeyFrame KeyTime="00:00:001" Value="0" >
+                                                                        <!--<EasingDoubleKeyFrame.EasingFunction>
+                                                                <ElasticEase  EasingMode="EaseInOut" />
+                                                            </EasingDoubleKeyFrame.EasingFunction>-->
+                                                                    </EasingDoubleKeyFrame>
+                                                                </DoubleAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </DataTrigger.EnterActions>
+                                                </DataTrigger>
+
+                                                <DataTrigger Binding="{Binding StockStatus}" Value="OutOfStock">
+                                                    <Setter Property="FontWeight" Value="Bold"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding StockStatus}" Value="LowInStock">
+                                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                                    <Setter Property="FontWeight" Value="Bold"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                        <Style TargetType="DataGrid" BasedOn="{StaticResource MahApps.Styles.DataGrid}">
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                        </Style>
+                                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MyDataGridCell}"/>
+                                    </DataGrid.Resources>
+
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Id" Binding="{Binding Product.Id}" Width="*"/>
+                                        <DataGridTextColumn Header="Category" Binding="{Binding Product.Category.Name}" Width="*"/>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Product.Name}" Width="*" />
+                                        <DataGridTextColumn Header="Description" Binding="{Binding Product.Description}" Width="2*"/>
+                                        <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, ConverterCulture=en-GB, StringFormat=' \{0:C\}'}" Width="*"/>
+                                        <DataGridTextColumn Header="Quantity" Binding="{Binding QuantityInStock}" Width="*" />
+                                        <DataGridTextColumn Header="Stock status"  Binding="{Binding StockStatus, Converter={StaticResource stockStatusConv}}" Width="*" CellStyle="{StaticResource AnimatedCell}">
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem Header="Low in stock products" >
+                            <uc:GridUserControl ItemsSource="{Binding LowInStockProducts}"/>
+                        </TabItem>
+                        <TabItem Header="Out of stock products" >
+                            <uc:GridUserControl ItemsSource="{Binding OutOfStockProducts}"/>
+                        </TabItem>
+                    </TabControl>
                 </Grid>
             </Viewbox>
         </GroupBox>
