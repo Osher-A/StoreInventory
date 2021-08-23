@@ -23,7 +23,7 @@
             </Style>
         </Page.Resources>
 
-        <Grid Background="{DynamicResource AccentColorBrush4}">
+        <Grid Style="{StaticResource MyGrid}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>

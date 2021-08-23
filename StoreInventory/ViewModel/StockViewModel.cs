@@ -19,8 +19,8 @@ namespace StoreInventory.ViewModel
     public class StockViewModel : INotifyPropertyChanged
     {
         private IProductRepository _productRepository = new ProductRepository();
-        private StockService _stockService = new StockService(new StockRepository(), new CategoryRepository());
-        private ProductDataService _productService;
+        private StockSearchService _stockSearchService = new StockSearchService(new StockRepository());
+        private ProductDataService _productDataService;
         private ImageService _imageService = new ImageService();
 
 
@@ -65,11 +65,17 @@ namespace StoreInventory.ViewModel
         {
             get
             {
-                if (_selectedStock.Product.Image == null && !string.IsNullOrWhiteSpace(_selectedStock.Product.Name))
-                    ImageUploadVisibility = Visibility.Visible;
+                if (_selectedStock != null)
+                {
+                    if (_selectedStock.Product.Image == null && !string.IsNullOrWhiteSpace(_selectedStock.Product.Name))
+                        ImageUploadVisibility = Visibility.Visible;
+                    else
+                        ImageUploadVisibility = Visibility.Collapsed;
+                }
                 else
                     ImageUploadVisibility = Visibility.Collapsed;
-                return _selectedStock;                                
+
+                return _selectedStock;
             }
             set
             {
@@ -110,7 +116,7 @@ namespace StoreInventory.ViewModel
         public StockViewModel()
         {
             _getStocks = new ObservableCollection<Stock>();
-            _productService = new ProductDataService(_productRepository);
+            _productDataService = new ProductDataService(_productRepository);
             LoadData();
             ClearFormCommand = new CustomCommand(ClearForm, CanClearForm);
             ImageCommand = new CustomCommand(AddImage, CanAddImage);
@@ -119,7 +125,7 @@ namespace StoreInventory.ViewModel
             DeleteProductCommand = new CustomCommand(DeleteProduct, CanDeleteProduct);
             SearchCommand = new CustomCommand(SearchProducts, CanSearchProducts);
         }
-
+        
         private bool CanSearchProducts(object obj)
         {
             return true;
@@ -127,12 +133,14 @@ namespace StoreInventory.ViewModel
 
         private void SearchProducts(object obj)
         {
-           GetStocks = _stockService.SearchStocks(SearchInput, _productRepository);
+           GetStocks = _stockSearchService.SearchStock(SearchInput, _productRepository);
         }
 
-        private void DeleteProduct(object obj)
+        private async void DeleteProduct(object obj)
         {
-            _productService.DeleteProduct(SelectedStock.Product.Id);
+           await _productDataService.DeleteProduct(SelectedStock.Product.Id);
+            LoadData();
+            ClearFields();
         }
 
         private bool CanDeleteProduct(object obj)
@@ -145,21 +153,21 @@ namespace StoreInventory.ViewModel
 
         private void AddNewProduct(object obj)
         {
-            _productService.AddNewProduct(SelectedStock.Product);
+            _productDataService.AddNewProduct(SelectedStock.Product);
+            ClearFields();
             LoadData();
-            SelectedStock = new Stock() { Product = new Product() };
         }
 
         private bool CanAddNewProduct(object obj)
         {
-            return !_productService.ExistingProduct(SelectedStock.Product);
+            return !_productDataService.ExistingProduct(SelectedStock.Product);
         }
 
         private void UpdateProduct(object obj)
         {
-            _productService.UpdateProduct(SelectedStock.Product);
+            _productDataService.UpdateProduct(SelectedStock.Product);
             LoadData();
-            SelectedStock = new Stock() { Product = new Product() };
+            ClearFields();
         }
 
         private bool CanUpDateProduct(object obj)
@@ -179,7 +187,7 @@ namespace StoreInventory.ViewModel
 
         private void ClearForm(object obj)
         {
-            SelectedStock = new Stock() { Product = new Product() };
+            ClearFields();
         }
 
         private bool CanClearForm(object obj)
@@ -189,10 +197,15 @@ namespace StoreInventory.ViewModel
 
         private void LoadData()
         {
-            GetStocks = _stockService.GetStocks;
-            LowInStockProducts = _stockService.GetLowInStockProducts();
-            OutOfStockProducts = _stockService.GetOutOfStockProducts();
-            Categories = _stockService.GetCategories();
+            GetStocks = _stockSearchService.AllStockProducts();
+            LowInStockProducts = _stockSearchService.GetLowInStockProducts();
+            OutOfStockProducts = _stockSearchService.GetOutOfStockProducts();
+            Categories = new CategoryService(new CategoryRepository()).GetCategories();
+        }
+
+        private void ClearFields() 
+        {
+            SelectedStock = new Stock() { Product = new Product() { Category = new Category() } };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

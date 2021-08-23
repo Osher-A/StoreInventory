@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:StoreInventory.Views"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:convr="clr-namespace:StoreInventory.Views.Converters"
     StartupUri="..\Views\MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -11,8 +12,26 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
+            
+            <convr:WindowHeightConverter x:Key="windowConvr"/>
+            
             <Thickness x:Key="ControlMargin">0 5 0 0</Thickness>
+
+            <Style TargetType="Grid" x:Key="MyGrid" >
+                <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}" />
+            </Style>
+
+            <Style TargetType="RowDefinition">
+                <Setter Property="Height" Value="40"/>
+            </Style>
+
+            <Style TargetType="GroupBox" BasedOn="{StaticResource MahApps.Styles.GroupBox}">
+                <Setter Property="BorderThickness" Value="5"/>
+            </Style>
+
+            <Style TargetType="ScrollViewer" BasedOn="{StaticResource MahApps.Styles.ScrollViewer}">
+                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+            </Style>
             
             <Style TargetType="TextBlock" x:Key="Title" BasedOn="{StaticResource MahApps.Styles.TextBlock}">
                 <Setter Property="FontFamily" Value="{StaticResource MahApps.Fonts.Family.Header}"/>
@@ -42,40 +61,46 @@
                 <Setter Property="Width" Value="150"/>
             </Style>
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}">
-                <Setter Property="Margin" Value="0,5,20,5"/>
+                <Setter Property="Margin" Value="0,5,52,5"/>
                 <Setter Property="controls:ControlsHelper.ContentCharacterCasing" Value="Normal"/>
                 <Setter Property="FontSize" Value="15"/>
                 <Setter Property="FontFamily" Value="{StaticResource MahApps.Fonts.Family.Button}"/>
-                <Setter Property="Width" Value="125"/>
+                <Setter Property="Width" Value="150"/>
+                <Setter Property="Height" Value="30"/>
             </Style>
-            <Style TargetType="RowDefinition">
-                <Setter Property="Height" Value="40"/>
+            
+            <Style TargetType="TabControl" BasedOn="{StaticResource MahApps.Styles.TabControl.Animated}">
+                <Setter Property="Margin" Value="0,5"/>
             </Style>
+            <Style TargetType="TabItem" BasedOn="{StaticResource MahApps.Styles.TabItem}">
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+
             <Style TargetType="DataGrid" BasedOn="{StaticResource MahApps.Styles.DataGrid.Azure}">
                 <Setter Property="AlternatingRowBackground" Value="{StaticResource MahApps.Brushes.Accent4}"/>
                 <Setter Property="GridLinesVisibility" Value="All"/>
+                <Setter Property="IsReadOnly" Value="True"/>
+                <Setter Property="AutoGenerateColumns" Value="False"/>
+                <Setter Property="RowHeight" Value="40"/>
+                <Setter Property="BorderThickness" Value="1"/>
             </Style>
+            
             <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
                 <Setter Property="controls:ControlsHelper.ContentCharacterCasing" Value="Normal"/>
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Setter Property="Padding" Value="5"/>
             </Style>
-            <Style x:Key="MyDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell.Azure}">
-                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                <Setter Property="controls:DataGridHelper.CellPadding" Value="5"/>
-                <Setter Property="SnapsToDevicePixels" Value="True"/>
-            </Style>
+            
             <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell.Azure}">
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Setter Property="controls:DataGridHelper.CellPadding" Value="5"/>
-                <Setter Property="SnapsToDevicePixels" Value="True"/>
             </Style>
-            <Style TargetType="TabControl" BasedOn="{StaticResource MahApps.Styles.TabControl.Animated}">
+            
+            <Style x:Key="MyDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell.Azure}">
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="controls:DataGridHelper.CellPadding" Value="5"/>
             </Style>
-            <Style TargetType="TabItem" BasedOn="{StaticResource MahApps.Styles.TabItem}">
-                <Setter Property="BorderThickness" Value="1"/>
 
-            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -6,6 +6,7 @@ using StoreInventory.Model;
 using StoreInventory.Interfaces;
 using Moq;
 using StoreInventory.Services;
+using System.Collections.ObjectModel;
 
 namespace UnitTests.ServicesTests
 {
@@ -21,6 +22,19 @@ namespace UnitTests.ServicesTests
             _productRepository = new Mock<IProductRepository>();
             _productRepository.Setup(pr => pr.GetProducts()).Returns(ModelProducts());
             _searchService = new ProductSearchService(_productRepository.Object);
+        }
+
+        [Test]
+        public void AllProducts_WhenSelected_ReturnsAConvertedListOfDTOProducts()
+        {
+            //Arrange
+
+            //Act
+            var dtoProducts = _searchService.AllProducts;
+
+            // Assert
+            Assert.That(dtoProducts, Is.TypeOf<ObservableCollection<StoreInventory.DTO.Product>>());
+            Assert.That(dtoProducts.Count == 4);
         }
 
         [Test]

@@ -12,26 +12,28 @@ namespace StoreInventory.Services
     public class ProductSearchService
     {
         private IProductRepository _productRepository;
-        private List<IProduct> _modelProducts;
+        public ObservableCollection<DTO.Product> AllProducts { get; private set; }
+
 
         public ProductSearchService(IProductRepository productRepository)
         {
             _productRepository = productRepository;
-            _modelProducts = _productRepository.GetProducts();
+            AllProducts = ToDTOProductList( _productRepository.GetProducts()).ToObservableCollection();
         }
         public ObservableCollection<DTO.Product> SearchProducts(string searchInput)
         {
             int id;
             var isNumber = int.TryParse(searchInput, out id);
-            var searchList = (isNumber)? _modelProducts.Where(mp => mp.Id == id).ToList(): _modelProducts
-                                                   .Where(mp => mp.Category.Name                                       
+            var searchList = (isNumber) ? AllProducts.Where(mp => mp.Id == id).ToList() : AllProducts
+                                                   .Where(mp => mp.Category.Name
                                                    .Contains(searchInput.Trim(), StringComparison.OrdinalIgnoreCase))
                                                    .OrderBy(mp => mp.Name)
                                                    .ToList();
+                                                   
             if (searchList.Count == 0)
-                searchList = _modelProducts.Where(mp => mp.Name.Contains(searchInput, StringComparison.OrdinalIgnoreCase)).ToList();
+                searchList = AllProducts.Where(mp => mp.Name.Contains(searchInput, StringComparison.OrdinalIgnoreCase)).ToList();
 
-            return ToDTOProductList(searchList).ToList().ToObservableCollection();
+            return searchList.ToObservableCollection();
         }
 
         private IEnumerable<DTO.Product> ToDTOProductList(List<IProduct> modelProducts)

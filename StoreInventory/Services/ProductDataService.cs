@@ -1,22 +1,26 @@
 ﻿using StoreInventory.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StoreInventory.Services
 {
     public class ProductDataService
     {
         private IProductRepository _productRepository;
-        public Action<string, string> OkMessageBoxEvent;
-        public Action<string, string> OkAndCancelMessageBoxEvent;
+        public static Action<string, string> OkMessageBoxEvent;
+        public static Func<string, string, Task<bool>> OkAndCancelMessageBoxEvent;
         public static bool UsersConfirmation { get; set; }
-        
-       public List<DTO.Product> AllProducts { get; private set; }
+
         public ProductDataService() { }
         public ProductDataService(IProductRepository productRepository)
         {
             _productRepository = productRepository;
-            AllProducts = (List<DTO.Product>)ConvertToDtoProducts(_productRepository.GetProducts()) ;
+        }
+        public void AddNewProduct(IProduct newProduct)
+        {
+            if (ValidProductToAdd(newProduct))
+                _productRepository.AddingProduct(newProduct);
         }
 
         public void UpdateProduct(IProduct usersProduct)
@@ -24,17 +28,29 @@ namespace StoreInventory.Services
             _productRepository.EditingProduct(usersProduct);
         }
 
-        public void DeleteProduct(int productId)
+        public async Task DeleteProduct(int productId)
         {
-            OkAndCancelMessageBoxEvent?.Invoke("Warning!","Are you sure you would like to delete this product!");
-            if (UsersConfirmation)
+            var result = OkAndCancelMessageBoxEvent?.Invoke("Warning!","Are you sure you would like to delete this product!");
+            if (await result)
                 _productRepository.DeletingProduct(productId);
         }
 
-        public void AddNewProduct(IProduct newProduct)
+        public bool ExistingProduct(IProduct newProduct)
         {
-            if (ValidProductToAdd(newProduct))
-                _productRepository.AddingProduct(newProduct);
+            var allProducts = (List<DTO.Product>)ConvertToDtoProducts(_productRepository.GetProducts());
+
+            if (newProduct.Id != 0)
+                return true;
+
+            if (!string.IsNullOrWhiteSpace(newProduct.Name) && !string.IsNullOrWhiteSpace(newProduct.Category.Name))
+            {
+                if (allProducts.Exists(p => string.Equals(p.Category.Name.Trim(), newProduct.Category.Name.Trim(), StringComparison.OrdinalIgnoreCase))
+                 && allProducts.Exists(p => string.Equals(p.Name.Trim(), newProduct.Name.Trim(), StringComparison.OrdinalIgnoreCase))
+                 && allProducts.Exists(p => string.Equals(p.Description.Trim(), newProduct.Description.Trim(), StringComparison.OrdinalIgnoreCase)))
+                    return true;
+            }
+
+            return false;
         }
         private bool ValidProductToAdd(IProduct newProduct)
         {
@@ -46,21 +62,6 @@ namespace StoreInventory.Services
             }
             else
                 return true;
-        }
-        public bool ExistingProduct(IProduct newProduct)
-        {
-            if (newProduct.Id != 0)
-                return true;
-
-            if (!string.IsNullOrWhiteSpace(newProduct.Name) && !string.IsNullOrWhiteSpace(newProduct.Category.Name))
-            {
-                if (AllProducts.Exists(p => string.Equals(p.Category.Name.Trim(), newProduct.Category.Name.Trim(), StringComparison.OrdinalIgnoreCase))
-                 && AllProducts.Exists(p => string.Equals(p.Name.Trim(), newProduct.Name.Trim(), StringComparison.OrdinalIgnoreCase))
-                 && AllProducts.Exists(p => string.Equals(p.Description.Trim(), newProduct.Description.Trim(), StringComparison.OrdinalIgnoreCase)))
-                      return true;
-            }
-
-             return false;
         }
         private IEnumerable<DTO.Product> ConvertToDtoProducts(List<IProduct> products)
         {

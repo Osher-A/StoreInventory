@@ -4,14 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:convr="clr-namespace:StoreInventory.Views.Converters"
         xmlns:local="clr-namespace:StoreInventory.Views"
         mc:Ignorable="d"
-         Name="mainWindow"             
+         Name="mainWindow" 
+         IsWindowDraggable="True"
+         MaxWidth="1000"
+          Height="700"            
+         WindowStartupLocation="CenterScreen"             
         GlowBrush="{DynamicResource AccentColorBrush}"
         UseNoneWindowStyle="False"
-        ResizeMode="CanResizeWithGrip" HorizontalAlignment="Stretch" VerticalAlignment="Top" 
-         Height="1000"             >
-        <controls:MetroWindow.Flyouts>
+        ResizeMode="CanResizeWithGrip" HorizontalAlignment="Center" VerticalAlignment="Top" 
+        >
+   
+    <controls:MetroWindow.Flyouts>
             <controls:FlyoutsControl x:Name="FlyoutControl">
                 <controls:Flyout x:Name="StockOutList"
                   HorizontalAlignment="Stretch"
@@ -23,7 +29,7 @@
                         IsOpen="False"
                          IsModal="True"
                         >
-                    <Grid>
+                    <Grid Name="parentGrid" Height="Auto">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition Height="*"/>
@@ -47,6 +53,7 @@
                 </controls:Flyout>
             </controls:FlyoutsControl>
         </controls:MetroWindow.Flyouts>
+
         <Grid >
             <Frame Name="MainWindowFrame"
                Loaded="MainWindowFrame_Loaded"
@@ -56,5 +63,6 @@
                NavigationUIVisibility="Hidden" ClipToBounds="True"
                     >
             </Frame>
-        </Grid>
+    </Grid>
+
 </controls:MetroWindow>

@@ -11,21 +11,21 @@ using System.Text;
 namespace UnitTests.ServicesTests
 {
     [TestFixture]
-    public class StockServiceTests
+    public class StockSearchServiceTests
     {
         private Mock<IStockRepository> _mockRepository = new Mock<IStockRepository>();
         private Mock<ICategoryRepository> _mockCategoryRepos = new Mock<ICategoryRepository>();
 
         [Test]
-        public void GetStocks_WhenCalled_ReturnsConvertedListOfDTOStocksOrderedByCategories()
+        public void AllStockProducts_WhenCalled_ReturnsConvertedListOfDTOStocksOrderedByCategories()
         {
             //Arrange
             _mockRepository.Setup(mr => mr.GetAllStocks()).Returns(ModelStocks());
             _mockCategoryRepos.Setup(cr => cr.GetCategories()).Returns(Categories());
-            var stockService = new StockService(_mockRepository.Object, _mockCategoryRepos.Object);
+            var stockService = new StockSearchService(_mockRepository.Object);
 
             //Act
-            var dtoStocks = stockService.GetStocks;
+            var dtoStocks = stockService.AllStockProducts();
 
             //Assert
             Assert.That(dtoStocks, Is.TypeOf<ObservableCollection<StoreInventory.DTO.Stock>>());

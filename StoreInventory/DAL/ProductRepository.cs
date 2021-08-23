@@ -36,6 +36,15 @@ namespace StoreInventory.DAL
             }
         }
         
+        public void DeletingProduct(int productId)
+        {
+            using (var db = new StoreContext())
+            {
+                var productToDelete = db.Products.Find(productId);
+                db.Products.Remove(productToDelete);
+                db.SaveChanges();
+            }
+        }
         public void EditingProduct(IProduct usersProduct)
         {
             using (var db = new StoreContext())
@@ -52,18 +61,15 @@ namespace StoreInventory.DAL
             modelProduct.Description = usersProduct.Description;
             modelProduct.Price = usersProduct.Price;
             modelProduct.Image = usersProduct.Image;
-            modelProduct.CategoryId = usersProduct.CategoryId;
-        }
-        public void DeletingProduct(int productId)
-        {
-            using (var db = new StoreContext())
-            {
-                db.Products.Find(productId);
-                db.SaveChanges();
-            }
+            modelProduct.CategoryId = GetModelCategoryId(usersProduct.Category.Name);
         }
 
-        
+        private int GetModelCategoryId(string categoryName)
+        {
+            using var db = new StoreContext();
+            var category = db.Categories.SingleOrDefault(c => c.Name == categoryName);
+            return category.Id;
+        }
 
     }
 }

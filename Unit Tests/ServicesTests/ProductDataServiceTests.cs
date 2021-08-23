@@ -11,7 +11,7 @@ using StoreInventory.DTO;
 namespace UnitTests.ServicesTests
 {
     [TestFixture]
-    public class ProductServiceTests
+    public class ProductDataServiceTests
     {
         private Mock<IProductRepository> _mockRepository;
         private ProductDataService _productService;
@@ -24,20 +24,7 @@ namespace UnitTests.ServicesTests
         }
 
         [Test]
-        public void AllProducts_WhenSelected_ReturnsAConvertedListOfDTOProducts()
-        {
-            //Arrange
-
-            //Act
-           var dtoProducts = _productService.AllProducts;
-
-            // Assert
-            Assert.That(dtoProducts, Is.TypeOf<List<StoreInventory.DTO.Product>>());
-            Assert.That(dtoProducts.Count == 3);
-        }
-
-        [Test]
-        public void ValidProductToAdd_IfNewPropertyIsValid_ReturnTrue()
+        public void AddNewProduct_IfNewPropertyIsValid_AddingProductMethodIsCalled()
         {
             // Arrange
 
@@ -56,13 +43,14 @@ namespace UnitTests.ServicesTests
             //Assert
             _mockRepository.Verify(mr => mr.AddingProduct(It.IsAny<Product>()));
         }
+
         [Test]
         [TestCase(0, "", "Bun", "Yummy Bun", 1.05f) ]
         [TestCase(0, "Home", "", "Large Clock", 12.05f)]
         [TestCase(0, "Food", "Coke", "", 1.50f)]
         [TestCase(0, "Home", "Bin", "Large Bin", 0)]
 
-        public void ValidProductToAdd_IfNewPropertyHasNotBeenFullySet_ReturnFalse
+        public void AddNewProduct_IfNewPropertyHasNotBeenFullySet_ReturnFalse
             (int id,string categoryName, string name, string description, float price)
         {
             // Arrange
@@ -84,7 +72,7 @@ namespace UnitTests.ServicesTests
         }
 
         [Test]
-        public void ExistingProduct_IfIdenticelToExistingProduct_ReturnTrue()
+        public void ExistingProduct_IfIdenticelToExistingProduct_ReturnsTrue()
         {
             //Arrange
             var existingProduct = new Product()

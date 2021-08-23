@@ -33,23 +33,26 @@
             </ObjectDataProvider>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <DataGrid 
+
+        <Grid>
+        <ScrollViewer   VerticalScrollBarVisibility="Auto" Style="{StaticResource MahApps.Styles.ScrollViewer}" >
+            <DataGrid 
             x:Name="DataGrid"
-                        Width="700"
-                        MinHeight="500"
+                        MaxHeight="500"
+                        Width="750"
                         ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType=local:GridUserControl}}"
                         SelectedItem="{Binding SelectedStock}"      
                                AutoGenerateColumns="False"
                         RowHeight="40">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Product.Id}" Width="*"/>
-                <DataGridTextColumn Header="Category" Binding="{Binding Product.Category.Name}" Width="*"/>
-                <DataGridTextColumn Header="Name" Binding="{Binding Product.Name}" Width="*" />
-                <DataGridTextColumn Header="Description" Binding="{Binding Product.Description}" Width="2*"/>
-                <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, ConverterCulture=en-GB, StringFormat=' \{0:C\}'}" Width="*"/>
-                <DataGridTextColumn Header="Quantity" Binding="{Binding QuantityInStock}" Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>    
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Product.Id}" Width="*"/>
+                    <DataGridTextColumn Header="Category" Binding="{Binding Product.Category.Name}" Width="*"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Product.Name}" Width="*" />
+                    <DataGridTextColumn Header="Description" Binding="{Binding Product.Description}" Width="2*"/>
+                    <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, ConverterCulture=en-GB, StringFormat=' \{0:C\}'}" Width="*"/>
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding QuantityInStock}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

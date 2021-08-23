@@ -24,6 +24,7 @@
         <ResourceDictionary>
             <viewModel:StockViewModel x:Key="vm"/>
             <converters:DefaultIntConverter x:Key="intConv"/>
+            <converters:CurrencyConverter x:Key="currencyToInt"/>
             <converters:StockStatusConverter x:Key="stockStatusConv"/>
 
             <ObjectDataProvider x:Key="UnitType" ObjectType="{x:Type sys:Enum}" MethodName="GetNames" >
@@ -39,12 +40,11 @@
             </ObjectDataProvider>
         </ResourceDictionary>
     </Page.Resources>
-
-    <ScrollViewer   VerticalScrollBarVisibility="Auto" Style="{StaticResource MahApps.Styles.ScrollViewer}" >
-        <GroupBox  BorderThickness="5" Header="Stock Manager" Style="{StaticResource MahApps.Styles.GroupBox}" >
-            <Viewbox 
+    <ScrollViewer   VerticalScrollBarVisibility="Auto" >
+        <GroupBox Name="GroupBox"  Header="Stock Manager" >
+            <Viewbox  
             Stretch="Uniform">
-                <Grid Background="{DynamicResource MahApps.Brushes.Accent4}" DataContext="{StaticResource vm}" diag:PresentationTraceSources.TraceLevel="High" Opacity="2">
+                <Grid DataContext="{StaticResource vm}" Width="{Binding ElementName=GroupBox}" Style="{StaticResource MyGrid}" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20" />
                         <RowDefinition/>
@@ -68,6 +68,8 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="20"/>
                     </Grid.ColumnDefinitions>
+                    
+                    
                     <Label Grid.Row="1"
                     Content="_Id: "
                        Target="{Binding ElementName=IdTextBox}"
@@ -89,7 +91,8 @@
                     Grid.Row="2"
                     Grid.Column="2"
                     SpellCheck.IsEnabled="True"       
-                    Text="{Binding SelectedStock.Product.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                    Text="{Binding SelectedStock.Product.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  >
+                    </TextBox>
 
                     <Label Grid.Row="3"
                     Grid.Column="1"
@@ -121,7 +124,7 @@
                                Text="Select a photo to upload"
                                TextDecorations="Underline"
                                HorizontalAlignment="Center"
-                               >
+                               Visibility="{Binding ImageUploadVisibility}">
                         <TextBlock.Resources>
                             <Style TargetType="TextBlock" >
                                 <Style.Triggers>
@@ -137,7 +140,7 @@
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBlock>
-                    
+
                     <Label Grid.Row="2"
                     Grid.Column="7"
                     Content="_Category:"
@@ -183,7 +186,7 @@
                     Grid.Row="4"
                     Grid.Column="8"
                     Width="50"
-                         Text="{Binding SelectedStock.Product.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={} {0:C}, ConverterCulture=en-GB, Converter={StaticResource intConv}}"/>
+                         Text="{Binding SelectedStock.Product.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource currencyToInt}}"/>
 
                     <TextBox Grid.Row="4"
                              Grid.Column="8"
@@ -209,30 +212,30 @@
                     <StackPanel Orientation="Horizontal"
                     Grid.Row="6"
                     Grid.Column="1"
-                    Grid.ColumnSpan="8" >
-                        <Button 
+                    Grid.ColumnSpan="8"
+                                >
+                        <Button
                         Content="_Add New"
                             Command="{Binding AddNewProductCommand}"/>
                         <Button
                         Content="_Update"
                             Command="{Binding UpdateProductCommand}"/>
                         <Button 
-                        Content="_Delete"/>
+                        Content="_Delete" 
+                            Command="{Binding DeleteProductCommand}"/>
                         <Button 
                         Content="_Clear"
-                        Command="{Binding ClearFormCommand }"/>
-                        <Button 
-                        Content="_Close"
-                        Margin="0,5"/>
+                        Command="{Binding ClearFormCommand }"
+                            Margin="0,5"/>
                     </StackPanel>
-                    <Separator Grid.Row="7"
+                    <Border Grid.Row="7"
                                Grid.Column="0"
                                Grid.ColumnSpan="10"
-                               VerticalAlignment="Bottom"
-                               BorderThickness="5"
-                               Background="{StaticResource MahApps.Brushes.Accent}"/>
+                            BorderThickness="0,0,0,3"
+                            Margin="0,10"
+                               BorderBrush="{StaticResource MahApps.Brushes.Accent}"/>
 
-                    <TabControl Grid.Row="8" Grid.Column="1"  Grid.ColumnSpan="8" Margin="0,5">
+                    <TabControl Grid.Row="8" Grid.Column="1"  Grid.ColumnSpan="8" >
                         <TabItem Header="All products" IsSelected="True" >
                             <StackPanel Background="{StaticResource MahApps.Brushes.Accent4}">
                                 <TextBox 
@@ -248,69 +251,58 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TextBox>
-
-                                <DataGrid x:Name="DataGrid"
-                                    Width="700"
-                                    MinHeight="500"
+                                <ScrollViewer  >
+                                    <DataGrid x:Name="DataGrid"
+                                     Width="750" 
                                     ItemsSource="{Binding GetStocks}"
                                     SelectedItem="{Binding SelectedStock}"      
-                                   AutoGenerateColumns="False"
-                                   RowHeight="40"
                               >
-                                    <!--<i:Interaction.Triggers>
-                            <ei:DataTrigger Binding="{}" Value="Red" >
-                                <ei:ControlStoryboardAction Storyboard="{StaticResource MyAnimation}"
-                                                            ControlStoryboardOption="Play"/>
-                            </ei:DataTrigger>
-
-                        </i:Interaction.Triggers>-->
-
-                                    <DataGrid.Resources>
-                                        <Style TargetType="DataGridCell" x:Key="AnimatedCell" BasedOn="{StaticResource MyDataGridCell}">
-                                            <Style.Triggers>
-                                                <DataTrigger
+                                        <DataGrid.Resources>
+                                            <Style TargetType="DataGridCell" x:Key="AnimatedCell" BasedOn="{StaticResource MyDataGridCell}">
+                                                <Style.Triggers>
+                                                    <DataTrigger
                                                   Binding="{Binding StockStatus}" Value="OutOfStock">
-                                                    <DataTrigger.EnterActions>
-                                                        <BeginStoryboard >
-                                                            <Storyboard Name="Animate" AutoReverse="True" RepeatBehavior="Forever">
-                                                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="Opacity">
-                                                                    <EasingDoubleKeyFrame KeyTime="00:00:001" Value="0" >
-                                                                        <!--<EasingDoubleKeyFrame.EasingFunction>
+                                                        <DataTrigger.EnterActions>
+                                                            <BeginStoryboard >
+                                                                <Storyboard Name="Animate" AutoReverse="True" RepeatBehavior="Forever">
+                                                                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="Opacity">
+                                                                        <EasingDoubleKeyFrame KeyTime="00:00:0001" Value="0" >
+                                                                            <!--<EasingDoubleKeyFrame.EasingFunction>
                                                                 <ElasticEase  EasingMode="EaseInOut" />
                                                             </EasingDoubleKeyFrame.EasingFunction>-->
-                                                                    </EasingDoubleKeyFrame>
-                                                                </DoubleAnimationUsingKeyFrames>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </DataTrigger.EnterActions>
-                                                </DataTrigger>
+                                                                        </EasingDoubleKeyFrame>
+                                                                    </DoubleAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </DataTrigger.EnterActions>
+                                                    </DataTrigger>
 
-                                                <DataTrigger Binding="{Binding StockStatus}" Value="OutOfStock">
-                                                    <Setter Property="FontWeight" Value="Bold"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding StockStatus}" Value="LowInStock">
-                                                    <Setter Property="Foreground" Value="DarkRed"/>
-                                                    <Setter Property="FontWeight" Value="Bold"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                        <Style TargetType="DataGrid" BasedOn="{StaticResource MahApps.Styles.DataGrid}">
-                                            <Setter Property="BorderThickness" Value="1"/>
-                                        </Style>
-                                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MyDataGridCell}"/>
-                                    </DataGrid.Resources>
+                                                    <DataTrigger Binding="{Binding StockStatus}" Value="OutOfStock">
+                                                        <Setter Property="FontWeight" Value="Bold"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding StockStatus}" Value="LowInStock">
+                                                        <Setter Property="Foreground" Value="DarkRed"/>
+                                                        <Setter Property="FontWeight" Value="Bold"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                            
+                                            <Style TargetType="DataGridCell" BasedOn="{StaticResource MyDataGridCell}"/>
+                                            
+                                        </DataGrid.Resources>
 
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Id" Binding="{Binding Product.Id}" Width="*"/>
-                                        <DataGridTextColumn Header="Category" Binding="{Binding Product.Category.Name}" Width="*"/>
-                                        <DataGridTextColumn Header="Name" Binding="{Binding Product.Name}" Width="*" />
-                                        <DataGridTextColumn Header="Description" Binding="{Binding Product.Description}" Width="2*"/>
-                                        <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, ConverterCulture=en-GB, StringFormat=' \{0:C\}'}" Width="*"/>
-                                        <DataGridTextColumn Header="Quantity" Binding="{Binding QuantityInStock}" Width="*" />
-                                        <DataGridTextColumn Header="Stock status"  Binding="{Binding StockStatus, Converter={StaticResource stockStatusConv}}" Width="*" CellStyle="{StaticResource AnimatedCell}">
-                                        </DataGridTextColumn>
-                                    </DataGrid.Columns>
-                                </DataGrid>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Id" Binding="{Binding Product.Id}" Width="*"/>
+                                            <DataGridTextColumn Header="Category" Binding="{Binding Product.Category.Name}" Width="*"/>
+                                            <DataGridTextColumn Header="Name" Binding="{Binding Product.Name}" Width="*" />
+                                            <DataGridTextColumn Header="Description" Binding="{Binding Product.Description}" Width="2*"/>
+                                            <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, ConverterCulture=en-GB, StringFormat=' \{0:C\}'}" Width="*"/>
+                                            <DataGridTextColumn Header="Quantity" Binding="{Binding QuantityInStock}" Width="*" />
+                                            <DataGridTextColumn Header="Stock status"  Binding="{Binding StockStatus, Converter={StaticResource stockStatusConv}}" Width="*" CellStyle="{StaticResource AnimatedCell}">
+                                            </DataGridTextColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </ScrollViewer>
                             </StackPanel>
                         </TabItem>
                         <TabItem Header="Low in stock products" >
@@ -324,4 +316,5 @@
             </Viewbox>
         </GroupBox>
     </ScrollViewer>
+
 </Page>
