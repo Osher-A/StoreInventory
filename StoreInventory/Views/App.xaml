@@ -17,7 +17,12 @@
             
             <Thickness x:Key="ControlMargin">0 5 0 0</Thickness>
 
-            <Style TargetType="Grid" x:Key="MyGrid" >
+            <Style TargetType="Page" BasedOn="{StaticResource MahApps.Styles.Page}">
+                <Setter Property="Width" Value="885"/>
+                <Setter Property="Height" Value="1000"/>
+            </Style>
+
+            <Style TargetType="Grid" x:Key="MainGrid">
                 <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}" />
             </Style>
 
@@ -25,12 +30,18 @@
                 <Setter Property="Height" Value="40"/>
             </Style>
 
+            <Style TargetType="ScrollViewer" BasedOn="{StaticResource MahApps.Styles.ScrollViewer}">
+                <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+            </Style>
+            
             <Style TargetType="GroupBox" BasedOn="{StaticResource MahApps.Styles.GroupBox}">
                 <Setter Property="BorderThickness" Value="5"/>
             </Style>
 
-            <Style TargetType="ScrollViewer" BasedOn="{StaticResource MahApps.Styles.ScrollViewer}">
-                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+            <Style TargetType="Border" x:Key="MyBorder">
+                <Setter Property="BorderThickness" Value="0,0,0,3"/>
+                <Setter Property="BorderBrush" Value="{StaticResource MahApps.Brushes.Accent}"/>
+                <Setter Property="Margin" Value="0,10"/>
             </Style>
             
             <Style TargetType="TextBlock" x:Key="Title" BasedOn="{StaticResource MahApps.Styles.TextBlock}">
@@ -46,6 +57,7 @@
             <Style TargetType="TextBox" x:Key="SearchTextBox" BasedOn="{StaticResource MahApps.Styles.TextBox.Search}">
                 <Setter Property="Margin"  Value="0,5"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="{StaticResource ControlMargin}"/>
             </Style>
 
             <Style TargetType="Label" BasedOn="{StaticResource  MahApps.Styles.Label}">
@@ -83,6 +95,7 @@
                 <Setter Property="AutoGenerateColumns" Value="False"/>
                 <Setter Property="RowHeight" Value="40"/>
                 <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Width" Value="750"/>
             </Style>
             
             <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
@@ -100,6 +113,8 @@
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Setter Property="controls:DataGridHelper.CellPadding" Value="5"/>
             </Style>
+
+            <Style TargetType="RadioButton" BasedOn="{StaticResource MahApps.Styles.RadioButton.Win10}"/>
 
         </ResourceDictionary>
     </Application.Resources>

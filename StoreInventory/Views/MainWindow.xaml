@@ -29,9 +29,9 @@
                         IsOpen="False"
                          IsModal="True"
                         >
-                    <Grid Name="parentGrid" Height="Auto">
+                    <Grid Name="FlyOutGrid" Height="Auto">
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBox Style="{StaticResource SearchTextBox}"

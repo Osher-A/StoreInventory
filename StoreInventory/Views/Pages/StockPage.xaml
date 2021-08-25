@@ -16,7 +16,6 @@
       mc:Ignorable="d" 
       d:DesignHeight="1000" d:DesignWidth="885"
       Title="Stock Page"
-      Height="Auto"
       VerticalAlignment="Top"
       >
     <Page.Resources>
@@ -41,10 +40,10 @@
         </ResourceDictionary>
     </Page.Resources>
     <ScrollViewer   VerticalScrollBarVisibility="Auto" >
-        <GroupBox Name="GroupBox"  Header="Stock Manager" >
+        <GroupBox Name="GroupBox"  Header="Stock Page" >
             <Viewbox  
             Stretch="Uniform">
-                <Grid DataContext="{StaticResource vm}" Width="{Binding ElementName=GroupBox}" Style="{StaticResource MyGrid}" >
+                <Grid DataContext="{StaticResource vm}" Width="{Binding ElementName=GroupBox}" Style="{StaticResource MainGrid}" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20" />
                         <RowDefinition/>
@@ -231,9 +230,8 @@
                     <Border Grid.Row="7"
                                Grid.Column="0"
                                Grid.ColumnSpan="10"
-                            BorderThickness="0,0,0,3"
-                            Margin="0,10"
-                               BorderBrush="{StaticResource MahApps.Brushes.Accent}"/>
+                            Style="{StaticResource MyBorder}"
+                           />
 
                     <TabControl Grid.Row="8" Grid.Column="1"  Grid.ColumnSpan="8" >
                         <TabItem Header="All products" IsSelected="True" >
@@ -251,7 +249,6 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TextBox>
-                                <ScrollViewer  >
                                     <DataGrid x:Name="DataGrid"
                                      Width="750" 
                                     ItemsSource="{Binding GetStocks}"
@@ -302,7 +299,6 @@
                                             </DataGridTextColumn>
                                         </DataGrid.Columns>
                                     </DataGrid>
-                                </ScrollViewer>
                             </StackPanel>
                         </TabItem>
                         <TabItem Header="Low in stock products" >

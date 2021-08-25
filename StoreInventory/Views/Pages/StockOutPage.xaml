@@ -4,116 +4,239 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:StoreInventory.Views.Pages"
+      xmlns:uc="clr-namespace:StoreInventory.Views.UserControls"
       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="1000" d:DesignWidth="800"
       Title="StockOutPage">
 
-        <Page.Resources>
-            <Style TargetType="Border">
-                <Setter Property="BorderBrush" Value="{DynamicResource BlackColorBrush}"/>
-                <Setter Property="BorderThickness" Value="2"/>
-                <Setter Property="Margin" Value="10"/>
-            </Style>
-            <Style TargetType="TextBlock">
-                <Setter Property="FontSize" Value="20"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="HorizontalAlignment" Value="Center"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-            </Style>
-        </Page.Resources>
+    <Page.Resources>
 
-        <Grid Style="{StaticResource MyGrid}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Border Padding="0,0,5,0">
-                <Grid>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </Page.Resources>
+    <ScrollViewer >
+        <GroupBox Header="Order Page">
+            <Grid  Style="{StaticResource MainGrid}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="50"/>
                         <RowDefinition/>
                         <RowDefinition />
-                        <RowDefinition />
+                        <RowDefinition/>
+                        <RowDefinition Height="20"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="30"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.ColumnSpan="5"
-                       Text="Customer Details"
-                       />
-                    <StackPanel Orientation="Horizontal"
+
+                    <TextBlock 
+                        HorizontalAlignment="Left"
                         Grid.Row="1"
-                        Grid.ColumnSpan="5"
-                        HorizontalAlignment="Center">
-                        <Label 
-                   Content="Customer Id:"/>
-                        <TextBox Width="100"/>
-                    </StackPanel>
-                    <Label Grid.Row="2"
+                        Grid.Column="4"
+                        Text="Customer's Details"/>
+                    <Label Grid.Column="3" 
+                               Content="Date:" Grid.Row="2"/>
+                    <TextBox Grid.Column="4" Grid.Row="2"/>
+                    <Label Grid.Row="3"
                    Content="First Name:"/>
-                    <TextBox Grid.Row="2"
+                    <TextBox Grid.Row="3"
                      Grid.Column="1"/>
-                    <Label Grid.Row="2"
-                   Grid.Column="3"
+                    <Label Grid.Row="3"
+                   Grid.Column="6"
                    Content="Last Name:"/>
-                    <TextBox Grid.Row="2"
-                     Grid.Column="4"/>
+                    <TextBox Grid.Row="3"
+                     Grid.Column="7"/>
+                    <Label 
+                            Grid.Row="4"
+                            Content="Phone:"/>
+                    <TextBox 
+                            Grid.Row="4"
+                            Grid.Column="1"/>
+                    <Label 
+                            Grid.Row="4"
+                            Grid.Column="6"
+                            Content="Email:"/>
+                    <TextBox 
+                            Grid.Row="4"
+                            Grid.Column="7"/>
+                </Grid>
+
+                <Border Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Style="{StaticResource MyBorder}" />
+                <Grid Grid.Row="2" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="20" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Products"/>
+
+                    <DockPanel Grid.Row="1">
+                        <TextBox
+                                DockPanel.Dock="Right"
+                             controls:TextBoxHelper.Watermark="Search"
+                             HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                             Style="{StaticResource SearchTextBox}"
+                             Width="150"
+                            Height="25"
+                            />
+
+                        <ComboBox
+                              DockPanel.Dock="Right"  
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Width="150"
+                            Margin="0,0,10,0"
+                            />
+                    </DockPanel>
+
+                    <uc:GridUserControl
+                        Margin="0,10,0,0"
+                            Grid.Row="2"/>
+
+                    <DockPanel 
+                        Grid.Row="4"
+                        >
+                        <TextBox
+                            Width="80"
+                            DockPanel.Dock="Right"/>
+                        <Label 
+                            Content="Quantity:"
+                            DockPanel.Dock="Right"/>
+
+                    </DockPanel>
 
                 </Grid>
-            </Border>
-            <Border Grid.Row="1">
-                <Grid>
+                <Border
+                    Grid.Row="3"
+                     Grid.Column="0"
+                     Grid.ColumnSpan="3"
+                    Style="{StaticResource MyBorder}" />
+                <Grid Grid.Row="4" Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition />
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="List Of Products"/>
-                    <TextBox controls:TextBoxHelper.Watermark="Search"
-                         HorizontalAlignment="Right"
-                         Height="25"
-                         Style="{StaticResource SearchTextBox}"
-                         Width="150"/>
-                    <DataGrid Grid.Row="1">
-                        <DataGrid.Columns>
+
+                    <TextBlock 
+                      Text="Order Products"/>
+                    <DataGrid 
+                        Margin="0,10,0,0"
+                        Grid.Row="1" >
+                        <DataGrid.Columns >
                             <DataGridTextColumn Header="Item Id"/>
-                            <DataGridTextColumn Header="Name"/>
+                            <DataGridTextColumn Header="Item Name"/>
                             <DataGridTextColumn Header="Description"/>
                             <DataGridTextColumn Header="Price"/>
-                            <DataGridTextColumn Header="Available Quantity "/>
+                            <DataGridTextColumn Header="Quantity "/>
+                            <DataGridTextColumn Header="Total Price"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                </Grid>
-            </Border>
-            <TextBlock Grid.Row="2"
-                  Text="List Of Added Items"/>
-            <Border Grid.Row="3">
-                <DataGrid >
-                    <DataGrid.Columns >
-                        <DataGridTextColumn Header="Item Id"/>
-                        <DataGridTextColumn Header="Item Name"/>
-                        <DataGridTextColumn Header="Description"/>
-                        <DataGridTextColumn Header="Price"/>
-                        <DataGridTextColumn Header="Quantity "/>
-                        <DataGridTextColumn Header="Total Price"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Border>
-            <StackPanel Orientation="Horizontal"
-                    Grid.Row="4"
-                    Margin="10,5"
-                    HorizontalAlignment="Center">
-                <Button Content="Save"/>
-                <Button Content="Remove"/>
-                <Button Content="Clear"/>
-                <Button Content="View List" />
-            </StackPanel>
 
-        </Grid>
+                    <StackPanel Orientation="Horizontal"
+                    Grid.Row="2"
+                    Margin="10"
+                    HorizontalAlignment="Center">
+                        <Button Content="Check Out"/>
+                        <Button Content="Remove item"/>
+                        <Button Content="Clear list"/>
+                    </StackPanel>
+                </Grid>
+                <Border
+                    Grid.Row="5" 
+                    Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                    Style="{StaticResource MyBorder}"/>
+                <Grid 
+                    Grid.Row="6" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition Height="80"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel >
+                        <TextBox 
+                            DockPanel.Dock="Right"/>
+                        <Label
+                            DockPanel.Dock="Right"
+                            Content="Total:"/>
+                    </DockPanel>
+                    <ComboBox 
+                        Grid.Row="1"
+                        HorizontalAlignment="Right"
+                        controls:TextBoxHelper.Watermark="Payment Method"/>
+                    <StackPanel 
+                        Grid.Row="2"
+                        Orientation="Horizontal"
+                         HorizontalAlignment="Center">
+                        <RadioButton 
+                           GroupName="PaymentStatus"
+                           Content="Fully paid"/>
+                        <RadioButton
+                            GroupName="PaymentStatus"
+                            Content="Partly paid"/>
+                        <RadioButton
+                            GroupName="PaymentStatus"
+                            Content="Not paid"
+                            IsChecked="True"/>
+                    </StackPanel>
+                    <StackPanel
+                         Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                         Grid.Row="3">
+                        <Label 
+                            Content="Amount Paid:"/>
+                        <TextBox/>
+                        <Label Content="Amount Owed:"
+                               Margin="10,0,0,0"/>
+                        <TextBox/>
+                    </StackPanel>
+                    <Button 
+                        Grid.Row="4"
+                        Content="Confirm"
+                        HorizontalAlignment="Right"
+                        Margin="0"/>
+                    
+
+                </Grid>
+            </Grid>
+        </GroupBox>
+    </ScrollViewer>
 </Page>
