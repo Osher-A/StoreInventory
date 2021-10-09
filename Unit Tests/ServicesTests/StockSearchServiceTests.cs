@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using StoreInventory.DAL;
 using StoreInventory.Interfaces;
-using StoreInventory.Services;
+using StoreInventory.Services.ProductControllerServices;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

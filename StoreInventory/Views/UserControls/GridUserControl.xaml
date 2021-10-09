@@ -10,13 +10,12 @@
             xmlns:sys="clr-namespace:System;assembly=mscorlib"
             xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
             xmlns:converters="clr-namespace:StoreInventory.Views.Converters"
-            d:DataContext="{d:DesignInstance Type=viewModel:StockViewModel}"
+            d:DataContext="{d:DesignInstance Type=viewModel:ProductControllerViewModel}"
             xmlns:local="clr-namespace:StoreInventory.Views.UserControls"
             mc:Ignorable="d" 
             d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
-            <viewModel:StockViewModel x:Key="vm"/>
             <converters:DefaultIntConverter x:Key="intConv"/>
             <converters:StockStatusConverter x:Key="stockStatusConv"/>
 
@@ -31,27 +30,39 @@
                     <x:Type TypeName="enums:StockStatus"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
+
+            <Style TargetType="DataGrid" BasedOn="{StaticResource MahApps.Styles.DataGrid.Azure}">
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="GridLinesVisibility" Value="All"/>
+                <Setter Property="IsReadOnly" Value="True"/>
+                <Setter Property="AutoGenerateColumns" Value="False"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
         <Grid>
         <ScrollViewer   VerticalScrollBarVisibility="Auto" Style="{StaticResource MahApps.Styles.ScrollViewer}" >
             <DataGrid 
-            x:Name="DataGrid"
+                        x:Name="DataGrid"
                         MaxHeight="500"
                         Width="750"
                         ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType=local:GridUserControl}}"
-                        SelectedItem="{Binding SelectedStock}"      
-                               AutoGenerateColumns="False"
-                        RowHeight="40">
+                        SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=local:GridUserControl}}"      
+                        AutoGenerateColumns="False"
+                        >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Id" Binding="{Binding Product.Id}" Width="*"/>
                     <DataGridTextColumn Header="Category" Binding="{Binding Product.Category.Name}" Width="*"/>
                     <DataGridTextColumn Header="Name" Binding="{Binding Product.Name}" Width="*" />
                     <DataGridTextColumn Header="Description" Binding="{Binding Product.Description}" Width="2*"/>
+                    <DataGridTextColumn Header="Stock Qty" Binding="{Binding QuantityInStock}" Width="*" />
                     <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, ConverterCulture=en-GB, StringFormat=' \{0:C\}'}" Width="*"/>
-                    <DataGridTextColumn Header="Quantity" Binding="{Binding QuantityInStock}" Width="*" />
                 </DataGrid.Columns>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseUp">
+                        <i:InvokeCommandAction Command="{Binding MyCommand, RelativeSource={RelativeSource AncestorType=local:GridUserControl}}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </DataGrid>
         </ScrollViewer>
     </Grid>

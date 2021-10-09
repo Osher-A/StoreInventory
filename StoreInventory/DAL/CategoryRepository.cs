@@ -36,7 +36,7 @@ namespace StoreInventory.DAL
                 db.SaveChanges();
             }
         }
-        public void EditingCategory(int categoryId, string editedName)
+        public void UpdateCategory(int categoryId, string editedName)
         {
             using (var db = new StoreContext())
             {

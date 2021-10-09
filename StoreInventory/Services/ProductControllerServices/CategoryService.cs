@@ -3,7 +3,7 @@ using StoreInventory.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace StoreInventory.Services
+namespace StoreInventory.Services.ProductControllerServices
 {
     public class CategoryService
     {
@@ -18,6 +18,7 @@ namespace StoreInventory.Services
         {
             return Categories().ToObservableCollection();
         }
+
         private IEnumerable<DTO.Category> Categories()
         {
             var modelcategories = _categoryRepos.GetCategories();

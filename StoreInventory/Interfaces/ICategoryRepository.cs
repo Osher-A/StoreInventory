@@ -7,7 +7,7 @@ namespace StoreInventory.Interfaces
     {
         void AddingCategory(string categoryName);
         void DeletingCategory(int categaryId);
-        void EditingCategory(int categoryId, string editedName);
+        void UpdateCategory(int categoryId, string editedName);
         List<ICategory> GetCategories();
         ICategory GetCategory(int categoryId);
     }

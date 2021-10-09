@@ -11,7 +11,7 @@ namespace StoreInventory.DAL
 {
     public class ProductRepository : IProductRepository
     {
-        public List<IProduct> GetProducts()
+        public List<IProduct> GetAllProducts()
         {
             List<IProduct> products;
             using (var db = new StoreContext())
@@ -45,7 +45,7 @@ namespace StoreInventory.DAL
                 db.SaveChanges();
             }
         }
-        public void EditingProduct(IProduct usersProduct)
+        public void UpdateProduct(IProduct usersProduct)
         {
             using (var db = new StoreContext())
             {

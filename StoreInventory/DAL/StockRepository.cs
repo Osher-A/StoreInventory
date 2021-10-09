@@ -10,7 +10,7 @@ namespace StoreInventory.DAL
 {
     public class StockRepository : IStockRepository
     {
-        //No need to add a AddToStock Method since this is automated by the db Triggers of the orders and stockIn tables
+        //No need to add a AddToStock Method since this is automated by the db Triggers of the ordersProducts and stockIn tables
 
         public List<IStock> GetAllStocks()
         {

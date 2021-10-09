@@ -1,4 +1,4 @@
-﻿using StoreInventory.Services;
+﻿using StoreInventory.Services.ProductControllerServices;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace StoreInventory.Views.Pages
 {
     /// <summary>
-    /// Interaction logic for StockPage.xaml
+    /// Interaction logic for ProductControllerPage.xaml
     /// </summary>
-    public partial class StockPage : Page
+    public partial class ProductControllerPage : Page
     {
-        public StockPage()
+        public ProductControllerPage()
         {
             InitializeComponent();
         }

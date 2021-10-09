@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace StoreInventory.Services
+namespace StoreInventory.Services.ProductControllerServices
 {
     public class StockSearchService 
     {

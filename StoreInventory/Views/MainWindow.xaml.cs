@@ -1,6 +1,7 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using StoreInventory.Services;
+using StoreInventory.Services.MessageService;
+using StoreInventory.Services.ProductControllerServices;
 using StoreInventory.Views.Pages;
 using System;
 using System.Collections.Generic;
@@ -24,18 +25,22 @@ namespace StoreInventory.Views
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private StockPage _mainWindowContentPage = new StockPage();
-        public MainWindow()
+        private OrderPage _mainWindowContentPage;
+        private readonly IMessageService _messageService;
+
+        public MainWindow(IMessageService messageService)
         {
             InitializeComponent();
-
-            ProductDataService.OkMessageBoxEvent += MahAppsOKMessageBox;
-            ProductDataService.OkAndCancelMessageBoxEvent += MahAppsOkAndCancelMessageBox;
+            _messageService = messageService;
+            _messageService.OkMessageBoxEvent += MahAppsOKMessageBox;
+            _messageService.OkAndCancelMessageBoxEvent += MahAppsOkAndCancelMessageBox;
+            _mainWindowContentPage = new OrderPage(messageService);
         }
-        private async void MahAppsOKMessageBox(string heading, string message)
+        private async Task MahAppsOKMessageBox(string heading, string message)
         {
            await this.ShowMessageAsync(heading, message, MessageDialogStyle.Affirmative);
         }
+
         private async Task<bool> MahAppsOkAndCancelMessageBox(string heading, string message)
         {
             if (await this.ShowMessageAsync(heading, message, MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)

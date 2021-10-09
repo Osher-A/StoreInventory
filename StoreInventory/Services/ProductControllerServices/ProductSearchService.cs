@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace StoreInventory.Services
+namespace StoreInventory.Services.ProductControllerServices
 {
     public class ProductSearchService
     {
@@ -18,7 +18,7 @@ namespace StoreInventory.Services
         public ProductSearchService(IProductRepository productRepository)
         {
             _productRepository = productRepository;
-            AllProducts = ToDTOProductList( _productRepository.GetProducts()).ToObservableCollection();
+            AllProducts = ToDTOProductList( _productRepository.GetAllProducts()).ToObservableCollection();
         }
         public ObservableCollection<DTO.Product> SearchProducts(string searchInput)
         {

@@ -6,7 +6,9 @@ namespace StoreInventory.Interfaces
     {
         string Email { get; set; }
         int Id { get; set; }
-        string Name { get; set; }
+        string FirstNames { get; set; }
+        string LastName { get; set; }
         string PhoneNumber { get; set; }
+        IAddress Address { get; set; }
     }
 }

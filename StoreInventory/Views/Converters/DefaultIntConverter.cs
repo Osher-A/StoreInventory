@@ -19,12 +19,12 @@ namespace StoreInventory.Views.Converters
                 if ((float)value == 0f)
                     return string.Empty;
 
-            return value;
+            return value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value;
+            return (int)value;
         }
     }
 }

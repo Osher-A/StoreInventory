@@ -5,7 +5,7 @@ using System.Text;
 using StoreInventory.Model;
 using StoreInventory.Interfaces;
 using Moq;
-using StoreInventory.Services;
+using StoreInventory.Services.ProductControllerServices;
 using System.Collections.ObjectModel;
 
 namespace UnitTests.ServicesTests
@@ -20,7 +20,7 @@ namespace UnitTests.ServicesTests
         public void SetUp()
         {
             _productRepository = new Mock<IProductRepository>();
-            _productRepository.Setup(pr => pr.GetProducts()).Returns(ModelProducts());
+            _productRepository.Setup(pr => pr.GetAllProducts()).Returns(ModelProducts());
             _searchService = new ProductSearchService(_productRepository.Object);
         }
 

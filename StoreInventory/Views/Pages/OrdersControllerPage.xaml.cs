@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace StoreInventory.Views.Pages
 {
     /// <summary>
-    /// Interaction logic for StockOutPage.xaml
+    /// Interaction logic for OrdersControllerPage.xaml
     /// </summary>
-    public partial class StockOutPage : Page
+    public partial class OrdersControllerPage : Page
     {
-        public StockOutPage()
+        public OrdersControllerPage()
         {
             InitializeComponent();
         }

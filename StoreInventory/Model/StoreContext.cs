@@ -15,10 +15,13 @@ namespace StoreInventory.Model
         public virtual DbSet<StockIn> StockIns { get; set; }
         public virtual DbSet<OrderProduct> OrdersProducts { get; set; }
         public virtual DbSet<Stock> Stocks { get; set; }
+        public virtual DbSet<Address> Addresses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder )
         {
             optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;Database=Store;Trusted_Connection=True;");
+            optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.EnableDetailedErrors();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,14 +39,30 @@ namespace StoreInventory.Model
                 .WithOne(so => (Order)so.Order);
 
             modelBuilder.Entity<Order>()
-                .Property(o => o.TotalPrice)
+                .Property(o => o.Total)
                 .HasDefaultValue(0f);
+
 
             modelBuilder.Entity<OrderProduct>()
                 .HasKey(op => new { op.OrderId, op.ProductId });
             modelBuilder.Entity<Stock>()
                 .Ignore(s => s.StockStatus);
-                
+
+            modelBuilder.Entity<Customer>()
+                 .HasOne(c => (Address)c.Address)
+                 .WithOne(a => (Customer)a.Customer)
+                 .HasForeignKey("Customer", "AddressId");
+
+            modelBuilder.Entity<Address>()
+                 .HasOne(a => (Customer)a.Customer)
+                 .WithOne(c => (Address)c.Address)
+                 .HasForeignKey("Address", "CustomerId");
+
+
+
+
+
+
 
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
         }

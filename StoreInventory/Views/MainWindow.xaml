@@ -10,7 +10,7 @@
          Name="mainWindow" 
          IsWindowDraggable="True"
          MaxWidth="1000"
-          Height="700"            
+          MinHeight="700"            
          WindowStartupLocation="CenterScreen"             
         GlowBrush="{DynamicResource AccentColorBrush}"
         UseNoneWindowStyle="False"

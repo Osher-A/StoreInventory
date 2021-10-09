@@ -3,7 +3,7 @@ using MyLibrary.Utilities;
 using StoreInventory.DAL;
 using StoreInventory.Interfaces;
 using StoreInventory.DTO;
-using StoreInventory.Services;
+using StoreInventory.Services.ProductControllerServices;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,10 +13,11 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows;
+using StoreInventory.Services.MessageService;
 
 namespace StoreInventory.ViewModel
 {
-    public class StockViewModel : INotifyPropertyChanged
+    public class ProductControllerViewModel : INotifyPropertyChanged
     {
         private IProductRepository _productRepository = new ProductRepository();
         private StockSearchService _stockSearchService = new StockSearchService(new StockRepository());
@@ -113,10 +114,10 @@ namespace StoreInventory.ViewModel
         public ICommand SearchCommand { get; set; }
        
         
-        public StockViewModel()
+        public ProductControllerViewModel()
         {
             _getStocks = new ObservableCollection<Stock>();
-            _productDataService = new ProductDataService(_productRepository);
+            _productDataService = new ProductDataService(_productRepository, new MessageService()); ;
             LoadData();
             ClearFormCommand = new CustomCommand(ClearForm, CanClearForm);
             ImageCommand = new CustomCommand(AddImage, CanAddImage);

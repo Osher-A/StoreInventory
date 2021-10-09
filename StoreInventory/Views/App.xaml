@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:StoreInventory.Views"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:convr="clr-namespace:StoreInventory.Views.Converters"
-    StartupUri="..\Views\MainWindow.xaml">
+              Startup="OnStartup">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,8 +12,6 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            
-            <convr:WindowHeightConverter x:Key="windowConvr"/>
             
             <Thickness x:Key="ControlMargin">0 5 0 0</Thickness>
 
@@ -89,11 +87,9 @@
             </Style>
 
             <Style TargetType="DataGrid" BasedOn="{StaticResource MahApps.Styles.DataGrid.Azure}">
-                <Setter Property="AlternatingRowBackground" Value="{StaticResource MahApps.Brushes.Accent4}"/>
                 <Setter Property="GridLinesVisibility" Value="All"/>
                 <Setter Property="IsReadOnly" Value="True"/>
                 <Setter Property="AutoGenerateColumns" Value="False"/>
-                <Setter Property="RowHeight" Value="40"/>
                 <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="Width" Value="750"/>
             </Style>

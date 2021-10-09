@@ -10,6 +10,6 @@ namespace StoreInventory.Interfaces
         int CustomerId { get; set; }
         int Id { get; set; }
         DateTime OrderDate { get; set; }
-        float TotalPrice { get; set; }
+        float Total { get; set; }
     }
 }

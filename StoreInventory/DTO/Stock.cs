@@ -46,8 +46,8 @@ namespace StoreInventory.DTO
             var dtoStock = new Stock();
             dtoStock.Id = modelStock.Id;
             dtoStock.Product = (DTO.Product)(Model.Product)modelStock.Product;
+            dtoStock.Product.Category = (DTO.Category)(Model.Category)modelStock.Product.Category;
             dtoStock.QuantityInStock = modelStock.QuantityInStock;
-
             return dtoStock;
         }
 

@@ -6,7 +6,7 @@ namespace StoreInventory.Interfaces
     {
         void AddingProduct(IProduct newusersProduct);
         void DeletingProduct(int productId);
-        void EditingProduct(IProduct productToEdit);
-        List<IProduct> GetProducts();
+        void UpdateProduct(IProduct productToEdit);
+        List<IProduct> GetAllProducts();
     }
 }

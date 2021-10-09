@@ -37,25 +37,26 @@ namespace StoreInventory.DAL
             return order;
         }
 
-        //public void AddingOrder(IOrder newOrder)
-        //{
-        //    Order newModelOrder = MyMapper.Mapper(newOrder, new Order());
-        //    using(var db = new StoreContext())
-        //    {
-        //        db.Orders.Add(newModelOrder);
-        //        db.SaveChanges();
-        //    }
-        //}
+        public void AddingOrder(DTO.Order newOrder)
+        {
+            Order newModelOrder = new Model.Order();
+            MapToModelOrder(newOrder, newModelOrder);
+            using (var db = new StoreContext())
+            {
+                db.Orders.Add(newModelOrder);
+                db.SaveChanges();
+            }
+        }
 
-        //public void EditingOrder(DTO.Order orderToEdit)
-        //{
-        //    using(var db = new StoreContext())
-        //    {
-        //        Order modelOrder =  db.Orders.Find(orderToEdit.Id);
-        //        MyMapper.Mapper(orderToEdit, modelOrder);
-        //        db.SaveChanges();
-        //    }
-        //}
+        public void UpdateOrder(DTO.Order orderToEdit)
+        {
+            using (var db = new StoreContext())
+            {
+                Order modelOrder = db.Orders.Find(orderToEdit.Id);
+                MapToModelOrder(orderToEdit, modelOrder);
+                db.SaveChanges();
+            }
+        }
 
         public void DeletingOrder(int orderId)
         {
@@ -67,7 +68,33 @@ namespace StoreInventory.DAL
             }
         }
 
+        public int GetCurrentOrderId()
+        {
+            using var db = new StoreContext();
+            return db.Orders.OrderByDescending(o => o.OrderDate).Take(1).SingleOrDefault().Id;
+        }
 
+        public int GetOrderId(IOrder order)
+        {
+            using var db = new StoreContext();
+            return db.Orders.SingleOrDefault(o => o.CustomerId == order.CustomerId
+                                                    && o.OrderDate == order.OrderDate
+                                                    && o.Total == order.Total).Id;
+        }
+
+        private void MapToModelOrder(DTO.Order order, Model.Order modelOrder)
+        {
+            if (order.CustomerId != 0)
+                modelOrder.CustomerId = order.CustomerId;
+            else
+                modelOrder.Customer = (Model.Customer)(DTO.Customer)order.Customer; // Creating new model customer
+
+            modelOrder.OrderDate = order.OrderDate;
+           // modelOrder.Total = order.Total;  // This is set via the db trigger.
+            modelOrder.AmountPaid = order.AmountPaid;
+
+            // need to update products
+        }
     }
 }   
 

@@ -1,21 +1,24 @@
 ﻿using StoreInventory.Interfaces;
+using StoreInventory.Services.MessageService;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace StoreInventory.Services
+namespace StoreInventory.Services.ProductControllerServices
 {
     public class ProductDataService
     {
         private IProductRepository _productRepository;
-        public static Action<string, string> OkMessageBoxEvent;
-        public static Func<string, string, Task<bool>> OkAndCancelMessageBoxEvent;
+        private IMessageService _messageService;
+        
         public static bool UsersConfirmation { get; set; }
 
         public ProductDataService() { }
-        public ProductDataService(IProductRepository productRepository)
+        public ProductDataService(IProductRepository productRepository) : this(productRepository, null) { }
+        public ProductDataService(IProductRepository productRepository, IMessageService messageService) 
         {
             _productRepository = productRepository;
+            _messageService = messageService;
         }
         public void AddNewProduct(IProduct newProduct)
         {
@@ -25,19 +28,19 @@ namespace StoreInventory.Services
 
         public void UpdateProduct(IProduct usersProduct)
         {
-            _productRepository.EditingProduct(usersProduct);
+            _productRepository.UpdateProduct(usersProduct);
         }
 
         public async Task DeleteProduct(int productId)
         {
-            var result = OkAndCancelMessageBoxEvent?.Invoke("Warning!","Are you sure you would like to delete this product!");
+            var result = _messageService.OkAndCancelMessageBoxEvent?.Invoke("Warning!","Are you sure you would like to delete this product!");
             if (await result)
                 _productRepository.DeletingProduct(productId);
         }
 
         public bool ExistingProduct(IProduct newProduct)
         {
-            var allProducts = (List<DTO.Product>)ConvertToDtoProducts(_productRepository.GetProducts());
+            var allProducts = (List<DTO.Product>)ConvertToDtoProducts(_productRepository.GetAllProducts());
 
             if (newProduct.Id != 0)
                 return true;
@@ -57,7 +60,7 @@ namespace StoreInventory.Services
             if (string.IsNullOrWhiteSpace(newProduct.Name) || string.IsNullOrWhiteSpace(newProduct.Description)
                 || string.IsNullOrWhiteSpace(newProduct.Category.Name) || newProduct.Price == 0f )
             {
-                OkMessageBoxEvent?.Invoke("Missing Details!","You forgot to fill in or select one of the boxes!");
+                _messageService.OkMessageBoxEvent?.Invoke("Missing Details!","You forgot to fill in or select one of the boxes!");
                 return false;
             }
             else
