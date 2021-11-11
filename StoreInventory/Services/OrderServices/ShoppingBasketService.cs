@@ -7,16 +7,16 @@ using System.Text;
 
 namespace StoreInventory.Services.OrderServices
 {
-    public class ShoppingBasketService
+    public class ShoppingBasketService 
     {
         public ObservableCollection<BasketItem> BasketItems = new ObservableCollection<BasketItem>();
         private IStockRepository _stockRepository;
         private List<IStock> _modelFullStock;
 
-        public  List<IStock> StockRemaing { get; private set; }
+        public List<IStock> StockRemaing { get; private set; }
         private float _totalCost;
 
-        public float TotalCost => _totalCost = (BasketItems.Count >= 1)?BasketItems[BasketItems.Count - 1].RunningTotal : 0f;
+        public float TotalCost => _totalCost = BasketItems.Count >= 1 ? BasketItems[BasketItems.Count - 1].RunningTotal : 0f;
 
 
         public ShoppingBasketService(IStockRepository stockRepository)
@@ -33,14 +33,14 @@ namespace StoreInventory.Services.OrderServices
             float runningTotal = 0;
             foreach (var item in BasketItems)
             {
-                runningTotal += (item.Product.Price * item.Quantity);
+                runningTotal += item.Product.Price * item.Quantity;
                 item.RunningTotal = runningTotal;
             }
         }
 
         public void RemoveItemFromBasket(IProduct product)
         {
-           var itemToRemove = BasketItems.Single(bi => bi.Product.Id== product.Id);
+            var itemToRemove = BasketItems.Single(bi => bi.Product.Id == product.Id);
             BasketItems.Remove(itemToRemove);
             UpdateStock();
         }
@@ -53,12 +53,12 @@ namespace StoreInventory.Services.OrderServices
 
         private void AddToBasket(IProduct product, int quantity)
         {
-            var basketItem = new BasketItem() { Product = product, Quantity = (quantity == 0) ? 1 : quantity };
+            var basketItem = new BasketItem() { Product = product, Quantity = quantity == 0 ? 1 : quantity };
 
             var existingItem = BasketItems.SingleOrDefault(bi => bi.Product.Id == basketItem.Product.Id);
 
             if (existingItem != null)
-                existingItem.Quantity = (quantity == 0) ? existingItem.Quantity + 1 : quantity;
+                existingItem.Quantity = quantity == 0 ? existingItem.Quantity + 1 : quantity;
             else
                 BasketItems.Add(basketItem);
 
@@ -82,7 +82,7 @@ namespace StoreInventory.Services.OrderServices
 
         private void PreOrderStock()
         {
-            StockRemaing = _stockRepository.GetAllStocks().OrderBy(s => s.Product.Category.Name).ThenBy(s => s.Product.Name).ToList(); 
+            StockRemaing = _stockRepository.GetAllStocks().OrderBy(s => s.Product.Category.Name).ThenBy(s => s.Product.Name).ToList();
         }
 
     }

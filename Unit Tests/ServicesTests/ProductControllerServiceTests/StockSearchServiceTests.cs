@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace UnitTests.ServicesTests
+namespace UnitTests.ServicesTests.ProductControllerServiceTests
 {
     [TestFixture]
     public class StockSearchServiceTests

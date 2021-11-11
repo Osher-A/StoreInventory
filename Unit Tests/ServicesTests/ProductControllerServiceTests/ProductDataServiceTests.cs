@@ -7,20 +7,23 @@ using StoreInventory.Interfaces;
 using StoreInventory;
 using StoreInventory.Services.ProductControllerServices;
 using StoreInventory.DTO;
+using StoreInventory.Services.MessageService;
 
-namespace UnitTests.ServicesTests
+namespace UnitTests.ServicesTests.ProductControllerServiceTests
 {
     [TestFixture]
     public class ProductDataServiceTests
     {
         private Mock<IProductRepository> _mockRepository;
+        private Mock<IMessageService> _mockMessageService;
         private ProductDataService _productService;
         [SetUp]
         public void SetUp()
         {
             _mockRepository = new Mock<IProductRepository>();
             _mockRepository.Setup(mr => mr.GetAllProducts()).Returns(ModelProducts());
-            _productService = new ProductDataService(_mockRepository.Object);
+            _mockMessageService = new Mock<IMessageService>();
+            _productService = new ProductDataService(_mockRepository.Object, _mockMessageService.Object);
         }
 
         [Test]

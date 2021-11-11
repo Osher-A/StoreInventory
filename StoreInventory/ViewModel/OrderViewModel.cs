@@ -224,7 +224,7 @@ namespace StoreInventory.ViewModel
 
             // The following is needed when updating after payment-status radio button has been checked.
             ControllBalance(null);
-            PaymentStatus = _paymentService.UpdatePaymentStatus(addingItem, PaymentStatus, PaymentAmounts);
+            PaymentStatus = _paymentService.UpdatePaymentStatus(addingItem, PaymentStatus);
         }
 
         private bool CanControllBalance(object obj)
@@ -252,9 +252,9 @@ namespace StoreInventory.ViewModel
             return PaymentStatus != null;
         }
 
-        private async void CheckOut(object obj)
+        private void CheckOut(object obj)
         {
-            if (await ValidateDetails())
+            if (ValidateDetails())
             {
                 NewOrder.AmountPaid = PaymentAmounts.AmountPaid;
                 var odService = new OrderDataService(NewOrder, BasketProducts.ToList());
@@ -264,9 +264,9 @@ namespace StoreInventory.ViewModel
             }
         }
 
-        private async Task<bool> ValidateDetails()
+        private bool ValidateDetails()
         {
-            await _paymentService.CustomersDetailsValidated(PaymentStatus);
+             _paymentService.CustomersDetailsValidated(PaymentStatus);
             if (!_paymentService.IsDetailsValid)
             { 
                 ScrollUpEvent?.Invoke(this, new EventArgs());

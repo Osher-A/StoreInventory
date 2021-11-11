@@ -16,7 +16,8 @@ namespace StoreInventory.Services.OrderServices
          private CategoryService  _categoriesService = new CategoryService(new CategoryRepository());
         public ObservableCollection<DTO.Stock> AllProductsStocked { get; private set; }
         private ShoppingBasketService _shoppingBasketService;
-        public OrderViewService (ShoppingBasketService shoppingBasketService)
+
+        public OrderViewService(ShoppingBasketService shoppingBasketService)
         {
             _shoppingBasketService = shoppingBasketService;
             UpdateStockProducts();

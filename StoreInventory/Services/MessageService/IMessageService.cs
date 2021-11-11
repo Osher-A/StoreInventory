@@ -9,5 +9,9 @@ namespace StoreInventory.Services.MessageService
     {
         Func<string, string, Task> OkMessageBoxEvent { get; set; }
         public Func<string, string, Task<bool>> OkAndCancelMessageBoxEvent { get; set; }
+
+        Task CustomersAddressDetailsMissingAlert();
+        void MissingDetailsAlert();
+        Task<bool> DeleteWarningAlert();
     }
 }

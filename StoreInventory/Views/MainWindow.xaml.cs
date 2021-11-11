@@ -43,7 +43,7 @@ namespace StoreInventory.Views
 
         private async Task<bool> MahAppsOkAndCancelMessageBox(string heading, string message)
         {
-            if (await this.ShowMessageAsync(heading, message, MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
+            if ( await this.ShowMessageAsync(heading, message, MessageDialogStyle.AffirmativeAndNegative) == MessageDialogResult.Affirmative)
                 return true;
             else
                 return false;

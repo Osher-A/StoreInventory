@@ -8,7 +8,7 @@ using Moq;
 using StoreInventory.Services.ProductControllerServices;
 using System.Collections.ObjectModel;
 
-namespace UnitTests.ServicesTests
+namespace UnitTests.ServicesTests.ProductControllerServiceTests
 {
     [TestFixture]
     class ProductSearchServiceTests

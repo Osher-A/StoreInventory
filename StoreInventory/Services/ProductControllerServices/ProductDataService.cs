@@ -33,8 +33,8 @@ namespace StoreInventory.Services.ProductControllerServices
 
         public async Task DeleteProduct(int productId)
         {
-            var result = _messageService.OkAndCancelMessageBoxEvent?.Invoke("Warning!","Are you sure you would like to delete this product!");
-            if (await result)
+           var result = await _messageService.DeleteWarningAlert();
+            if (result)
                 _productRepository.DeletingProduct(productId);
         }
 
@@ -60,7 +60,7 @@ namespace StoreInventory.Services.ProductControllerServices
             if (string.IsNullOrWhiteSpace(newProduct.Name) || string.IsNullOrWhiteSpace(newProduct.Description)
                 || string.IsNullOrWhiteSpace(newProduct.Category.Name) || newProduct.Price == 0f )
             {
-                _messageService.OkMessageBoxEvent?.Invoke("Missing Details!","You forgot to fill in or select one of the boxes!");
+                _messageService.MissingDetailsAlert();
                 return false;
             }
             else

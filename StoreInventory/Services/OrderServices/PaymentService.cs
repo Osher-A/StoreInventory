@@ -36,34 +36,35 @@ namespace StoreInventory.Services.OrderServices
             return pa;
         }
 
-        public async Task CustomersDetailsValidated(PaymentStatus? paymentStatus)
+        public void CustomersDetailsValidated(PaymentStatus? paymentStatus)
         {
             if ((paymentStatus == PaymentStatus.NotPaid || paymentStatus == PaymentStatus.PartlyPaid) && ((string.IsNullOrWhiteSpace(_customer.Address.House) || string.IsNullOrWhiteSpace(_customer.Address.Zip))
                 && string.IsNullOrWhiteSpace(_customer.Email)))
             {
-               await _messageService.OkMessageBoxEvent("Missing Details!", @"
-In Order to proceed, you'll have to provide the customer's Address 
-(i.e. House Number & Post code), or Email! ");
+               _messageService.CustomersAddressDetailsMissingAlert();
                 IsDetailsValid = false;
             }
             else
                 IsDetailsValid = true;
         }
 
-        public PaymentStatus? UpdatePaymentStatus(bool addingItem, PaymentStatus? paymentStatus, PaymentAmounts paymentAmounts)
+        public PaymentStatus? UpdatePaymentStatus(bool addingItem, PaymentStatus? paymentStatus)
         {
             if (addingItem)
-                if (paymentAmounts.AmountPaid > 0 && paymentAmounts.AmountOwed > 0)
+                if (paymentStatus == PaymentStatus.FullyPaid)
                     return PaymentStatus.PartlyPaid;
                 else
                     return paymentStatus;
             else
+                if (paymentStatus == PaymentStatus.FullyPaid)
+                    return paymentStatus;
+
                 return null; // this would make sure there is no checked radio button.
         }
 
         public float OutStandingBallance(float amountPaid, float totalCost)
-        { 
-                return totalCost - amountPaid;
+        {
+            return totalCost - amountPaid;
         }
     }
 }
