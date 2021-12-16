@@ -2,6 +2,7 @@
 using MahApps.Metro.Controls.Dialogs;
 using StoreInventory.Services.MessageService;
 using StoreInventory.Services.ProductControllerServices;
+using StoreInventory.ViewModel;
 using StoreInventory.Views.Pages;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ToastNotifications.Core;
+using ToastNotifications.Lifetime.Clear;
 
 namespace StoreInventory.Views
 {
@@ -27,7 +30,8 @@ namespace StoreInventory.Views
     {
         private OrdersControllerPage _mainWindowContentPage;
         private readonly IMessageService _messageService;
-
+        private readonly ToastViewModel _toastVm;
+        private int _count = 0;
         public MainWindow(IMessageService messageService)
         {
             InitializeComponent();
@@ -36,7 +40,22 @@ namespace StoreInventory.Views
             _messageService.OkAndCancelMessageBoxEvent += MahAppsOkAndCancelMessageBox;
             //_mainWindowContentPage = new OrderPage(messageService);
             _mainWindowContentPage = new OrdersControllerPage();
+
+            _toastVm = new ToastViewModel();
+            ToastService.ToastSuccessAction += ShowSuccess;
+            ToastService.ToastErrorAction += ShowError;
         }
+
+        private void ShowError()
+        {
+            _toastVm.ShowError("Error!");
+        }
+
+        private void ShowSuccess()
+        {
+            _toastVm.ShowSuccess("Email Sent!");
+        }
+        
         private async Task MahAppsOKMessageBox(string heading, string message)
         {
            await this.ShowMessageAsync(heading, message, MessageDialogStyle.Affirmative);

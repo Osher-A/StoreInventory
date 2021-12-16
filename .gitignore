@@ -361,5 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/StoreInventory/Services/OrderControllerServices/EmailSmtpService.cs
+
 /StoreInventory/Secrets.cs
