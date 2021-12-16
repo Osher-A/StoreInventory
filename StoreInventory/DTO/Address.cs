@@ -37,6 +37,31 @@ namespace StoreInventory.DTO
 
         public string Zip { get; set; }
         public ICustomer Customer { get; set; }
+        public string FirstLineOfAddress
+        {
+            get
+            {
+                return House + " " + Street;
+            }
+        }
+        public string SecondLineOfAddress
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(City))
+                    return City + " " + Zip;
+                else
+                    return Zip;
+            }
+        }
+
+        public string WholeAddress
+        {
+            get
+            {
+                return $"{House} {Street} {City} {Zip}";
+            }
+        }
 
         private void GetHouseNumber()
         {

@@ -25,7 +25,7 @@ namespace StoreInventory.Views
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private OrderPage _mainWindowContentPage;
+        private OrdersControllerPage _mainWindowContentPage;
         private readonly IMessageService _messageService;
 
         public MainWindow(IMessageService messageService)
@@ -34,7 +34,8 @@ namespace StoreInventory.Views
             _messageService = messageService;
             _messageService.OkMessageBoxEvent += MahAppsOKMessageBox;
             _messageService.OkAndCancelMessageBoxEvent += MahAppsOkAndCancelMessageBox;
-            _mainWindowContentPage = new OrderPage(messageService);
+            //_mainWindowContentPage = new OrderPage(messageService);
+            _mainWindowContentPage = new OrdersControllerPage();
         }
         private async Task MahAppsOKMessageBox(string heading, string message)
         {

@@ -54,7 +54,7 @@
             </controls:FlyoutsControl>
         </controls:MetroWindow.Flyouts>
 
-        <Grid >
+        <Grid Style="{StaticResource MainGrid}">
             <Frame Name="MainWindowFrame"
                Loaded="MainWindowFrame_Loaded"
                Width="{Binding ElementName=mainWindow, Path=ActualWidth }"

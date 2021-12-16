@@ -34,6 +34,17 @@ namespace StoreInventory.DTO
                 OnPropertyChanged(nameof(LastName));
             }
         }
+
+        public string FullName 
+        {
+            get 
+            { 
+                if(!string.IsNullOrWhiteSpace(FirstNames))
+                return (FirstNames + " " + LastName).Trim();
+                else
+                    return LastName;
+            }
+        }
         public string PhoneNumber
         {
             get { return _phoneNumber; }

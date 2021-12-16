@@ -1,7 +1,9 @@
-﻿using StoreInventory.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using StoreInventory.Interfaces;
 using StoreInventory.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace StoreInventory.DAL

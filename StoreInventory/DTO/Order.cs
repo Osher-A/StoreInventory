@@ -9,6 +9,10 @@ namespace StoreInventory.DTO
 {
     public class Order : IOrder, INotifyPropertyChanged
     {
+        private float _total;
+        private float _amountPaid;
+        private float _amountOwed;
+        private ICustomer _customer;
 
         public int Id { get; set; }
         public ICustomer Customer
@@ -22,10 +26,6 @@ namespace StoreInventory.DTO
         }
         public int CustomerId { get; set; }
         public DateTime OrderDate { get; set; }
-        private float _total;
-        private float _amountPaid;
-        private ICustomer _customer;
-
         public float Total
         {
             get { return _total; }
@@ -44,6 +44,17 @@ namespace StoreInventory.DTO
                 OnPropertyChanged(nameof(AmountPaid));
             }
         }
+
+        public float AmountOwed
+        {
+            get {return Total - AmountPaid;}
+            set 
+            {
+                _amountOwed = value;
+                AmountPaid = Total - value;
+                OnPropertyChanged(nameof(AmountOwed));
+            }
+        }
         public List<OrderProduct> OrdersProducts { get; set; }
 
         public Order()
@@ -56,11 +67,12 @@ namespace StoreInventory.DTO
             return new Order
             {
                 Id = order.Id,
-                Customer = (Customer)(Model.Customer)order.Customer,
+               Customer = (Customer)(Model.Customer)order.Customer,
                 CustomerId = order.CustomerId,
                 OrderDate = order.OrderDate,
                 Total = order.Total,
-                AmountPaid = order.AmountPaid
+                AmountPaid = order.AmountPaid,
+                OrdersProducts = GetOrderProducts(order.OrdersProducts)
             };
         }
 
@@ -77,9 +89,23 @@ namespace StoreInventory.DTO
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private static List<OrderProduct> GetOrderProducts(List<Model.OrderProduct> modelOrderProducts)
+        {
+            var dtoOrderProducts = new List<OrderProduct>();
+            foreach (var modelOrderProduct in modelOrderProducts)
+            {
+                var dtoOrderProduct = new DTO.OrderProduct();
+                dtoOrderProduct.OrderId = modelOrderProduct.OrderId;
+                dtoOrderProduct.ProductId = modelOrderProduct.ProductId;
+                dtoOrderProduct.Quantity = modelOrderProduct.Quantity;
+                dtoOrderProducts.Add(dtoOrderProduct);
+            }
+            return dtoOrderProducts;
+        }
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }

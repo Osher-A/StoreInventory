@@ -9,9 +9,9 @@ using StoreInventory.Interfaces;
 
 namespace StoreInventory.DAL
 {
-    class OrderRepository
+    public class OrderRepository : IOrderRepository
     {
-        public List<Order> GetOrders()
+        public List<Model.Order> GetOrders()
         {
             List<Order> orders;
             using (var db = new StoreContext())
@@ -32,12 +32,16 @@ namespace StoreInventory.DAL
             var order = new Order();
             using (var db = new StoreContext())
             {
-                order = db.Orders.Find(Id);
+                order = db.Orders.Where(o => o.Id == Id)
+                    .Include(o => o.Customer)
+                    .Include(o => o.OrdersProducts)
+                    .ThenInclude(op => op.Product)
+                    .FirstOrDefault();
             }
             return order;
         }
 
-        public void AddingOrder(DTO.Order newOrder)
+        public void AddingOrder(IOrder newOrder)
         {
             Order newModelOrder = new Model.Order();
             MapToModelOrder(newOrder, newModelOrder);
@@ -48,7 +52,7 @@ namespace StoreInventory.DAL
             }
         }
 
-        public void UpdateOrder(DTO.Order orderToEdit)
+        public void UpdateOrder(IOrder orderToEdit)
         {
             using (var db = new StoreContext())
             {
@@ -60,7 +64,7 @@ namespace StoreInventory.DAL
 
         public void DeletingOrder(int orderId)
         {
-            using(var db = new StoreContext())
+            using (var db = new StoreContext())
             {
                 var orderToDelete = db.Orders.Find(orderId);
                 db.Orders.Remove(orderToDelete);
@@ -82,7 +86,7 @@ namespace StoreInventory.DAL
                                                     && o.Total == order.Total).Id;
         }
 
-        private void MapToModelOrder(DTO.Order order, Model.Order modelOrder)
+        private void MapToModelOrder(IOrder order, Model.Order modelOrder)
         {
             if (order.CustomerId != 0)
                 modelOrder.CustomerId = order.CustomerId;
@@ -90,7 +94,7 @@ namespace StoreInventory.DAL
                 modelOrder.Customer = (Model.Customer)(DTO.Customer)order.Customer; // Creating new model customer
 
             modelOrder.OrderDate = order.OrderDate;
-           // modelOrder.Total = order.Total;  // This is set via the db trigger.
+            // modelOrder.Total = order.Total;  // This is set via the db trigger.
             modelOrder.AmountPaid = order.AmountPaid;
 
             // need to update products

@@ -1,5 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Ninject;
+using RazorEngine;
+using RazorEngine.Configuration;
+using RazorEngine.Templating;
+using RazorEngine.Text;
 using StoreInventory.Services.MessageService;
 using StoreInventory.ViewModel;
 using System;
@@ -30,9 +34,14 @@ namespace StoreInventory.Views
         {
             services.AddSingleton<IMessageService>(new MessageService());
             services.AddSingleton<MainWindow>();
+
+            //TemplateServiceConfiguration templateConfig = new TemplateServiceConfiguration();
+            //templateConfig.EncodedStringFactory = new RawStringFactory();
+            //var service = RazorEngineService.Create(templateConfig);
+            //Engine.Razor = service;
         }
 
-        private void OnStartup(object sender, StartupEventArgs e)
+            private void OnStartup(object sender, StartupEventArgs e)
         {
             var mainWindow = _serviceProvider.GetService<MainWindow>();
             mainWindow.Show();

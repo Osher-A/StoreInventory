@@ -11,8 +11,11 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
+            <convr:CurrencyConverter x:Key="currencyconvr"/>
+
             <Thickness x:Key="ControlMargin">0 5 0 0</Thickness>
 
             <Style TargetType="Page" BasedOn="{StaticResource MahApps.Styles.Page}">
@@ -73,7 +76,7 @@
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Styles.Button.MetroSquare.Accent}">
                 <Setter Property="Margin" Value="0,5,52,5"/>
                 <Setter Property="controls:ControlsHelper.ContentCharacterCasing" Value="Normal"/>
-                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="FontSize" Value="14"/>
                 <Setter Property="FontFamily" Value="{StaticResource MahApps.Fonts.Family.Button}"/>
                 <Setter Property="Width" Value="150"/>
                 <Setter Property="Height" Value="30"/>
@@ -81,6 +84,7 @@
             
             <Style TargetType="TabControl" BasedOn="{StaticResource MahApps.Styles.TabControl.Animated}">
                 <Setter Property="Margin" Value="0,5"/>
+                <Setter Property="FontSize" Value="13"/>
             </Style>
             <Style TargetType="TabItem" BasedOn="{StaticResource MahApps.Styles.TabItem}">
                 <Setter Property="BorderThickness" Value="1"/>
