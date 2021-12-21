@@ -43,8 +43,7 @@ namespace StoreInventory.DAL
 
         public void AddingOrder(IOrder newOrder)
         {
-            Order newModelOrder = new Model.Order();
-            MapToModelOrder(newOrder, newModelOrder);
+            var newModelOrder = MapToModelOrder(newOrder);
             using (var db = new StoreContext())
             {
                 db.Orders.Add(newModelOrder);
@@ -52,12 +51,12 @@ namespace StoreInventory.DAL
             }
         }
 
-        public void UpdateOrder(IOrder orderToEdit)
+        public void UpdateOrderStatus(IOrder orderToEdit)
         {
             using (var db = new StoreContext())
             {
                 Order modelOrder = db.Orders.Find(orderToEdit.Id);
-                MapToModelOrder(orderToEdit, modelOrder);
+                modelOrder.AmountPaid = orderToEdit.AmountPaid;
                 db.SaveChanges();
             }
         }
@@ -86,18 +85,12 @@ namespace StoreInventory.DAL
                                                     && o.Total == order.Total).Id;
         }
 
-        private void MapToModelOrder(IOrder order, Model.Order modelOrder)
+        private Model.Order MapToModelOrder(IOrder order)
         {
-            if (order.CustomerId != 0)
-                modelOrder.CustomerId = order.CustomerId;
-            else
-                modelOrder.Customer = (Model.Customer)(DTO.Customer)order.Customer; // Creating new model customer
+           return (Model.Order)(DTO.Order)order; 
 
-            modelOrder.OrderDate = order.OrderDate;
-            // modelOrder.Total = order.Total;  // This is set via the db trigger.
-            modelOrder.AmountPaid = order.AmountPaid;
-
-            // need to update products
+           // casting via the operator return a new Model.Order
+           // so can't be used for updating the model
         }
     }
 }   

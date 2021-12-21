@@ -22,7 +22,7 @@ namespace StoreInventory.DAL
             return customers;
         }
 
-        public int GetLastCustomerId(ICustomer uiCustomer)
+        public int GetLastCustomerId()
         {
             using (var db = new StoreContext())
             {
@@ -84,15 +84,20 @@ namespace StoreInventory.DAL
             modelCustomer.LastName = (!string.IsNullOrWhiteSpace(uiCustomer.LastName)) ? uiCustomer.LastName : modelCustomer.LastName;
             modelCustomer.PhoneNumber = (!string.IsNullOrWhiteSpace(uiCustomer.PhoneNumber)) ? uiCustomer.PhoneNumber : modelCustomer.PhoneNumber;
             modelCustomer.Email = (!string.IsNullOrWhiteSpace(uiCustomer.Email)) ? uiCustomer.Email : modelCustomer.Email;
-            UpdateAddress(modelCustomer.Address, uiCustomer.Address);
+            UpdateAddress(modelCustomer, uiCustomer.Address);
         }
 
-        private void UpdateAddress(IAddress modelAddress, IAddress uiAddress)
+        private void UpdateAddress(Model.Customer modelCustomer, IAddress uiAddress)
         {
-            modelAddress.House = (!string.IsNullOrWhiteSpace(uiAddress.House)) ? uiAddress.House : modelAddress.House;
-            modelAddress.Street = (!string.IsNullOrWhiteSpace(uiAddress.Street)) ? uiAddress.Street : modelAddress.Street;
-            modelAddress.Zip = (!string.IsNullOrWhiteSpace(uiAddress.Zip)) ? uiAddress.Zip : modelAddress.Zip;
-            modelAddress.City = (!string.IsNullOrWhiteSpace(uiAddress.Zip)) ? uiAddress.City : modelAddress.City;
+            IAddress modelAddress;
+            if(modelCustomer.Address != null)
+            {
+                modelAddress = modelCustomer.Address;
+                modelAddress.House = (!string.IsNullOrWhiteSpace(uiAddress.House)) ? uiAddress.House : modelAddress.House;
+                modelAddress.Street = (!string.IsNullOrWhiteSpace(uiAddress.Street)) ? uiAddress.Street : modelAddress.Street;
+                modelAddress.Zip = (!string.IsNullOrWhiteSpace(uiAddress.Zip)) ? uiAddress.Zip : modelAddress.Zip;
+                modelAddress.City = (!string.IsNullOrWhiteSpace(uiAddress.Zip)) ? uiAddress.City : modelAddress.City;
+            }
         }
     }
 }

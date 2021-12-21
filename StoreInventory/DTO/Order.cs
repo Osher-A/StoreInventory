@@ -3,6 +3,7 @@ using StoreInventory.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 
 namespace StoreInventory.DTO
@@ -55,11 +56,11 @@ namespace StoreInventory.DTO
                 OnPropertyChanged(nameof(AmountOwed));
             }
         }
-        public List<OrderProduct> OrdersProducts { get; set; }
+        public IEnumerable<IOrderProduct> OrdersProducts { get; set; }
 
         public Order()
         {
-            OrdersProducts = new List<OrderProduct>();
+            OrdersProducts = new List<IOrderProduct>();
         }
 
         public static explicit operator Order(Model.Order order)
@@ -67,12 +68,13 @@ namespace StoreInventory.DTO
             return new Order
             {
                 Id = order.Id,
-               Customer = (Customer)(Model.Customer)order.Customer,
+                Customer = (Customer)(Model.Customer)order.Customer,
                 CustomerId = order.CustomerId,
                 OrderDate = order.OrderDate,
                 Total = order.Total,
                 AmountPaid = order.AmountPaid,
-                OrdersProducts = GetOrderProducts(order.OrdersProducts)
+                AmountOwed = order.Total - order.AmountPaid,
+                OrdersProducts = GetIOrderProducts(order.OrdersProducts)
             };
         }
 
@@ -80,28 +82,39 @@ namespace StoreInventory.DTO
         {
             return new Model.Order
             {
-                CustomerId = order.CustomerId,
                 OrderDate = order.OrderDate,
-                Total = order.Total,
-                AmountPaid = order.AmountPaid
+                CustomerId = order.CustomerId,
+                //Total = order.Total, -- Set via db trigger
+                AmountPaid = order.AmountPaid,
+                OrdersProducts = GetIOrderProducts(order.OrdersProducts) as IEnumerable<Model.OrderProduct>
             };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private static List<OrderProduct> GetOrderProducts(List<Model.OrderProduct> modelOrderProducts)
+        private static IEnumerable<IOrderProduct> GetIOrderProducts(IEnumerable<IOrderProduct> orderProducts)
         {
-            var dtoOrderProducts = new List<OrderProduct>();
-            foreach (var modelOrderProduct in modelOrderProducts)
-            {
-                var dtoOrderProduct = new DTO.OrderProduct();
-                dtoOrderProduct.OrderId = modelOrderProduct.OrderId;
-                dtoOrderProduct.ProductId = modelOrderProduct.ProductId;
-                dtoOrderProduct.Quantity = modelOrderProduct.Quantity;
-                dtoOrderProducts.Add(dtoOrderProduct);
-            }
-            return dtoOrderProducts;
+            IOrderProduct orderProduct;
+            if (orderProducts is IEnumerable<Model.OrderProduct>)
+                orderProduct = new DTO.OrderProduct();
+            else
+                orderProduct = new Model.OrderProduct();
+            return CreateOrderProducts(orderProducts,orderProduct);
         }
+
+        private static IEnumerable<IOrderProduct> CreateOrderProducts(IEnumerable<IOrderProduct> orderProducts, IOrderProduct orderProduct)
+        {
+            var iOrderProducts = new List<IOrderProduct>();
+            foreach (var modelOrderProduct in orderProducts)
+            {
+                orderProduct.OrderId = modelOrderProduct.OrderId;
+                orderProduct.ProductId = modelOrderProduct.ProductId;
+                orderProduct.Quantity = modelOrderProduct.Quantity;
+                iOrderProducts.Add(orderProduct);
+            }
+            return iOrderProducts;
+        }
+
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -11,6 +11,6 @@ namespace StoreInventory.Interfaces
         Model.Order GetOrder(int Id);
         int GetOrderId(IOrder order);
         List<Model.Order> GetOrders();
-        void UpdateOrder(IOrder orderToEdit);
+        void UpdateOrderStatus(IOrder orderToEdit);
     }
 }

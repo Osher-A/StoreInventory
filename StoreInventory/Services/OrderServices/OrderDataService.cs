@@ -41,24 +41,30 @@ namespace StoreInventory.Services.OrderServices
             else
             {
                 _customerRepository.AddNewCustomer(_newOrder.Customer);
-                return _customerRepository.GetLastCustomerId(_newOrder.Customer);
+                return _customerRepository.GetLastCustomerId();
             }
         }
         
         private ICustomer ExistingCustomer()
         {
             ICustomer customer = FetchCustomer();
-            if (String.IsNullOrWhiteSpace(customer.Address.House) || (string.IsNullOrWhiteSpace(customer.Address.Street) && String.IsNullOrWhiteSpace(customer.Address.Zip)) && string.IsNullOrWhiteSpace(customer.Email))
-                return null;
-            else if (customer == null)
-                return null;
-            else
-                return customer;
+            if (customer != null)
+                if (customer.Address != null)
+                    if (String.IsNullOrWhiteSpace(customer.Address.House)|| (string.IsNullOrWhiteSpace(customer.Address.Street)
+                        && String.IsNullOrWhiteSpace(customer.Address.Zip)) && string.IsNullOrWhiteSpace(customer.Email))
+                        return null;
+                    else
+                        return customer;
+                else if (!string.IsNullOrWhiteSpace(customer.Email))
+                    return customer;
+            return null;
         }
 
         private ICustomer FetchCustomer()
         {
-            return (ICustomer)_customerRepository.GetCustomers().FirstOrDefault(c => (string.Equals(c.FirstNames?.Trim(), _newOrder.Customer?.FirstNames.Trim(), StringComparison.CurrentCultureIgnoreCase) && string.Equals(c.LastName?.Trim(), _newOrder.Customer?.LastName.Trim(), StringComparison.CurrentCultureIgnoreCase)) || c.Email?.Trim() == _newOrder.Customer.Email?.Trim());
+            return (ICustomer)_customerRepository.GetCustomers().FirstOrDefault(c =>
+            c.FirstNames?.Trim().ToLower() == _newOrder.Customer?.FirstNames?.Trim().ToLower()
+                    && c.LastName?.Trim().ToLower() == _newOrder.Customer?.LastName?.Trim().ToLower());
         }
 
         private void RemoveProductsFromDb()

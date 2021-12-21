@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StoreInventory.Model;
+using System;
 using System.Collections.Generic;
 
 namespace StoreInventory.Interfaces
@@ -11,5 +12,6 @@ namespace StoreInventory.Interfaces
         int Id { get; set; }
         DateTime OrderDate { get; set; }
         float Total { get; set; }
+        IEnumerable<IOrderProduct> OrdersProducts { get; set; }
     }
 }

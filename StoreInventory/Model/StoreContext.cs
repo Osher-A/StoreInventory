@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StoreInventory.Extentions;
+using StoreInventory.Interfaces;
 using StoreInventory.Migrations.Configurations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace StoreInventory.Model
@@ -42,7 +45,6 @@ namespace StoreInventory.Model
                 .Property(o => o.Total)
                 .HasDefaultValue(0f);
 
-
             modelBuilder.Entity<OrderProduct>()
                 .HasKey(op => new { op.OrderId, op.ProductId });
             modelBuilder.Entity<Stock>()
@@ -59,12 +61,9 @@ namespace StoreInventory.Model
                  .HasForeignKey("Address", "CustomerId");
 
 
-
-
-
-
-
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
         }
+
+        
     }
 }

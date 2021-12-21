@@ -29,9 +29,9 @@ namespace StoreInventory.Views
     public partial class MainWindow : MetroWindow
     {
         private OrdersControllerPage _mainWindowContentPage;
+       // private OrderPage _mainWindowContentPage;
         private readonly IMessageService _messageService;
         private readonly ToastViewModel _toastVm;
-        private int _count = 0;
         public MainWindow(IMessageService messageService)
         {
             InitializeComponent();

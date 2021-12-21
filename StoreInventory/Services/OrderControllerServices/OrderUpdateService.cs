@@ -15,7 +15,7 @@ namespace StoreInventory.Services.OrderControllerServices
 
         public void UpdateOrder(IOrder order)
         {
-            _orderRepository.UpdateOrder(order);
+            _orderRepository.UpdateOrderStatus(order);
         }
     }
 }
