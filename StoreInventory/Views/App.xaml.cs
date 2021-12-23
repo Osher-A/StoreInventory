@@ -4,6 +4,8 @@ using RazorEngine;
 using RazorEngine.Configuration;
 using RazorEngine.Templating;
 using RazorEngine.Text;
+using StoreInventory.DAL;
+using StoreInventory.Interfaces;
 using StoreInventory.Services.MessageService;
 using StoreInventory.ViewModel;
 using System;
@@ -33,12 +35,12 @@ namespace StoreInventory.Views
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IMessageService>(new MessageService());
+            services.AddSingleton<IOrderRepository>(new OrderRepository());
+            services.AddSingleton<ICustomerRepository>(new CustomerRepository());
+            services.AddSingleton<IOrderProductRepository>(new OrderProductRepository());
             services.AddSingleton<MainWindow>();
 
-            //TemplateServiceConfiguration templateConfig = new TemplateServiceConfiguration();
-            //templateConfig.EncodedStringFactory = new RawStringFactory();
-            //var service = RazorEngineService.Create(templateConfig);
-            //Engine.Razor = service;
+            
         }
 
             private void OnStartup(object sender, StartupEventArgs e)

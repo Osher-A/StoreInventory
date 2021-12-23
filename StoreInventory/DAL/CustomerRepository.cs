@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace StoreInventory.DAL
 {
-    internal class CustomerRepository
+    internal class CustomerRepository : ICustomerRepository
     {
         public List<ICustomer> GetCustomers()
         {
@@ -90,7 +90,7 @@ namespace StoreInventory.DAL
         private void UpdateAddress(Model.Customer modelCustomer, IAddress uiAddress)
         {
             IAddress modelAddress;
-            if(modelCustomer.Address != null)
+            if (modelCustomer.Address != null)
             {
                 modelAddress = modelCustomer.Address;
                 modelAddress.House = (!string.IsNullOrWhiteSpace(uiAddress.House)) ? uiAddress.House : modelAddress.House;

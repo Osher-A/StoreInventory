@@ -89,7 +89,7 @@ namespace StoreInventory.DAL
         {
            return (Model.Order)(DTO.Order)order; 
 
-           // casting via the operator return a new Model.Order
+           // casting via the operator returns a new Model.Order
            // so can't be used for updating the model
         }
     }

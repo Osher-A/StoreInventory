@@ -3,6 +3,7 @@ using MyLibrary.Utilities;
 using StoreInventory.DAL;
 using StoreInventory.DTO;
 using StoreInventory.Enums;
+using StoreInventory.Interfaces;
 using StoreInventory.Services.MessageService;
 using StoreInventory.Services.OrderServices;
 using System;
@@ -22,6 +23,9 @@ namespace StoreInventory.ViewModel
         private ShoppingBasketService _shoppingBasketService = new ShoppingBasketService(new StockRepository());
         private OrderViewService _orderViewService;
         private PaymentService _paymentService;
+        private ICustomerRepository _customerRepository;
+        private IOrderRepository _orderRepository;
+        private IOrderProductRepository _orderProductRepository;
 
         private Stock _lastSelectedProduct = new Stock() { Product = new Product() };
         private Stock _selectedStockProduct = new Stock() { Product = new Product() };
@@ -37,10 +41,14 @@ namespace StoreInventory.ViewModel
         private bool _isExpanded;
         private Order _newOrder = new Order { OrderDate = DateTime.Now, Customer = new Customer() { Address = new Address() } };
 
-        public OrderViewModel(IMessageService messageService)
+        public OrderViewModel(IMessageService messageService, IOrderRepository orderRepository,
+            ICustomerRepository customerRepository, IOrderProductRepository orderProductRepository)
         {
             _orderViewService = new OrderViewService(_shoppingBasketService);
             _paymentService = new PaymentService(messageService, NewOrder.Customer);
+            _orderRepository = orderRepository;
+            _customerRepository = customerRepository;
+            _orderProductRepository = orderProductRepository;
             SearchCommand = new CustomCommand(SearchAllProducts, CanSearch);
             AddToBasketCommand = new CustomCommand(AddToBasket, CanAddToBasket);
             RemoveItemCommand = new CustomCommand(RemoveItem, CanRemoveItem);
@@ -257,7 +265,7 @@ namespace StoreInventory.ViewModel
             if (ValidateDetails())
             {
                 NewOrder.AmountPaid = PaymentAmounts.AmountPaid;
-                var odService = new OrderDataService(NewOrder, BasketProducts.ToList());
+                var odService = new OrderDataService(_orderRepository, _customerRepository, _orderProductRepository ,NewOrder, BasketProducts.ToList());
                 odService.SaveOrderDetails();
 
                 ClearAllInputs();

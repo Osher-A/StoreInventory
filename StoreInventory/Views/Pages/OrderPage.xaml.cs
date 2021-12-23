@@ -1,4 +1,5 @@
-﻿using StoreInventory.Services.MessageService;
+﻿using StoreInventory.Interfaces;
+using StoreInventory.Services.MessageService;
 using StoreInventory.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -20,11 +21,11 @@ namespace StoreInventory.Views.Pages
     /// </summary>
     public partial class OrderPage : Page
     {
-        public OrderPage(IMessageService messageService)
+        public OrderPage(IMessageService messageService, IOrderRepository orderRepository, ICustomerRepository customerRepository)
         {
             InitializeComponent();
 
-            var vm = new OrderViewModel(messageService);
+            var vm = new OrderViewModel(messageService, orderRepository, customerRepository);
             this.DataContext = vm;
 
             vm.ScrollUpEvent += Vm_ScrollUpEvent;

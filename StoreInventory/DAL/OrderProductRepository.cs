@@ -8,16 +8,18 @@ using System.Text;
 
 namespace StoreInventory.DAL
 {
-    public class OrderProductRepository
+    public class OrderProductRepository : IOrderProductRepository
     {
         public void UpdateOrderProducts(List<IOrderProduct> orderProducts)
         {
             using var db = new StoreContext();
             foreach (var op in orderProducts)
             {
-                var orderProduct = new Model.OrderProduct() 
+                var orderProduct = new Model.OrderProduct()
                 {
-                    OrderId = op.OrderId, ProductId = op.ProductId, Quantity = op.Quantity 
+                    OrderId = op.OrderId,
+                    ProductId = op.ProductId,
+                    Quantity = op.Quantity
                 };
                 db.OrdersProducts.Add(orderProduct);
             }
