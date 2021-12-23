@@ -46,9 +46,9 @@ namespace StoreInventory.Views
             ToastService.ToastErrorAction += ShowError;
         }
 
-        private void ShowError()
+        private void ShowError(string message )
         {
-            _toastVm.ShowError("Error!");
+            _toastVm.ShowError("ERROR!" + "  " + message );
         }
 
         private void ShowSuccess()

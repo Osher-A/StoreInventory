@@ -25,7 +25,7 @@ namespace StoreInventory.DTO
                 OnPropertyChanged(nameof(Customer));
             }
         }
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public DateTime OrderDate { get; set; }
         public float Total
         {
@@ -48,7 +48,7 @@ namespace StoreInventory.DTO
 
         public float AmountOwed
         {
-            get {return Total - AmountPaid;}
+            get {return Total - AmountPaid;}    
             set 
             {
                 _amountOwed = value;
@@ -99,7 +99,7 @@ namespace StoreInventory.DTO
                 orderProduct = new DTO.OrderProduct();
             else
                 orderProduct = new Model.OrderProduct();
-            return CreateOrderProducts(orderProducts,orderProduct);
+            return CreateOrderProducts(orderProducts, orderProduct);
         }
 
         private static IEnumerable<IOrderProduct> CreateOrderProducts(IEnumerable<IOrderProduct> orderProducts, IOrderProduct orderProduct)
@@ -109,6 +109,7 @@ namespace StoreInventory.DTO
             {
                 orderProduct.OrderId = modelOrderProduct.OrderId;
                 orderProduct.ProductId = modelOrderProduct.ProductId;
+                orderProduct.Product = modelOrderProduct.Product;
                 orderProduct.Quantity = modelOrderProduct.Quantity;
                 iOrderProducts.Add(orderProduct);
             }

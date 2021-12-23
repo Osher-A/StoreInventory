@@ -8,7 +8,7 @@ namespace StoreInventory.Interfaces
     {
         float AmountPaid { get; set; }
         ICustomer Customer { get; set; }
-        int CustomerId { get; set; }
+        int? CustomerId { get; set; }
         int Id { get; set; }
         DateTime OrderDate { get; set; }
         float Total { get; set; }

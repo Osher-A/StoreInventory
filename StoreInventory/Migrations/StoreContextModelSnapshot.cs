@@ -101,7 +101,7 @@ namespace StoreInventory.Migrations
                     b.Property<float>("AmountPaid")
                         .HasColumnType("real");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
@@ -231,9 +231,7 @@ namespace StoreInventory.Migrations
                 {
                     b.HasOne("StoreInventory.Model.Customer", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.Navigation("Customer");
                 });

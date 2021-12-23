@@ -30,6 +30,7 @@ namespace StoreInventory.Services.OrderControllerServices
         {
             MimeMessage mail = new MimeMessage();
             mail.From.Add(new MailboxAddress("Admin", "oa@sharpdeveloper.co.uk"));
+            //mail.To.Add(new MailboxAddress("Customer", "Papercut@user.com"));
             mail.To.Add(new MailboxAddress("Customer", "oamoscovitch@gmail.com"));
             mail.Subject = "Invoice";
             mail.Body = new TextPart("html") { Text = GetMessageTemplate(order) };
@@ -39,12 +40,12 @@ namespace StoreInventory.Services.OrderControllerServices
 
         private static string GetMessageTemplate(DTO.Order order)
         {
-            string path = @"../../../../StoreInventory/Services/OrderControllerServices/Html.txt";
+            //string path = @"../../../../StoreInventory/Services/OrderControllerServices/EmailTemplate.txt";
+            string path = @"C:/Users/user/source/repos/Wpf/StoreInventory/StoreInventory/Services/OrderControllerServices/EmailTemplate.txt";
             string template = System.Text.Encoding.UTF8.GetString(System.IO.File.ReadAllBytes(path));
             string returnedView = Engine.Razor.RunCompile(template, "report", typeof(DTO.Order), order, null);
             return returnedView;
         }
-
         private static void SendMessage(MimeMessage mail)
         {
             try
@@ -62,9 +63,9 @@ namespace StoreInventory.Services.OrderControllerServices
                     client.Disconnect(true);
                 }
             }
-            catch (Exception)
+            catch (Exception e )
             {
-                ToastService.ErrorToast();
+                ToastService.ErrorToast(e.Message);
                 return;
             }
             ToastService.SuccessToast();

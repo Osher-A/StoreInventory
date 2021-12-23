@@ -11,7 +11,7 @@ namespace StoreInventory.Model
     {
         public int Id { get; set; }
         public ICustomer Customer { get; set; } 
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public DateTime OrderDate { get; set; }
         public float Total { get; set; }
         public float AmountPaid { get; set; }
