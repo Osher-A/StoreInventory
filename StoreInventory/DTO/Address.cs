@@ -72,7 +72,8 @@ namespace StoreInventory.DTO
                 if (word.Any(char.IsDigit) || word.Length == 1)
                     house += word;
             }
-            House = house;
+            if(house.Length > 0)
+               House = house;
         }
 
         private void SetZip()

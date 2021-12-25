@@ -26,37 +26,71 @@ namespace UnitTests.ServicesTests.OrderServiceTests
         {
             _orderRepository = new Mock<IOrderRepository>();
             _customerRepository = new Mock<ICustomerRepository>();
-            _customerRepository.Setup(cr => cr.GetCustomers()).Returns(_mockDbCustomers);
-            _orderDataService = new OrderDataService(_orderRepository.Object, _customerRepository.Object,
-                _orderProductRepository.Object, _mockNewOrder, _mockBasketItems);
-
-            _mockNewOrder = new Order();
+            _orderProductRepository = new Mock<IOrderProductRepository>();
+            _mockNewOrder = new Order() { Customer = new Customer(), };
             SetBasketItems();
             SetDbCustomers();
 
+            _customerRepository.Setup(cr => cr.GetCustomers()).Returns(_mockDbCustomers);
+            _orderDataService = new OrderDataService(_orderRepository.Object, _customerRepository.Object,
+                _orderProductRepository.Object, _mockNewOrder, _mockBasketItems);
         }
+
         [Test]
-        public void SaveOrderDetails_WhenAllCustomersDetailsAreNullAndFullyPaid_DoNotAddOrUpdateCustomerInRepo()
+        [TestCase( "Darenth Rd", "N16 6PR")]
+        public void SaveOrderDetails_WhenCustomersDetailsAreNotUnique_DoNotAddOrUpdateCustomerInRepo(string street, string zip)
         {
             //Set up
-            _mockNewOrder.Total = 10; _mockNewOrder.AmountPaid = 10;
-            _mockNewOrder.Customer = new Customer();
+            _mockNewOrder.Customer.Address = new Address { Street = street, Zip = zip } ;
             
             //Act
             _orderDataService.SaveOrderDetails();
 
             //Assert
+            _orderRepository.Verify(or => or.AddingOrder(_mockNewOrder), Times.Once());
+            _customerRepository.Verify(cr => cr.UpdateCustomer(_mockNewOrder.Customer), Times.Never());
+            _customerRepository.Verify(cr => cr.AddNewCustomer(_mockNewOrder.Customer), Times.Never());
         }
-       
+
         [Test]
-        public void SaveOrderDetails_WhenPartOfDetailsNotNullAndCanBeMatchedToExistingCustomer_UpdateCustomerInRepo()
+        public void SaveOrderDetails_WhenCustomersUniqueDetailsIsNotNullAndCanBeMatchedToExistingCustomer_UpdateCustomerInRepo()
         {
+            //Set up
+            _mockNewOrder.Customer.Email = "be@gmail.com" ;
+
+            //Act
+            _orderDataService.SaveOrderDetails();
+
+            //Assert
+            _orderRepository.Verify(or => or.AddingOrder(_mockNewOrder), Times.Once());
+            
+            _customerRepository.Verify(cr => cr.UpdateCustomer(_mockNewOrder.Customer), Times.Once());
+            _customerRepository.Verify(cr => cr.AddNewCustomer(_mockNewOrder.Customer), Times.Never());
 
         }
-        [Test]
-        public void SaveOrderDetails_WhenPartOfDetailsNotNullAndCantBeMatchedToExistingCustomer_AddNewCustomerInRepo()
-        {
 
+        [Test]
+        [TestCase("c.@gmail.com", null, "", null)]
+        [TestCase(null, "12", "Queens Drive", "")]
+        [TestCase("", "2", "", "M260PQ")]
+        public void SaveOrderDetails_WhenUniqueDetailsNotNullButCantBeMatchedToExistingCustomer_AddNewCustomerInRepo(string email, string house, string street, string zip)
+        {
+            //Set up
+            _mockNewOrder.Customer.Email = email;
+            _mockNewOrder.Customer.Address = new Address()
+            {
+                House = house,
+                Street = street,
+                Zip = zip
+            };
+            
+            //Act
+            _orderDataService.SaveOrderDetails();
+
+            //Assert
+            _orderRepository.Verify(or => or.AddingOrder(_mockNewOrder), Times.Once());
+            _customerRepository.Verify(cr => cr.UpdateCustomer(_mockNewOrder.Customer), Times.Never());
+            _customerRepository.Verify(cr => cr.AddNewCustomer(_mockNewOrder.Customer), Times.Once());
         }
 
         private void SetBasketItems()

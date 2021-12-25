@@ -21,11 +21,12 @@ namespace StoreInventory.Views.Pages
     /// </summary>
     public partial class OrderPage : Page
     {
-        public OrderPage(IMessageService messageService, IOrderRepository orderRepository, ICustomerRepository customerRepository)
+        public OrderPage(IMessageService messageService, IOrderRepository orderRepository,
+            ICustomerRepository customerRepository, IOrderProductRepository orderProductRepository)
         {
             InitializeComponent();
 
-            var vm = new OrderViewModel(messageService, orderRepository, customerRepository);
+            var vm = new OrderViewModel(messageService, orderRepository, customerRepository, orderProductRepository);
             this.DataContext = vm;
 
             vm.ScrollUpEvent += Vm_ScrollUpEvent;

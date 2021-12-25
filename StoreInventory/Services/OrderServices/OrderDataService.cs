@@ -31,13 +31,13 @@ namespace StoreInventory.Services.OrderServices
 
         public void SaveOrderDetails()
         {
+            FetchCustomer();
             var customerid = SetAndOrGetCustomersId();
             if (customerid != 0)
                 _newOrder.CustomerId = customerid;
 
             _orderRepository.AddingOrder((DTO.Order)_newOrder);
             RemoveProductsFromDb();
-            FetchCustomer();
         }
 
         private int SetAndOrGetCustomersId()
@@ -59,22 +59,27 @@ namespace StoreInventory.Services.OrderServices
         {
             if (_newOrder.Customer != null)
                 if (_newOrder.Customer.Address != null)
-                    if (String.IsNullOrWhiteSpace(_newOrder.Customer.Address.House)||
+                    if ((String.IsNullOrWhiteSpace(_newOrder.Customer.Address.House) ||
                         (string.IsNullOrWhiteSpace(_newOrder.Customer.Address.Street)
-                        && String.IsNullOrWhiteSpace(_newOrder.Customer.Address.Zip))
+                        && String.IsNullOrWhiteSpace(_newOrder.Customer.Address.Zip)))
                         && string.IsNullOrWhiteSpace(_newOrder.Customer.Email))
                         return false;
                     else
                         return true;
+                else if (!string.IsNullOrWhiteSpace(_newOrder.Customer.Email))
+                    return true;
                 
             return false;
         }
 
         private void FetchCustomer()
         {
-            _existingCustomer = (ICustomer)_customerRepository.GetCustomers().FirstOrDefault(c => c.Email.Trim() == _newOrder.Customer.Email.Trim()
-            || (c.Address.Zip == _newOrder.Customer.Address.Zip && c.Address.House.Trim().ToLower() == _newOrder.Customer.Address.House.Trim().ToLower())
-            || (c.Address.House.Trim().ToLower() == _newOrder.Customer.Address.House.Trim().ToLower() && c.Address.Street.Trim().ToLower() == _newOrder.Customer.Address.Street));
+            _existingCustomer = (ICustomer)_customerRepository.GetCustomers().FirstOrDefault
+                (c => !string.IsNullOrWhiteSpace(c.Email) && c.Email?.Trim() == _newOrder.Customer.Email?.Trim()
+            || (!string.IsNullOrWhiteSpace(c.Address.Zip) && c.Address?.Zip == _newOrder.Customer?.Address?.Zip
+            && !string.IsNullOrWhiteSpace(c.Address.House) && c.Address?.House?.Trim().ToLower() == _newOrder.Customer?.Address?.House?.Trim().ToLower())
+            || (!string.IsNullOrWhiteSpace(c.Address.House) && c.Address?.House?.Trim().ToLower() == _newOrder.Customer?.Address?.House?.Trim().ToLower()
+            && !string.IsNullOrWhiteSpace(c.Address.Street) && c.Address?.Street?.Trim().ToLower() == _newOrder.Customer?.Address?.Street));
         }
 
         private void RemoveProductsFromDb()
