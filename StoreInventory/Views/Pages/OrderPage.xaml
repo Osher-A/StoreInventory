@@ -7,6 +7,7 @@
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:is="http://schemas.microsoft.com/expression/2010/interactions"
       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
       xmlns:local="clr-namespace:StoreInventory.Views.Pages"
       xmlns:uc="clr-namespace:StoreInventory.Views.UserControls"
       xmlns:vm="clr-namespace:StoreInventory.ViewModel"
@@ -36,28 +37,76 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </Page.Resources>
-    <ScrollViewer Name="scrollViewer">
-        <Viewbox>
+    <ScrollViewer Name="scrollViewer" >
+        <Viewbox >
             <Grid  Style="{StaticResource MainGrid}">
                 <!--DataContext="{StaticResource vm}">-->
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="31*"/>
-                        <RowDefinition />
-                        <RowDefinition Height="220*"/>
-                        <RowDefinition />
-                        <RowDefinition Height="57*"/>
-                        <RowDefinition />
-                        <RowDefinition Height="80*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="20"/>
-                    </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="31*"/>
+                    <RowDefinition />
+                    <RowDefinition Height="220*"/>
+                    <RowDefinition />
+                    <RowDefinition Height="57*"/>
+                    <RowDefinition />
+                    <RowDefinition Height="80*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                
+                <ToolBarPanel HorizontalAlignment="Center"  Grid.ColumnSpan="3"   >
+                    <ToolBarPanel.Resources>
+                        <Style TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button.ToolBar}">
+                            <Setter Property="Margin" Value="0,0,10,0"/>
+                        </Style>
+                    </ToolBarPanel.Resources>
+                    <ToolBar >
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Home page" Click="PageClick" CommandParameter="MainWindowContent"/>
+                            <Separator Style="{StaticResource MahApps.Styles.Separator.StatusBar}"/>
+                            <Button Content="Stock page" Click="PageClick" CommandParameter="Stock"/>
+                            <Separator Style="{StaticResource MahApps.Styles.Separator.StatusBar}"/>
+                            <Button Content="Order controller page" Click="PageClick" CommandParameter="OrderController"/>
+                        </StackPanel>
+                    </ToolBar>
+                </ToolBarPanel>
 
-                    <Expander 
+                <TextBlock Grid.ColumnSpan="3"
+                            Text="Order Submition"
+                            FontSize="30"
+                           FontFamily="Copperplate Gothic Bold"
+                            HorizontalAlignment="Center"
+                           Margin="0,20" Grid.Row="1" />
+                <Button Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource MahApps.Styles.Button.Circle}" 
+                        Height="50"
+                        Width="50"
+                        Click="NavigationClick"
+                        CommandParameter="Backwards" Grid.Row="1" >
+                    <Button.Content>
+                        <icons:MaterialDesign Kind="ArrowForward"/>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="1"
+                        HorizontalAlignment="Left"
+                          Style="{StaticResource MahApps.Styles.Button.Circle}" 
+                        Height="50"
+                        Width="50"
+                        Click="NavigationClick"
+                        CommandParameter="Forwards" Grid.Row="1">
+                    <Button.Content>
+                        <icons:MaterialDesign Kind="ArrowBack"/>
+                    </Button.Content>
+                </Button>
+                <Expander 
                         Name="myExpander"
                         IsExpanded="{Binding IsExpanded}"
+                        Grid.Row="2"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
                         Grid.RowSpan="2"
@@ -66,14 +115,14 @@
                         VerticalAlignment="Stretch"
                         Margin="20"
                         BorderThickness="0"
-                         HorizontalContentAlignment="Center"
+                         HorizontalContentAlignment="Center" 
                          
                         >
-                        <Expander.Style>
-                            <Style TargetType="Expander" BasedOn="{StaticResource MahApps.Styles.Expander}">
+                    <Expander.Style>
+                        <Style TargetType="Expander" BasedOn="{StaticResource MahApps.Styles.Expander}">
                         </Style>
-                        </Expander.Style>
-                        <Expander.Header >
+                    </Expander.Style>
+                    <Expander.Header >
                         <StackPanel Orientation="Horizontal" Background="{StaticResource MahApps.Brushes.SemiTransparent}">
                             <Label Foreground="White">
                                 <Label.Style>
@@ -88,29 +137,29 @@
                                 </Label.Style>
                             </Label>
                             <TextBlock Text="Customer's Details"  Foreground="White" FontSize="15" HorizontalAlignment="Right" Margin="240,0"/>
-                            </StackPanel>
-                        </Expander.Header>
+                        </StackPanel>
+                    </Expander.Header>
 
-                        <Grid Width="{Binding ElementName=ProductsGrid, Path=ActualWidth}" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="20"/>
-                                <RowDefinition/>
-                                <RowDefinition />
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="80"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition MinWidth="30"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition MinWidth="20"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                    <Grid Width="{Binding ElementName=ProductsGrid, Path=ActualWidth}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition MinWidth="30"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition MinWidth="20"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                            <TextBlock
+                        <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 HorizontalAlignment="Left"
@@ -120,82 +169,82 @@
                                 FontSize="17"
                                 />
 
-                            <Label Grid.Row="2"
+                        <Label Grid.Row="2"
                    Content="First Name:"/>
-                            <TextBox Grid.Row="2"
+                        <TextBox Grid.Row="2"
                      Grid.Column="1"
                              Text="{Binding NewOrder.Customer.FirstNames, Mode=TwoWay}"/>
-                            <Label Grid.Row="3"
+                        <Label Grid.Row="3"
                    Content="Last Name:"/>
-                            <TextBox Grid.Row="2"
+                        <TextBox Grid.Row="2"
                      Grid.Column="8"
                              Text="{Binding NewOrder.Customer.LastName, Mode=TwoWay}"/>
-                            <Label Grid.Row="2"
+                        <Label Grid.Row="2"
                            Grid.Column="3"
                            Content="House/Rd:"/>
-                            <TextBox
+                        <TextBox
                             Grid.Row="2"
                             Grid.Column="4"
                             Text="{Binding NewOrder.Customer.Address.Street, Mode=TwoWay}"/>
-                            <Label 
+                        <Label 
                             Grid.Row="3"
                             Grid.Column="3"
                             Content="Zip/City:"/>
-                            <TextBox 
+                        <TextBox 
                             Grid.Row="3"
                             Grid.Column="4"
                             Text="{Binding NewOrder.Customer.Address.City, Mode=TwoWay}"/>
-                            <Label 
+                        <Label 
                             Grid.Row="2"
                             Grid.Column="6"
                             Content="Phone:"/>
-                            <TextBox 
+                        <TextBox 
                             Grid.Row="3"
                             Grid.Column="1"
                         Text="{Binding NewOrder.Customer.PhoneNumber, Mode=TwoWay}"/>
-                            <Label 
+                        <Label 
                             Grid.Row="3"
                             Grid.Column="6"
                             Content="Email:"/>
-                            <TextBox 
+                        <TextBox 
                             Grid.Row="3"
                             Grid.Column="8"
                             Text="{Binding NewOrder.Customer.Email, Mode=TwoWay}"/>
 
-                        </Grid>
-                    </Expander>
+                    </Grid>
+                </Expander>
 
 
-                    <Border Grid.Row="1"
+                <Border Grid.Row="3"
                         Grid.Column="0"
                         Grid.ColumnSpan="3">
-                        <Border.Style>
-                            <Style TargetType="Border" BasedOn="{StaticResource MyBorder}">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=myExpander, Path=IsExpanded}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                    </Border>
+                    <Border.Style>
+                        <Style TargetType="Border" BasedOn="{StaticResource MyBorder}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=myExpander, Path=IsExpanded}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
 
-                    <Grid
+                <Grid
                         x:Name="ProductsGrid"
-                        Grid.Row="2" Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="20" />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
+                        Grid.Row="4" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="20" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
 
-                        <TextBlock Text="Products in stock"/>
+                    <TextBlock Text="Products in stock"/>
 
-                        <DockPanel Grid.Row="1">
-                            <TextBox
+                    <DockPanel Grid.Row="1">
+                        <TextBox
                                 DockPanel.Dock="Right"
                              controls:TextBoxHelper.Watermark="Search"
                              HorizontalAlignment="Right"
@@ -205,18 +254,18 @@
                             Height="25"
                             Text="{Binding Search, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
 
-                                <i:Interaction.Triggers>
-                                    
-                                    <i:EventTrigger EventName="TextChanged"     >
-                                        <i:InvokeCommandAction Command="{Binding SearchCommand}" />
-                                    </i:EventTrigger>
-                                    <is:KeyTrigger Key="Enter">
-                                        <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
-                                    </is:KeyTrigger>
-                                </i:Interaction.Triggers>
-                            </TextBox>
+                            <i:Interaction.Triggers>
 
-                            <ComboBox
+                                <i:EventTrigger EventName="TextChanged"     >
+                                    <i:InvokeCommandAction Command="{Binding SearchCommand}" />
+                                </i:EventTrigger>
+                                <is:KeyTrigger Key="Enter">
+                                    <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                                </is:KeyTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+
+                        <ComboBox
                               DockPanel.Dock="Right"  
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
@@ -226,110 +275,110 @@
                             SelectedIndex="0"
                             Text="{Binding SelectedCategory.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             >
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="LostFocus">
-                                        <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </ComboBox>
-                        </DockPanel>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                    </DockPanel>
 
-                        <uc:GridUserControl
+                    <uc:GridUserControl
                         ItemsSource="{Binding SearchProductsStocked}"
                         Margin="0,10,0,0"
                             Grid.Row="2"
                            SelectedItem="{Binding SelectedStockProduct, Mode=OneWayToSource}"
                             MyCommand="{Binding AddToBasketCommand}">
-                        </uc:GridUserControl>
+                    </uc:GridUserControl>
 
-                        <DockPanel 
+                    <DockPanel 
                         Grid.Row="4"
                         >
-                            <TextBox
+                        <TextBox
                                 HorizontalContentAlignment="Center"
                                  Width="40"
                                  DockPanel.Dock="Right"
                                  Text="{Binding ProductQuantity, Mode=TwoWay, FallbackValue=0, UpdateSourceTrigger=PropertyChanged}"   >
-                                <i:Interaction.Triggers>
-                                    <is:KeyTrigger Key="Enter">
-                                        <i:InvokeCommandAction Command="{Binding AddToBasketCommand}"/>
-                                    </is:KeyTrigger>
-                                </i:Interaction.Triggers>
-                            </TextBox>
-                            <Label 
+                            <i:Interaction.Triggers>
+                                <is:KeyTrigger Key="Enter">
+                                    <i:InvokeCommandAction Command="{Binding AddToBasketCommand}"/>
+                                </is:KeyTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                        <Label 
                             Content="Order Qty:"
                             DockPanel.Dock="Right"/>
 
-                        </DockPanel>
-                    </Grid>
-                    <Border
-                    Grid.Row="3"
+                    </DockPanel>
+                </Grid>
+                <Border
+                    Grid.Row="5"
                      Grid.Column="0"
                      Grid.ColumnSpan="3"
                     Style="{StaticResource MyBorder}" />
-                    <Grid Grid.Row="4" Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="50"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                <Grid Grid.Row="6" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                        <TextBlock 
+                    <TextBlock 
                       Text="Order Products"/>
-                        <DataGrid 
+                    <DataGrid 
                             ItemsSource="{Binding BasketProducts}"
                             SelectedItem="{Binding SelectedBasketItem}"
                         Margin="0,10,0,0"
                         Grid.Row="1" >
-                            <DataGrid.Columns >
-                                <DataGridTextColumn Header="Item Name" Binding="{Binding Product.Name, Mode=OneWay}" Width="*" />
-                                <DataGridTextColumn Header="Description" Binding="{Binding Product.Description, Mode=OneWay}" Width="2*" />
-                                <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, Mode=OneWay, Converter={StaticResource currency}}" Width="*" />
-                                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity, Mode=TwoWay}" Width="*" />
-                                <DataGridTextColumn Header="Running Total" Binding="{Binding RunningTotal, Mode=OneWay, Converter={StaticResource currency}}" Width="*" />
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <DataGrid.Columns >
+                            <DataGridTextColumn Header="Item Name" Binding="{Binding Product.Name, Mode=OneWay}" Width="*" />
+                            <DataGridTextColumn Header="Description" Binding="{Binding Product.Description, Mode=OneWay}" Width="2*" />
+                            <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, Mode=OneWay, Converter={StaticResource currency}}" Width="*" />
+                            <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity, Mode=TwoWay}" Width="*" />
+                            <DataGridTextColumn Header="Running Total" Binding="{Binding RunningTotal, Mode=OneWay, Converter={StaticResource currency}}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
 
-                        <StackPanel Orientation="Horizontal"
+                    <StackPanel Orientation="Horizontal"
                     Grid.Row="2"
                     Margin="0,30,0,10"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom"            >
-                            <Button Content="Remove item" Command="{Binding RemoveItemCommand}"/>
-                            <Button Content="Clear list" Command="{Binding EmptyBasketCommand}"/>
-                        </StackPanel>
-                    </Grid>
-                    <Border
-                    Grid.Row="5" 
+                        <Button Content="Remove item" Command="{Binding RemoveItemCommand}"/>
+                        <Button Content="Clear list" Command="{Binding EmptyBasketCommand}"/>
+                    </StackPanel>
+                </Grid>
+                <Border
+                    Grid.Row="7" 
                     Grid.Column="0"
                    Grid.ColumnSpan="3"
                     Style="{StaticResource MyBorder}"/>
-                    <Grid 
-                    Grid.Row="6" Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition Height="80"/>
-                        </Grid.RowDefinitions>
-                        <DockPanel >
-                            <TextBox 
+                <Grid 
+                    Grid.Row="8" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition Height="80"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel >
+                        <TextBox 
                             DockPanel.Dock="Right"
                                 IsReadOnly="True"
                                 Width="80"
                                 HorizontalContentAlignment="Center"
                                 Text="{Binding NewOrder.Total, Mode=TwoWay, StringFormat='{} {0:C}', ConverterCulture=en-GB}"/>
-                            <Label
+                        <Label
                             DockPanel.Dock="Right"
                             Content="Total:"/>
-                        </DockPanel>
-                        <ComboBox 
+                    </DockPanel>
+                    <ComboBox 
                         Grid.Row="1"
                         HorizontalAlignment="Right"
                         controls:TextBoxHelper.Watermark="Payment Method"
                             ItemsSource="{Binding Source={StaticResource paymentEnum}}"/>
-                        <StackPanel 
+                    <StackPanel 
                         Grid.Row="2"
                         Orientation="Horizontal"
                          HorizontalAlignment="Center">
@@ -368,11 +417,11 @@
                               >
                         </RadioButton>
                     </StackPanel>
-                        <StackPanel
+                    <StackPanel
                          Orientation="Horizontal"
                         HorizontalAlignment="Center"
                          Grid.Row="3">
-                            <Label 
+                        <Label 
                             Content="Amount Paid:"/>
                         <TextBox 
                                 Width="80"
@@ -388,19 +437,19 @@
 
                         <Label Content="Amount Owed:"
                                Margin="10,0,0,0"/>
-                            <TextBox
+                        <TextBox
                                 Width="80"
                                 HorizontalContentAlignment="Center"
                                 Text="{Binding PaymentAmounts.AmountOwed, Mode=OneWay, StringFormat={}{0:C}, ConverterCulture=en-GB}"/>
-                        </StackPanel>
-                        <Button 
+                    </StackPanel>
+                    <Button 
                         Grid.Row="4"
                         Content="Complete Order"
                         HorizontalAlignment="Right"
                         Margin="0"
                         Command="{Binding CheckOutCommand}"/>
-                    </Grid>
                 </Grid>
+            </Grid>
         </Viewbox>
     </ScrollViewer>
 </Page>

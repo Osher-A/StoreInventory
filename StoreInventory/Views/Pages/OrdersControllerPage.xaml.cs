@@ -1,4 +1,6 @@
-﻿using System;
+﻿using StoreInventory.Interfaces;
+using StoreInventory.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,9 +20,25 @@ namespace StoreInventory.Views.Pages
     /// </summary>
     public partial class OrdersControllerPage : Page
     {
-        public OrdersControllerPage()
+        public OrdersControllerPage(IEmailSmtpService emailSmtpService)
         {
             InitializeComponent();
+            var vm = new OrdersControllerViewModel(emailSmtpService);
+            this.DataContext = vm;
+        }
+
+        public Action<string> Navigator;
+        public Action<string> PageNavigator;
+
+        public void NavigationClick(object sender, RoutedEventArgs e)
+        {
+            var direction = (sender as Button).CommandParameter.ToString();
+            Navigator?.Invoke(direction);
+        }
+        public void PageClick(object sender, RoutedEventArgs e)
+        {
+            var page = (sender as Button).CommandParameter as string;
+            PageNavigator?.Invoke(page);
         }
     }
 }

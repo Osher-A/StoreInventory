@@ -22,5 +22,14 @@ namespace StoreInventory.Views.Pages
         {
             InitializeComponent();
         }
+
+        public Action<string> TileClick;
+
+        private void OnTileClick(object sender, RoutedEventArgs e)
+        {
+           var tile = sender as MahApps.Metro.Controls.Tile;
+            
+           TileClick?.Invoke(tile.Name);
+        }
     }
 }

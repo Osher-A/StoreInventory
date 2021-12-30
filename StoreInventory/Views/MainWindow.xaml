@@ -10,7 +10,8 @@
          Name="mainWindow" 
          IsWindowDraggable="True"
          MaxWidth="1000"
-          MinHeight="700"            
+         MinHeight="800"  
+         Title="Store Inventory"             
          WindowStartupLocation="CenterScreen"             
         GlowBrush="{DynamicResource AccentColorBrush}"
         UseNoneWindowStyle="False"
@@ -54,7 +55,7 @@
             </controls:FlyoutsControl>
         </controls:MetroWindow.Flyouts>
 
-        <Grid Style="{StaticResource MainGrid}">
+        <Grid Background="{StaticResource MahApps.Brushes.Gray5}">
             <Frame Name="MainWindowFrame"
                Loaded="MainWindowFrame_Loaded"
                Width="{Binding ElementName=mainWindow, Path=ActualWidth }"

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Ninject;
 using RazorEngine;
 using RazorEngine.Configuration;
@@ -7,11 +8,13 @@ using RazorEngine.Text;
 using StoreInventory.DAL;
 using StoreInventory.Interfaces;
 using StoreInventory.Services.MessageService;
+using StoreInventory.Services.OrderControllerServices;
 using StoreInventory.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -38,12 +41,11 @@ namespace StoreInventory.Views
             services.AddSingleton<IOrderRepository>(new OrderRepository());
             services.AddSingleton<ICustomerRepository>(new CustomerRepository());
             services.AddSingleton<IOrderProductRepository>(new OrderProductRepository());
+            services.AddSingleton<IEmailSmtpService>(new EmailSmtpService());
             services.AddSingleton<MainWindow>();
-
-            
         }
 
-            private void OnStartup(object sender, StartupEventArgs e)
+        private void OnStartup(object sender, StartupEventArgs e)
         {
             var mainWindow = _serviceProvider.GetService<MainWindow>();
             mainWindow.Show();

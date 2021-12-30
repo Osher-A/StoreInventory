@@ -1,13 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
+	
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <UserSecretsId>b357260a-1a1e-4bbe-9a79-8702e83f9952</UserSecretsId>
   </PropertyGroup>
+
+	<PropertyGroup>
+		<UserSecretsId>LocalKeyVault</UserSecretsId>
+	</PropertyGroup>
 
   <ItemGroup>
     <None Remove="Images\inventory.ico" />
+    <None Remove="Images\product-48.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +35,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\product-48.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Analytics" Version="3.8.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Expression.Blend.Sdk" Version="1.0.2" />
@@ -41,6 +54,7 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.13" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="MimeKit" Version="2.15.1" />
     <PackageReference Include="NETCore.MailKit" Version="2.0.3" />

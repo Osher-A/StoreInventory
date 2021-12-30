@@ -13,12 +13,19 @@ using StoreInventory.Services.MessageService;
 using RazorEngine;
 using RazorEngine.Templating;
 using System.Drawing.Text;
+using System.Configuration;
+using StoreInventory.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace StoreInventory.Services.OrderControllerServices
 {
-    internal class EmailSmtpService
+    public class EmailSmtpService : IEmailSmtpService
     {
-        public static void SendEmail(DTO.Order order)
+        private IConfiguration _configuration;
+        private string _userName;
+        private string _password;
+
+        public void SendEmail(DTO.Order order)
         {
             var orderProductsService = new OrderProductsService();
             var orderWithProducts = orderProductsService.GetOrderWithProducts(order);
@@ -26,7 +33,7 @@ namespace StoreInventory.Services.OrderControllerServices
             SendMessage(message);
         }
 
-        private static MimeMessage ComposeMessage(DTO.Order order)
+        private MimeMessage ComposeMessage(DTO.Order order)
         {
             MimeMessage mail = new MimeMessage();
             mail.From.Add(new MailboxAddress("Admin", "oa@sharpdeveloper.co.uk"));
@@ -34,11 +41,11 @@ namespace StoreInventory.Services.OrderControllerServices
             mail.To.Add(new MailboxAddress("Customer", "oamoscovitch@gmail.com"));
             mail.Subject = "Invoice";
             mail.Body = new TextPart("html") { Text = GetMessageTemplate(order) };
-            
+
             return mail;
         }
 
-        private static string GetMessageTemplate(DTO.Order order)
+        private string GetMessageTemplate(DTO.Order order)
         {
             //string path = @"../../../../StoreInventory/Services/OrderControllerServices/EmailTemplate.txt";
             string path = @"C:/Users/user/source/repos/Wpf/StoreInventory/StoreInventory/Services/OrderControllerServices/EmailTemplate.txt";
@@ -46,7 +53,7 @@ namespace StoreInventory.Services.OrderControllerServices
             string returnedView = Engine.Razor.RunCompile(template, "report", typeof(DTO.Order), order, null);
             return returnedView;
         }
-        private static void SendMessage(MimeMessage mail)
+        private void SendMessage(MimeMessage mail)
         {
             try
             {
@@ -57,18 +64,30 @@ namespace StoreInventory.Services.OrderControllerServices
 
                     client.Connect("smtp.eu.mailgun.org", 587, false);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    client.Authenticate(Secrets.MailGunUserName, Secrets.MailGunPassword);
+                    //client.Authenticate(Secrets.MailGunUserName, Secrets.MailGunPassword);
+                    ConfigureSecrets();
+                    client.Authenticate(_userName, _password);
 
                     client.Send(mail);
                     client.Disconnect(true);
                 }
             }
-            catch (Exception e )
+            catch (Exception e)
             {
                 ToastService.ErrorToast(e.Message);
                 return;
             }
             ToastService.SuccessToast();
+        }
+
+        private void ConfigureSecrets()
+        {
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(@"C:\Users\user\AppData\Roaming\Microsoft\UserSecrets\LocalKeyVault\")
+            .AddJsonFile("secrets.json", optional: false, reloadOnChange: true);
+            _configuration = builder.Build();
+            _userName = _configuration["username"];
+            _password = _configuration["password"];
         }
     }
 }

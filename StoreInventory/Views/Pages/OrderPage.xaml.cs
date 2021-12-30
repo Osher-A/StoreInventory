@@ -32,9 +32,23 @@ namespace StoreInventory.Views.Pages
             vm.ScrollUpEvent += Vm_ScrollUpEvent;
         }
 
+        public Action<string> Navigator { get; set; }
+        public Action<string> PageNavigator { get; set; }
+
         private void Vm_ScrollUpEvent(object sender, EventArgs e)
         {
             this.scrollViewer.ScrollToTop();
+        }
+
+        private void NavigationClick(object sender, RoutedEventArgs e)
+        {
+            string direction = (sender as Button).CommandParameter.ToString();
+            Navigator?.Invoke(direction);
+        }
+        public void PageClick(object sender, RoutedEventArgs e)
+        {
+            var page = (sender as Button).CommandParameter as string;
+            PageNavigator?.Invoke(page);
         }
     }
 }

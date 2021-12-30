@@ -1,4 +1,5 @@
-﻿using StoreInventory.Services.ProductControllerServices;
+﻿using StoreInventory.Enums;
+using StoreInventory.Services.ProductControllerServices;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,7 +24,21 @@ namespace StoreInventory.Views.Pages
         {
             InitializeComponent();
         }
-
         
+        public Action<string> Navigator { get; set; }
+        public Action<string> PageNavigator { get; set; }
+
+        public void NavigationClick(object sender, RoutedEventArgs e)
+        {
+            var direction = (sender as Button).CommandParameter as string;
+            Navigator?.Invoke(direction);
+        }
+
+        public void PageClick(object sender, RoutedEventArgs e)
+        {
+            var page = (sender as Button).CommandParameter as string;
+            PageNavigator?.Invoke(page);
+        }
+
     }
 }

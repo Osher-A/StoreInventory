@@ -1,6 +1,7 @@
 ﻿using MyLibrary.Utilities;
 using StoreInventory.DAL;
 using StoreInventory.DTO;
+using StoreInventory.Interfaces;
 using StoreInventory.Services.OrderControllerServices;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace StoreInventory.ViewModel
     {
         private Order _selectedOrder = new Order();
         private OrderSearchService _orderSearchService = new OrderSearchService(new OrderRepository());
+        private IEmailSmtpService _emailSmtpService;
         private ObservableCollection<Order> searchOrders;
 
         public Order SelectedOrder
@@ -52,8 +54,9 @@ namespace StoreInventory.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public OrdersControllerViewModel()
+        public OrdersControllerViewModel(IEmailSmtpService emailSmtpService)
         {
+            _emailSmtpService = emailSmtpService;
             FieldsDefaultSetting();
             SearchOrders = new ObservableCollection<Order>();
             UpdateOrderCommand = new CustomCommand(UpdateOrder, CanUpdateOrder);
@@ -70,7 +73,7 @@ namespace StoreInventory.ViewModel
         {
            // var email = new EmailService();
             //email.SendEmail(SelectedOrder);
-            EmailSmtpService.SendEmail(SelectedOrder);
+            _emailSmtpService.SendEmail(SelectedOrder);
         }
 
         private bool CanSendEmail(object obj)
