@@ -36,183 +36,124 @@
             </Style>
         </ResourceDictionary>
     </Page.Resources>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Viewbox Stretch="Uniform">
+                <Grid Style="{StaticResource MainGrid}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Viewbox Stretch="Uniform">
-            <Grid Style="{StaticResource MainGrid}">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="80"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
-                
-                <ToolBarPanel HorizontalAlignment="Center"     >
-                    <ToolBarPanel.Resources>
-                        <Style TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button.ToolBar}">
-                            <Setter Property="Margin" Value="0,0,10,0"/>
-                        </Style>
-                    </ToolBarPanel.Resources>
-                    <ToolBar >
-                        <StackPanel Orientation="Horizontal">
-                            <Button Content="Home page" Click="PageClick" CommandParameter="MainWindowContent"/>
-                            <Separator Style="{StaticResource MahApps.Styles.Separator.StatusBar}"/>
-                            <Button Content="Stock page" Click="PageClick" CommandParameter="Stock"/>
-                            <Separator Style="{StaticResource MahApps.Styles.Separator.StatusBar}"/>
-                            <Button Content="Order page" Click="PageClick" CommandParameter="Order"/>
-                        </StackPanel>
-                    </ToolBar>
-                </ToolBarPanel>
-                
-                <TextBlock 
+                    <ToolBarPanel HorizontalAlignment="Center"     >
+                        <ToolBarPanel.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button.ToolBar}">
+                                <Setter Property="Margin" Value="0,0,10,0"/>
+                            </Style>
+                        </ToolBarPanel.Resources>
+                        <ToolBar >
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Home page" Click="PageClick" CommandParameter="Home"/>
+                                <Separator Style="{StaticResource MahApps.Styles.Separator.StatusBar}"/>
+                                <Button Content="Stock page" Click="PageClick" CommandParameter="Stock"/>
+                                <Separator Style="{StaticResource MahApps.Styles.Separator.StatusBar}"/>
+                                <Button Content="Order page" Click="PageClick" CommandParameter="Order"/>
+                            </StackPanel>
+                        </ToolBar>
+                    </ToolBarPanel>
+
+                    <TextBlock 
                             Text="Orders Controller"
                             FontSize="30"
                            FontFamily="Copperplate Gothic Bold"
                             HorizontalAlignment="Center"
                            Margin="0,20" Grid.Row="1" />
-                <Button Margin="0,0,20,0"
+                    <Button Margin="0,0,20,0"
                         HorizontalAlignment="Right"
                         Style="{StaticResource MahApps.Styles.Button.Circle}" 
                         Height="50"
                         Width="50"
                         Click="NavigationClick"
                         CommandParameter="Backwards" Grid.Row="1" >
-                    <Button.Content>
-                        <icons:MaterialDesign Kind="ArrowForward"/>
-                    </Button.Content>
-                </Button>
-                <Button Margin="20,0,0,0"
+                        <Button.Content>
+                            <icons:MaterialDesign Kind="ArrowForward"/>
+                        </Button.Content>
+                    </Button>
+                    <Button Margin="20,0,0,0"
                         HorizontalAlignment="Left"
                           Style="{StaticResource MahApps.Styles.Button.Circle}" 
                         Height="50"
                         Width="50"
                         Click="NavigationClick"
                         CommandParameter="Forwards" Grid.Row="1">
-                    <Button.Content>
-                        <icons:MaterialDesign Kind="ArrowBack"/>
-                    </Button.Content>
-                </Button>
-                <StackPanel HorizontalAlignment="Center" Margin="10" Grid.Row="2" >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Order Date:" />
-                        <TextBox  Text="{Binding SelectedOrder.OrderDate, Mode=OneWay, Converter={StaticResource dateConver}}"/>
+                        <Button.Content>
+                            <icons:MaterialDesign Kind="ArrowBack"/>
+                        </Button.Content>
+                    </Button>
+                    <StackPanel HorizontalAlignment="Center" Margin="10" Grid.Row="2" >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Order Date:" />
+                            <TextBox  Text="{Binding SelectedOrder.OrderDate, Mode=OneWay, Converter={StaticResource dateConver}}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Customer's Name:"/>
+                            <TextBox Text="{Binding SelectedOrder.Customer.FullName, Mode=OneWay}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="House/Rd:"/>
+                            <TextBox Text="{Binding SelectedOrder.Customer.Address.FirstLineOfAddress, Mode=OneWay}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Content="City/Zip:"/>
+                            <TextBox  Text="{Binding SelectedOrder.Customer.Address.SecondLineOfAddress, Mode=OneWay}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Content="Phone:"/>
+                            <TextBox Text="{Binding SelectedOrder.Customer.PhoneNumber, Mode=OneWay}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Content="Email:"/>
+                            <TextBox  Text="{Binding SelectedOrder.Customer.Email, Mode=oneWay}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Owes:"/>
+                            <TextBox Text="{Binding SelectedOrder.AmountOwed, Mode=TwoWay, Converter={StaticResource currencyconvr}, ConverterCulture='en-GB'}" IsEnabled="True"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,20,0,0" >
+                            <Button Command="{Binding UpdateOrderCommand}">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Update Payment: " VerticalAlignment="Center" Margin="10"/>
+                                        <icons:MaterialDesign Kind="Update"  Width="30" Height="30"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            <Button  Command="{Binding EmailReminderCommand}">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Email Reminder: " VerticalAlignment="Center" Margin="10"/>
+                                        <icons:MaterialDesign Kind="Email"  Width="35" Height="35"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            <Button  Command="{Binding ClearSelectedOrderCommand}" >
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Clear Fields: " VerticalAlignment="Center" Margin="10"/>
+                                        <icons:MaterialDesign Kind="Clear"  Width="25" Height="30"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Customer's Name:"/>
-                        <TextBox Text="{Binding SelectedOrder.Customer.FullName, Mode=OneWay}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="House/Rd:"/>
-                        <TextBox Text="{Binding SelectedOrder.Customer.Address.FirstLineOfAddress, Mode=OneWay}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label  Content="City/Zip:"/>
-                        <TextBox  Text="{Binding SelectedOrder.Customer.Address.SecondLineOfAddress, Mode=OneWay}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label  Content="Phone:"/>
-                        <TextBox Text="{Binding SelectedOrder.Customer.PhoneNumber, Mode=OneWay}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label  Content="Email:"/>
-                        <TextBox  Text="{Binding SelectedOrder.Customer.Email, Mode=oneWay}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Owes:"/>
-                        <TextBox Text="{Binding SelectedOrder.AmountOwed, Mode=TwoWay, Converter={StaticResource currencyconvr}, ConverterCulture='en-GB'}" IsEnabled="True"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0" >
-                        <Button Command="{Binding UpdateOrderCommand}">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Update Payment: " VerticalAlignment="Center" Margin="10"/>
-                                    <icons:MaterialDesign Kind="Update"  Width="30" Height="30"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                        <Button  Command="{Binding EmailReminderCommand}">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Email Reminder: " VerticalAlignment="Center" Margin="10"/>
-                                    <icons:MaterialDesign Kind="Email"  Width="35" Height="35"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                        <Button  Command="{Binding ClearSelectedOrderCommand}" >
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Clear Fields: " VerticalAlignment="Center" Margin="10"/>
-                                    <icons:MaterialDesign Kind="Clear"  Width="25" Height="30"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                    </StackPanel>
-                </StackPanel>
 
-                <Border Grid.Row="3" Style="{StaticResource MyBorder}" VerticalAlignment="Center" />
+                    <Border Grid.Row="3" Style="{StaticResource MyBorder}" VerticalAlignment="Center" />
 
-                <TabControl Grid.Row="4" >
-                    <TabItem Header="All orders" >
-                        <DataGrid ItemsSource="{Binding AllOrders}" SelectedItem="{Binding SelectedOrder}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Date" Binding="{Binding OrderDate.Date, StringFormat='{} {0:dd/MM/yyyy}'}" Width="*"/>
-                                <DataGridTextColumn Header="Name" Binding="{Binding Customer.FullName}" Width="*" />
-                                <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*" />
-                                <DataGridTextColumn Header="Amount Paid" Binding="{Binding AmountPaid, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*"/>
-                                <DataGridTextColumn Header="Amount Owed" Binding="{Binding AmountOwed, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
-
-                    <TabItem Header="Search orders">
-                        <StackPanel Background="{StaticResource MahApps.Brushes.Accent4}" Width="{Binding ElementName=SearchGrid, Path=ActualWidth}" >
-                            <StackPanel Orientation="Horizontal" Margin="10" >
-                                <StackPanel.Resources>
-                                    <Style TargetType="Label" BasedOn="{StaticResource MahApps.Styles.Label}">
-                                        <Setter Property="Margin" Value="5,0,3,0"/>
-                                        <Setter Property="HorizontalAlignment" Value="Right"/>
-                                    </Style>
-                                    <Style TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox.Search}">
-                                        <Setter Property="Width" Value="130"/>
-                                    </Style>
-                                </StackPanel.Resources>
-                                <Label Margin="2,0,3,0" Content="Date" />
-                                <TextBox Text="{Binding Date , Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource dateConver}, ConverterCulture='en-GB'}" controls:TextBoxHelper.Watermark="dd/mm/yyyy" >
-                                    <i:Interaction.Triggers>
-                                        <is:KeyTrigger Key="Enter">
-                                            <i:InvokeCommandAction Command="{Binding SearchByDateCommand}"/>
-                                        </is:KeyTrigger>
-                                    </i:Interaction.Triggers>
-                                </TextBox>
-                                <Label  Content="Name" />
-                                <TextBox Text="{Binding Name , Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" >
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="SelectionChanged">
-                                            <i:InvokeCommandAction Command="{Binding SearchByNameCommand}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </TextBox>
-                                <Label  Content="Address" />
-                                <TextBox Text="{Binding Address , Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" >
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="SelectionChanged">
-                                            <i:InvokeCommandAction Command="{Binding SearchByAddressCommand}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </TextBox>
-                                <Label  Content="Email" />
-                                <TextBox Text="{Binding Email , Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" >
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="SelectionChanged">
-
-                                            <i:InvokeCommandAction Command="{Binding SearchByEmailCommand}"/>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </TextBox>
-                            </StackPanel>
-
-                            <DataGrid Name="SearchGrid" Margin="10" ItemsSource="{Binding SearchOrders}" SelectedItem="{Binding SelectedOrder}">
+                    <TabControl Grid.Row="4" >
+                        <TabItem Header="All orders" >
+                            <DataGrid ItemsSource="{Binding AllOrders}" SelectedItem="{Binding SelectedOrder}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Date" Binding="{Binding OrderDate.Date, StringFormat='{} {0:dd/MM/yyyy}'}" Width="*"/>
                                     <DataGridTextColumn Header="Name" Binding="{Binding Customer.FullName}" Width="*" />
@@ -221,24 +162,81 @@
                                     <DataGridTextColumn Header="Amount Owed" Binding="{Binding AmountOwed, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*"/>
                                 </DataGrid.Columns>
                             </DataGrid>
-                        </StackPanel>
-                    </TabItem>
+                        </TabItem>
 
-                    <TabItem Header="Unpaid orders" >
-                        <DataGrid ItemsSource="{Binding UnpaidOrders}" SelectedItem="{Binding SelectedOrder}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Date" Binding="{Binding OrderDate.Date, StringFormat='{} {0:dd/MM/yyyy}'}" Width="*"/>
-                                <DataGridTextColumn Header="Name" Binding="{Binding Customer.FullName}" Width="*" />
-                                <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*" />
-                                <DataGridTextColumn Header="Amount Paid" Binding="{Binding AmountPaid, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*"/>
-                                <DataGridTextColumn Header="Amount Owed" Binding="{Binding AmountOwed, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
-                </TabControl>
+                        <TabItem Header="Search orders">
+                            <StackPanel Background="{StaticResource MahApps.Brushes.Accent4}" Width="{Binding ElementName=SearchGrid, Path=ActualWidth}" >
+                                <StackPanel Orientation="Horizontal" Margin="10" >
+                                    <StackPanel.Resources>
+                                        <Style TargetType="Label" BasedOn="{StaticResource MahApps.Styles.Label}">
+                                            <Setter Property="Margin" Value="5,0,3,0"/>
+                                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        </Style>
+                                        <Style TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox.Search}">
+                                            <Setter Property="Width" Value="130"/>
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    <Label Margin="2,0,3,0" Content="Date" />
+                                    <TextBox Text="{Binding Date , Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource dateConver}, ConverterCulture='en-GB'}" controls:TextBoxHelper.Watermark="dd/mm/yyyy" >
+                                        <i:Interaction.Triggers>
+                                            <is:KeyTrigger Key="Enter">
+                                                <i:InvokeCommandAction Command="{Binding SearchByDateCommand}"/>
+                                            </is:KeyTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                    <Label  Content="Name" />
+                                    <TextBox Text="{Binding Name , Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="SelectionChanged">
+                                                <i:InvokeCommandAction Command="{Binding SearchByNameCommand}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                    <Label  Content="Address" />
+                                    <TextBox Text="{Binding Address , Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="SelectionChanged">
+                                                <i:InvokeCommandAction Command="{Binding SearchByAddressCommand}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                    <Label  Content="Email" />
+                                    <TextBox Text="{Binding Email , Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="SelectionChanged">
 
-            </Grid>
-        </Viewbox>
-    </ScrollViewer>
+                                                <i:InvokeCommandAction Command="{Binding SearchByEmailCommand}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                </StackPanel>
 
+                                <DataGrid Name="SearchGrid" Margin="10" ItemsSource="{Binding SearchOrders}" SelectedItem="{Binding SelectedOrder}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Date" Binding="{Binding OrderDate.Date, StringFormat='{} {0:dd/MM/yyyy}'}" Width="*"/>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Customer.FullName}" Width="*" />
+                                        <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*" />
+                                        <DataGridTextColumn Header="Amount Paid" Binding="{Binding AmountPaid, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*"/>
+                                        <DataGridTextColumn Header="Amount Owed" Binding="{Binding AmountOwed, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </TabItem>
+
+                        <TabItem Header="Unpaid orders" >
+                            <DataGrid ItemsSource="{Binding UnpaidOrders}" SelectedItem="{Binding SelectedOrder}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Date" Binding="{Binding OrderDate.Date, StringFormat='{} {0:dd/MM/yyyy}'}" Width="*"/>
+                                    <DataGridTextColumn Header="Name" Binding="{Binding Customer.FullName}" Width="*" />
+                                    <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*" />
+                                    <DataGridTextColumn Header="Amount Paid" Binding="{Binding AmountPaid, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*"/>
+                                    <DataGridTextColumn Header="Amount Owed" Binding="{Binding AmountOwed, StringFormat='{} {0:C}', ConverterCulture='en-GB'}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </TabItem>
+                    </TabControl>
+
+                </Grid>
+            </Viewbox>
+        </ScrollViewer>
 </Page>

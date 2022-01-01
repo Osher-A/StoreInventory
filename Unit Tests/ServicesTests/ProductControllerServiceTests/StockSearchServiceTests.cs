@@ -2,13 +2,13 @@
 using NUnit.Framework;
 using StoreInventory.DAL;
 using StoreInventory.Interfaces;
-using StoreInventory.Services.ProductControllerServices;
+using StoreInventory.Services.StockServices;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace UnitTests.ServicesTests.ProductControllerServiceTests
+namespace UnitTests.ServicesTests.StockServiceTests
 {
     [TestFixture]
     public class StockSearchServiceTests

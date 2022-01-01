@@ -10,7 +10,7 @@
             xmlns:sys="clr-namespace:System;assembly=mscorlib"
             xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
             xmlns:converters="clr-namespace:StoreInventory.Views.Converters"
-            d:DataContext="{d:DesignInstance Type=viewModel:ProductControllerViewModel}"
+            d:DataContext="{d:DesignInstance Type=viewModel:StockViewModel}"
             xmlns:local="clr-namespace:StoreInventory.Views.UserControls"
             mc:Ignorable="d" 
             d:DesignHeight="450" d:DesignWidth="800">

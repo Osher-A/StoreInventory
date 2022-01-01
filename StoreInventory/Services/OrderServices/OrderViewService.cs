@@ -7,7 +7,7 @@ using MyLibrary.Extentions;
 using StoreInventory.DAL;
 using StoreInventory.DTO;
 using StoreInventory.Interfaces;
-using StoreInventory.Services.ProductControllerServices;
+using StoreInventory.Services.StockServices;
 
 namespace StoreInventory.Services.OrderServices
 {

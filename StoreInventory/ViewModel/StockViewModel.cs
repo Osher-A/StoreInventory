@@ -3,7 +3,7 @@ using MyLibrary.Utilities;
 using StoreInventory.DAL;
 using StoreInventory.Interfaces;
 using StoreInventory.DTO;
-using StoreInventory.Services.ProductControllerServices;
+using StoreInventory.Services.StockServices;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +17,7 @@ using StoreInventory.Services.MessageService;
 
 namespace StoreInventory.ViewModel
 {
-    public class ProductControllerViewModel : INotifyPropertyChanged
+    public class StockViewModel : INotifyPropertyChanged
     {
         private IProductRepository _productRepository = new ProductRepository();
         private StockSearchService _stockSearchService = new StockSearchService(new StockRepository());
@@ -114,7 +114,7 @@ namespace StoreInventory.ViewModel
         public ICommand SearchCommand { get; set; }
        
         
-        public ProductControllerViewModel()
+        public StockViewModel()
         {
             _getStocks = new ObservableCollection<Stock>();
             _productDataService = new ProductDataService(_productRepository, new MessageService()); ;

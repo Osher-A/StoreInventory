@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace StoreInventory.Services.ProductControllerServices
+namespace StoreInventory.Services.StockServices
 {
     public class ProductSearchService
     {

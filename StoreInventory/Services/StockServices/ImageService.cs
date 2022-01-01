@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 
-namespace StoreInventory.Services.ProductControllerServices
+namespace StoreInventory.Services.StockServices
 {
     public class ImageService
     {

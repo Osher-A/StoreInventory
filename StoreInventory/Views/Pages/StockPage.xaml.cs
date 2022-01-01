@@ -1,5 +1,5 @@
 ﻿using StoreInventory.Enums;
-using StoreInventory.Services.ProductControllerServices;
+using StoreInventory.Services.StockServices;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace StoreInventory.Views.Pages
 {
     /// <summary>
-    /// Interaction logic for ProductControllerPage.xaml
+    /// Interaction logic for StockPage.xaml
     /// </summary>
-    public partial class ProductControllerPage : Page
+    public partial class StockPage : Page
     {
-        public ProductControllerPage()
+        public StockPage()
         {
             InitializeComponent();
         }

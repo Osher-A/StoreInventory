@@ -3,7 +3,7 @@ using StoreInventory.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace StoreInventory.Services.ProductControllerServices
+namespace StoreInventory.Services.StockServices
 {
     public class CategoryService
     {

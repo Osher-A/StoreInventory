@@ -37,7 +37,7 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </Page.Resources>
-    <ScrollViewer Name="scrollViewer" >
+        <ScrollViewer Name="scrollViewer"  >
         <Viewbox >
             <Grid  Style="{StaticResource MainGrid}">
                 <!--DataContext="{StaticResource vm}">-->
@@ -57,7 +57,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <ToolBarPanel HorizontalAlignment="Center"  Grid.ColumnSpan="3"   >
                     <ToolBarPanel.Resources>
                         <Style TargetType="Button" BasedOn="{StaticResource MahApps.Styles.Button.ToolBar}">
@@ -66,7 +66,7 @@
                     </ToolBarPanel.Resources>
                     <ToolBar >
                         <StackPanel Orientation="Horizontal">
-                            <Button Content="Home page" Click="PageClick" CommandParameter="MainWindowContent"/>
+                            <Button Content="Home page" Click="PageClick" CommandParameter="Home"/>
                             <Separator Style="{StaticResource MahApps.Styles.Separator.StatusBar}"/>
                             <Button Content="Stock page" Click="PageClick" CommandParameter="Stock"/>
                             <Separator Style="{StaticResource MahApps.Styles.Separator.StatusBar}"/>
@@ -451,5 +451,5 @@
                 </Grid>
             </Grid>
         </Viewbox>
-    </ScrollViewer>
+        </ScrollViewer>
 </Page>

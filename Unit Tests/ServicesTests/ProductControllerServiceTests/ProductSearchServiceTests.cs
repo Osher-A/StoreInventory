@@ -5,10 +5,10 @@ using System.Text;
 using StoreInventory.Model;
 using StoreInventory.Interfaces;
 using Moq;
-using StoreInventory.Services.ProductControllerServices;
+using StoreInventory.Services.StockServices;
 using System.Collections.ObjectModel;
 
-namespace UnitTests.ServicesTests.ProductControllerServiceTests
+namespace UnitTests.ServicesTests.StockServiceTests
 {
     [TestFixture]
     class ProductSearchServiceTests

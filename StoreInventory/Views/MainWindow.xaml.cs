@@ -3,7 +3,7 @@ using MahApps.Metro.Controls.Dialogs;
 using StoreInventory.Interfaces;
 using StoreInventory.Services.MessageService;
 using StoreInventory.Services.OrderControllerServices;
-using StoreInventory.Services.ProductControllerServices;
+using StoreInventory.Services.StockServices;
 using StoreInventory.ViewModel;
 using StoreInventory.Views.Pages;
 using System;
@@ -30,8 +30,8 @@ namespace StoreInventory.Views
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private MainWindowContentPage _mainWindowContentPage;
-        private ProductControllerPage _productControllerPage;
+        private HomePage _homePage;
+        private StockPage _StockPage;
         private OrderPage _orderPage;
         private OrdersControllerPage _orderControllerPage;
         private IMessageService _messageService;
@@ -47,11 +47,11 @@ namespace StoreInventory.Views
         private void SetUpPages(IMessageService messageService, IOrderRepository orderRepository,
             ICustomerRepository customerRepository, IOrderProductRepository orderProductRepository, IEmailSmtpService emailSmtpService)
         {
-            _mainWindowContentPage = new MainWindowContentPage();
-            _mainWindowContentPage.TileClick += OpenClickedPage;
-            _productControllerPage = new ProductControllerPage();
-            _productControllerPage.Navigator += NavigationButtonClicked;
-            _productControllerPage.PageNavigator += OpenClickedPage;
+            _homePage = new HomePage();
+            _homePage.TileClick += OpenClickedPage;
+            _StockPage = new StockPage();
+            _StockPage.Navigator += NavigationButtonClicked;
+            _StockPage.PageNavigator += OpenClickedPage;
             _orderPage = new OrderPage(messageService, orderRepository, customerRepository, orderProductRepository);
             _orderPage.Navigator += NavigationButtonClicked;
             _orderPage.PageNavigator += OpenClickedPage;
@@ -64,7 +64,7 @@ namespace StoreInventory.Views
             switch(page.ToLower().Trim())
             {
                 case "stock":
-                      MainWindowFrame.Content = _productControllerPage;
+                      MainWindowFrame.Content = _StockPage;
                     break;
                 case "order":
                     MainWindowFrame.Content = _orderPage;
@@ -73,7 +73,7 @@ namespace StoreInventory.Views
                     MainWindowFrame.Content = _orderControllerPage;
                     break;
                     default:
-                    MainWindowFrame.Content = _mainWindowContentPage;
+                    MainWindowFrame.Content = _homePage;
                     break;
             }
         }
@@ -112,7 +112,7 @@ namespace StoreInventory.Views
 
         private void MainWindowFrame_Loaded(object sender, RoutedEventArgs e)
         {
-            MainWindowFrame.Content = _mainWindowContentPage;
+            MainWindowFrame.Content = _homePage;
 
         }
 

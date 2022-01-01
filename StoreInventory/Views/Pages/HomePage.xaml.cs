@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace StoreInventory.Views.Pages
 {
     /// <summary>
-    /// Interaction logic for MainWindowContentPage.xaml
+    /// Interaction logic for HomePage.xaml
     /// </summary>
-    public partial class MainWindowContentPage : Page
+    public partial class HomePage : Page
     {
-        public MainWindowContentPage()
+        public HomePage()
         {
             InitializeComponent();
         }

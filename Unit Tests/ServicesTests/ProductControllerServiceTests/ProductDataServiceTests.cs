@@ -5,11 +5,11 @@ using System.Text;
 using Moq;
 using StoreInventory.Interfaces;
 using StoreInventory;
-using StoreInventory.Services.ProductControllerServices;
+using StoreInventory.Services.StockServices;
 using StoreInventory.DTO;
 using StoreInventory.Services.MessageService;
 
-namespace UnitTests.ServicesTests.ProductControllerServiceTests
+namespace UnitTests.ServicesTests.StockServiceTests
 {
     [TestFixture]
     public class ProductDataServiceTests

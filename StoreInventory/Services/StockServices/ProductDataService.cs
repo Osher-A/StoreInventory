@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace StoreInventory.Services.ProductControllerServices
+namespace StoreInventory.Services.StockServices
 {
     public class ProductDataService
     {
