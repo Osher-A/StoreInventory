@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Moq;
-using StoreInventory.Interfaces;
-using StoreInventory;
-using StoreInventory.Services.StockServices;
-using StoreInventory.DTO;
-using StoreInventory.Services.MessageService;
+using StoreManager.Interfaces;
+using StoreManager;
+using StoreManager.Services.StockServices;
+using StoreManager.DTO;
+using StoreManager.Services.MessageService;
 
-namespace UnitTests.ServicesTests.StockServiceTests
+namespace UnitTests.ServicesTests.ProductControllerServiceTests
 {
     [TestFixture]
     public class ProductDataServiceTests
@@ -31,15 +31,15 @@ namespace UnitTests.ServicesTests.StockServiceTests
         {
             // Arrange
 
-            var newProduct = new StoreInventory.DTO.Product
+            var newProduct = new StoreManager.DTO.Product
             {
                 Id = 1,
-                Category = new StoreInventory.DTO.Category { Name = "Food" },
+                Category = new StoreManager.DTO.Category { Name = "Food" },
                 Name = "Danish",
                 Description = "Yummy Danish",
                 Price = 1.50f
             };
-             
+
             // Act
             _productService.AddNewProduct(newProduct);
 
@@ -48,22 +48,22 @@ namespace UnitTests.ServicesTests.StockServiceTests
         }
 
         [Test]
-        [TestCase(0, "", "Bun", "Yummy Bun", 1.05f) ]
+        [TestCase(0, "", "Bun", "Yummy Bun", 1.05f)]
         [TestCase(0, "Home", "", "Large Clock", 12.05f)]
         [TestCase(0, "Food", "Coke", "", 1.50f)]
         [TestCase(0, "Home", "Bin", "Large Bin", 0)]
 
         public void AddNewProduct_IfNewPropertyHasNotBeenFullySet_ReturnFalse
-            (int id,string categoryName, string name, string description, float price)
+            (int id, string categoryName, string name, string description, float price)
         {
             // Arrange
-            var newProduct = new StoreInventory.DTO.Product
+            var newProduct = new StoreManager.DTO.Product
             {
                 Id = id,
                 Name = name,
                 Description = description,
                 Price = price,
-                Category = new StoreInventory.DTO.Category { Name = categoryName }
+                Category = new StoreManager.DTO.Category { Name = categoryName }
             };
 
             // Act
@@ -108,7 +108,7 @@ namespace UnitTests.ServicesTests.StockServiceTests
             };
 
             //Act
-           var productExists = _productService.ExistingProduct(newProduct);
+            var productExists = _productService.ExistingProduct(newProduct);
 
             //Assert
             Assert.That(productExists == false);
@@ -118,26 +118,26 @@ namespace UnitTests.ServicesTests.StockServiceTests
         {
             return new List<IProduct>
             {
-                new StoreInventory.Model.Product
+                new StoreManager.Model.Product
                 {
                  Id = 1,
-                 Category = new StoreInventory.Model.Category{Name = "Food"},
+                 Category = new StoreManager.Model.Category{Name = "Food"},
                  Name = "Danish",
                  Description = "Yummy Danish",
                  Price = 1.50f
                 },
-                new StoreInventory.Model.Product
+                new StoreManager.Model.Product
                 {
                  Id = 2,
-                 Category = new StoreInventory.Model.Category{Name = "Clothes"},
+                 Category = new StoreManager.Model.Category{Name = "Clothes"},
                  Name = "Shirt",
                  Description = "Smart Shirt",
                  Price = 11.50f
                 },
-                new StoreInventory.Model.Product
+                new StoreManager.Model.Product
                 {
                  Id = 3,
-                 Category = new StoreInventory.Model.Category{Name = "Home"},
+                 Category = new StoreManager.Model.Category{Name = "Home"},
                  Name = "Mirror",
                  Description = "Big Mirror",
                  Price = 23.00f

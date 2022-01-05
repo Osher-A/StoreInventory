@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using StoreInventory.Model;
-using StoreInventory.Interfaces;
+using StoreManager.Model;
+using StoreManager.Interfaces;
 using Moq;
-using StoreInventory.Services.StockServices;
+using StoreManager.Services.StockServices;
 using System.Collections.ObjectModel;
 
-namespace UnitTests.ServicesTests.StockServiceTests
+namespace UnitTests.ServicesTests.ProductControllerServiceTests
 {
     [TestFixture]
     class ProductSearchServiceTests
@@ -33,14 +33,14 @@ namespace UnitTests.ServicesTests.StockServiceTests
             var dtoProducts = _searchService.AllProducts;
 
             // Assert
-            Assert.That(dtoProducts, Is.TypeOf<ObservableCollection<StoreInventory.DTO.Product>>());
+            Assert.That(dtoProducts, Is.TypeOf<ObservableCollection<StoreManager.DTO.Product>>());
             Assert.That(dtoProducts.Count == 4);
         }
 
         [Test]
         public void SearchProducts_SearchInputIsNumber_ReturnProductWithThatId()
         {
-          var searchProduct = _searchService.SearchProducts("3");
+            var searchProduct = _searchService.SearchProducts("3");
             Assert.That(searchProduct[0].Name == "Mirror");
         }
 
@@ -70,34 +70,34 @@ namespace UnitTests.ServicesTests.StockServiceTests
         {
             return new List<IProduct>
             {
-                new StoreInventory.Model.Product
+                new StoreManager.Model.Product
                 {
                  Id = 1,
-                 Category = new StoreInventory.Model.Category{Name = "Food"},
+                 Category = new StoreManager.Model.Category{Name = "Food"},
                  Name = "Danish",
                  Description = "Yummy Danish",
                  Price = 1.50f
                 },
-                new StoreInventory.Model.Product
+                new StoreManager.Model.Product
                 {
                  Id = 2,
-                 Category = new StoreInventory.Model.Category{Name = "Clothes"},
+                 Category = new StoreManager.Model.Category{Name = "Clothes"},
                  Name = "Shirt",
                  Description = "Smart Shirt",
                  Price = 11.50f
                 },
-                new StoreInventory.Model.Product
+                new StoreManager.Model.Product
                 {
                  Id = 3,
-                 Category = new StoreInventory.Model.Category{Name = "Home"},
+                 Category = new StoreManager.Model.Category{Name = "Home"},
                  Name = "Mirror",
                  Description = "Big Mirror",
                  Price = 23.00f
                 },
-                new StoreInventory.Model.Product
+                new StoreManager.Model.Product
                 {
                  Id = 1,
-                 Category = new StoreInventory.Model.Category{Name = "Food"},
+                 Category = new StoreManager.Model.Category{Name = "Food"},
                  Name = "Pizza food",
                  Description = "Delicious stuff!",
                  Price = 8.50f

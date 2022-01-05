@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Moq;
 using NUnit.Framework;
-using StoreInventory.DTO;
-using StoreInventory.Enums;
-using StoreInventory.Services.MessageService;
-using StoreInventory.Services.OrderServices;
+using StoreManager.DTO;
+using StoreManager.Enums;
+using StoreManager.Services.MessageService;
+using StoreManager.Services.OrderServices;
 
 namespace UnitTests.ServicesTests.OrderServiceTests
 {

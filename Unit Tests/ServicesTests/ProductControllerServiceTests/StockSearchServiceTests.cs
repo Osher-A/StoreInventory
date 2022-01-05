@@ -1,14 +1,14 @@
 ﻿using Moq;
 using NUnit.Framework;
-using StoreInventory.DAL;
-using StoreInventory.Interfaces;
-using StoreInventory.Services.StockServices;
+using StoreManager.DAL;
+using StoreManager.Interfaces;
+using StoreManager.Services.StockServices;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace UnitTests.ServicesTests.StockServiceTests
+namespace UnitTests.ServicesTests.ProductControllerServiceTests
 {
     [TestFixture]
     public class StockSearchServiceTests
@@ -28,7 +28,7 @@ namespace UnitTests.ServicesTests.StockServiceTests
             var dtoStocks = stockService.AllStockProducts();
 
             //Assert
-            Assert.That(dtoStocks, Is.TypeOf<ObservableCollection<StoreInventory.DTO.Stock>>());
+            Assert.That(dtoStocks, Is.TypeOf<ObservableCollection<StoreManager.DTO.Stock>>());
             Assert.That(dtoStocks[0].Product.Category.Name == "Clothes");
         }
 
@@ -36,43 +36,43 @@ namespace UnitTests.ServicesTests.StockServiceTests
         {
             return new List<IStock>
             {
-                new StoreInventory.Model.Stock
+                new StoreManager.Model.Stock
                 {
                     Id = 1,
                     QuantityInStock = 10,
-                    Product = new StoreInventory.Model.Product
+                    Product = new StoreManager.Model.Product
                     {
                         Id = 1,
                         CategoryId = 1,
-                        Category = new StoreInventory.Model.Category{Id = 1, Name = "Food"},
+                        Category = new StoreManager.Model.Category{Id = 1, Name = "Food"},
                         Name = "Danish",
                         Description = "Yummy Danish",
                         Price = 1.50f
                     }
                 },
-                new StoreInventory.Model.Stock
+                new StoreManager.Model.Stock
                 {
                     Id = 2,
                     QuantityInStock = 5,
-                    Product = new StoreInventory.Model.Product
+                    Product = new StoreManager.Model.Product
                     {
                         Id = 2,
                         CategoryId = 2,
-                        Category = new StoreInventory.Model.Category{Id = 2, Name = "Clothes"},
+                        Category = new StoreManager.Model.Category{Id = 2, Name = "Clothes"},
                         Name = "Shirt",
                         Description = "Smart Shirt",
                         Price = 11.50f
                     }
                 },
-                new StoreInventory.Model.Stock
+                new StoreManager.Model.Stock
                 {
                     Id = 3,
                     QuantityInStock = 15,
-                    Product = new StoreInventory.Model.Product
+                    Product = new StoreManager.Model.Product
                     {
                         Id = 5,
                         CategoryId = 3,
-                        Category = new StoreInventory.Model.Category{Id = 3, Name = "Home"},
+                        Category = new StoreManager.Model.Category{Id = 3, Name = "Home"},
                         Name = "Mirror",
                         Description = "Big Mirror",
                         Price = 23.00f
@@ -84,9 +84,9 @@ namespace UnitTests.ServicesTests.StockServiceTests
         {
             return new List<ICategory>
             {
-               new StoreInventory.Model.Category{Id = 1, Name = "Food"},
-               new StoreInventory.Model.Category{Id = 2, Name = "Clothes"},
-               new StoreInventory.Model.Category{Id = 3, Name = "Home"}
+               new StoreManager.Model.Category{Id = 1, Name = "Food"},
+               new StoreManager.Model.Category{Id = 2, Name = "Clothes"},
+               new StoreManager.Model.Category{Id = 3, Name = "Home"}
             };
         }
     }

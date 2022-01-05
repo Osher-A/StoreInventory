@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Moq;
 using NUnit.Framework;
-using StoreInventory.Interfaces;
-using StoreInventory.Model;
-using StoreInventory.Services.OrderServices;
+using StoreManager.Interfaces;
+using StoreManager.Model;
+using StoreManager.Services.OrderServices;
 using System.Linq;
 
 namespace UnitTests.ServicesTests.OrderServiceTests

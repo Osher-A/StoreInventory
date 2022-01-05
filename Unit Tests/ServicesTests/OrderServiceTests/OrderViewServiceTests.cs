@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 using Moq;
 using System.Collections.ObjectModel;
-using StoreInventory.DAL;
-using StoreInventory.Model;
-using StoreInventory.Interfaces;
-using StoreInventory.Services.OrderServices;
+using StoreManager.DAL;
+using StoreManager.Model;
+using StoreManager.Interfaces;
+using StoreManager.Services.OrderServices;
 using System.Linq;
 
 namespace UnitTests.ServicesTests.OrderServiceTests

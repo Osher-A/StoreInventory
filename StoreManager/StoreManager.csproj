@@ -1,0 +1,104 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+	
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UserSecretsId>b357260a-1a1e-4bbe-9a79-8702e83f9952</UserSecretsId>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<UserSecretsId>LocalKeyVault</UserSecretsId>
+		<ApplicationIcon>Images\inventory.ico</ApplicationIcon>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\inventory.ico" />
+    <None Remove="Images\product-48.ico" />
+    <None Remove="Images\Shop-interior.jpg" />
+    <None Remove="Images\smart_city.jpg" />
+    <None Remove="Images\Store.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="Views\App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>4</VersionMinor>
+      <VersionMajor>2</VersionMajor>
+      <Guid>215d64d2-031c-33c7-96e3-61794cd1ee61</Guid>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\inventory.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\product-48.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Analytics" Version="3.8.0" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Expression.Blend.Sdk" Version="1.0.2" />
+    <PackageReference Include="Expression.Interaction" Version="3.0.40218" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.6" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
+    <PackageReference Include="MahApps.Metro.IconPacks.MaterialDesign" Version="4.8.0" />
+    <PackageReference Include="MahApps.Metro.Resources" Version="0.6.1" />
+    <PackageReference Include="MailKit" Version="2.15.0" />
+    <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.7" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.13" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="MimeKit" Version="2.15.1" />
+    <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
+    <PackageReference Include="Ninject" Version="3.3.4" />
+    <PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
+    <PackageReference Include="RazorTemplates" Version="1.2.1" />
+    <PackageReference Include="RestSharp" Version="106.15.0" />
+    <PackageReference Include="SparkPost" Version="1.14.0" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ToastNotifications" Version="2.5.1" />
+    <PackageReference Include="ToastNotifications.Messages" Version="2.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MyLibrary">
+      <HintPath>..\..\MyLibrary\bin\Debug\netcoreapp3.1\MyLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro">
+      <HintPath>..\..\..\MahApps.Metro.netcoreapp30\src\bin\Debug\netcoreapp3.1\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="MyLibrary">
+      <HintPath>..\..\MyLibrary\bin\Debug\netcoreapp3.1\MyLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\inventory.ico" />
+    <Resource Include="Images\Shop-interior.jpg" />
+    <Resource Include="Images\smart_city.jpg" />
+    <Resource Include="Images\Store.jpg" />
+  </ItemGroup>
+
+  
+
+</Project>
