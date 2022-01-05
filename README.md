@@ -20,7 +20,7 @@
 
 ## Features in more detail
 There is currently three pages to the project (besides the Home page). The pages are responsive and have the option to navigate backwords and forwards.  
-To see this in action [check this out](https://user-images.githubusercontent.com/70821594/147895136-55f73153-1027-4804-9f8c-17b275646033.mp4 "Navigation demo")
+To see this in action [check this out](https://user-images.githubusercontent.com/70821594/148304028-cae04a49-81cf-422a-8bfb-7719e6a59ad2.mp4 "Navigation demo")
 
 #### Page 1 - [Inventory page](https://user-images.githubusercontent.com/70821594/147864691-6c522b90-dc68-4381-a9db-1414ee25e1cf.mp4 "Inventory page") - Features
 * Add new product details, including a picture which can be uploaded (via the provided link) from the users computer
