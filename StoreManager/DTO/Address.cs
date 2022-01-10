@@ -8,7 +8,8 @@ namespace StoreManager.DTO
     {
         private string _street;
         private string _city;
-        private bool _isFirstSet = true;
+        private bool _cityIsFirstSet = true; // To prevent stack from overflowing 
+        private bool _streetIsFirstSet = true;// To prevent stack from overflowing
         public int Id { get; set; }
         public string House { get; set; }
 
@@ -18,7 +19,7 @@ namespace StoreManager.DTO
             set
             {
                 _street = value;
-                if(!string.IsNullOrWhiteSpace(_street))
+                if(_streetIsFirstSet && !string.IsNullOrWhiteSpace(_street))
                 GetHouseNumber();
             }
         }
@@ -30,8 +31,8 @@ namespace StoreManager.DTO
             set 
             { 
                 _city = value; 
-                if(_isFirstSet && !string.IsNullOrWhiteSpace(_city))
-                    SetZip();
+                if(_cityIsFirstSet && !string.IsNullOrWhiteSpace(_city))
+                    GetZip();
             }
         }
 
@@ -65,31 +66,38 @@ namespace StoreManager.DTO
 
         private void GetHouseNumber()
         {
+            _streetIsFirstSet = false;
             var words = Street.Split(' ');
-            string house = "";
+            string house = "", street = "";
             foreach (var word in words)
             {
                 if (word.Any(char.IsDigit) || word.Length == 1)
                     house += word;
+                else
+                    street += word + " ";
             }
             if(house.Length > 0)
                House = house;
+
+            Street = street;
         }
 
-        private void SetZip()
+        private void GetZip()
         {
-            string _zip = "";
-            _isFirstSet = false;
+            string zip = "", city = "";
+            _cityIsFirstSet = false;
             var words = City.Split(' ');
             foreach (var word in words)
             {
                 if (word.Any(char.IsDigit))
-                    _zip += word;
+                    zip += word;
+                else
+                    city += word;
             }
-            if (_zip.Length == City.Length)
-                City = String.Empty;
+            if(zip.Length > 0)
+            Zip = zip;
 
-            Zip = _zip;
+            City = city;
         }
 
         public static explicit operator Address(Model.Address address)
@@ -111,7 +119,8 @@ namespace StoreManager.DTO
                 House = address.House,
                 Street = address.Street,
                 Zip = address.Zip,
-                City = address.City
+                City = address.City,
+               // CustomerId = address.Customer.Id
             };
         }
     }

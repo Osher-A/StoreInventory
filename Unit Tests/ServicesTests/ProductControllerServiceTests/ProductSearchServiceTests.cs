@@ -7,6 +7,7 @@ using StoreManager.Interfaces;
 using Moq;
 using StoreManager.Services.StockServices;
 using System.Collections.ObjectModel;
+using System.Drawing.Text;
 
 namespace UnitTests.ServicesTests.ProductControllerServiceTests
 {
@@ -34,7 +35,7 @@ namespace UnitTests.ServicesTests.ProductControllerServiceTests
 
             // Assert
             Assert.That(dtoProducts, Is.TypeOf<ObservableCollection<StoreManager.DTO.Product>>());
-            Assert.That(dtoProducts.Count == 4);
+            Assert.That(dtoProducts.Count == 5);
         }
 
         [Test]
@@ -52,10 +53,10 @@ namespace UnitTests.ServicesTests.ProductControllerServiceTests
         }
 
         [Test]
-        public void SearchProducts_SearchInputMatchesCategoryAndPropertyName_ReturnsCategoryProducts()
+        public void SearchProducts_SearchInputMatchesCategoryAndPropertyName_ReturnsBothDistinctly()
         {
-            var searchProduct = _searchService.SearchProducts("foo");
-            Assert.That(searchProduct.Count == 2);
+            var searchProduct = _searchService.SearchProducts("s");
+            Assert.That(searchProduct.Count == 3);
         }
         [Test]
         public void SearchProducts_SearchInputNotMatchingAnything_ReturnsEmptyList()
@@ -68,6 +69,7 @@ namespace UnitTests.ServicesTests.ProductControllerServiceTests
 
         private List<IProduct> ModelProducts()
         {
+
             return new List<IProduct>
             {
                 new StoreManager.Model.Product
@@ -82,8 +84,16 @@ namespace UnitTests.ServicesTests.ProductControllerServiceTests
                 {
                  Id = 2,
                  Category = new StoreManager.Model.Category{Name = "Clothes"},
-                 Name = "Shirt",
-                 Description = "Smart Shirt",
+                 Name = "Hat",
+                 Description = "Big hat",
+                 Price = 11.50f
+                },
+                new StoreManager.Model.Product
+                {
+                 Id = 2,
+                 Category = new StoreManager.Model.Category{Name = "Clothes"},
+                 Name = "Socks",
+                 Description = "Blue Socks",
                  Price = 11.50f
                 },
                 new StoreManager.Model.Product
@@ -103,6 +113,8 @@ namespace UnitTests.ServicesTests.ProductControllerServiceTests
                  Price = 8.50f
                 }
             };
+
         }
+       
     }
 }

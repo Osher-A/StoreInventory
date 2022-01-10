@@ -13,6 +13,10 @@
 		<ApplicationIcon>Images\inventory.ico</ApplicationIcon>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <Compile Remove="Secrets.cs" />
+	</ItemGroup>
+
   <ItemGroup>
     <None Remove="Images\inventory.ico" />
     <None Remove="Images\product-48.ico" />

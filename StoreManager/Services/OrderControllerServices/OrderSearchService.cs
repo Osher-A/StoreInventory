@@ -39,8 +39,9 @@ namespace StoreManager.Services.OrderControllerServices
             if (AllOrders.Any(ao => ((DTO.Customer)ao.Customer).FullName != null)) 
                 nameOrders = AllOrders.Where(ao => ((DTO.Customer)ao.Customer).FullName != null).ToList();
 
-            if (nameOrders.Any(ao => ((DTO.Customer)ao.Customer).FullName.ToLower().Contains(name.ToLower())))
-                   searchOrders = AllOrders.Where(ao => ((DTO.Customer)ao.Customer).FullName.ToLower().Contains(name.ToLower()))
+            if(nameOrders.Count > 0)
+                if (nameOrders.Any(ao => ((DTO.Customer)ao.Customer).FullName.ToLower().Contains(name.ToLower())))
+                   searchOrders = nameOrders.Where(ao => ((DTO.Customer)ao.Customer).FullName.ToLower().Contains(name.ToLower()))
                        .OrderBy(ao => ((DTO.Customer)ao.Customer).FullName)
                        .ToObservableCollection();
            

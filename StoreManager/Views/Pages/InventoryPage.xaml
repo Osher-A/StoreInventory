@@ -13,16 +13,16 @@
       xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
       xmlns:converters="clr-namespace:StoreManager.Views.Converters"
       xmlns:uc="clr-namespace:StoreManager.Views.UserControls"
-      d:DataContext="{d:DesignInstance Type=viewModel:StockViewModel}"
+      d:DataContext="{d:DesignInstance Type=viewModel:InventoryViewModel}"
       mc:Ignorable="d" 
       d:DesignHeight="1000" d:DesignWidth="885"
       Title="Inventory Page"
       VerticalAlignment="Top"
-      >
+      Height="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=ActualHeight}">
     <Page.Resources>
 
         <ResourceDictionary>
-            <viewModel:StockViewModel x:Key="vm"/>
+            <viewModel:InventoryViewModel x:Key="vm"/>
             <converters:DefaultIntConverter x:Key="intConv"/>
             <converters:CurrencyConverter x:Key="currencyToInt"/>
             <converters:StockStatusConverter x:Key="stockStatusConv"/>
@@ -40,8 +40,7 @@
             </ObjectDataProvider>
         </ResourceDictionary>
     </Page.Resources>
-    <Grid>
-        <ScrollViewer   VerticalScrollBarVisibility="Auto" >
+        <ScrollViewer  >
             <Viewbox  
             Stretch="Uniform">
                 <Grid DataContext="{StaticResource vm}" Width="{Binding ElementName=GroupBox}" Style="{StaticResource MainGrid}" >
@@ -55,7 +54,7 @@
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="550" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20"/>
@@ -297,7 +296,7 @@
                                 <DataGrid x:Name="DataGrid"
                                      Width="750" 
                                     ItemsSource="{Binding GetStocks}"
-                                    SelectedItem="{Binding SelectedStock}"      
+                                    SelectedItem="{Binding SelectedStock, Mode=TwoWay}"      
                               >
                                     <DataGrid.Resources>
                                         <Style TargetType="DataGridCell" x:Key="AnimatedCell" BasedOn="{StaticResource MyDataGridCell}">
@@ -356,5 +355,4 @@
                 </Grid>
             </Viewbox>
         </ScrollViewer>
-    </Grid>
 </Page>

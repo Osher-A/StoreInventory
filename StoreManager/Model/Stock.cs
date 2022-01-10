@@ -13,7 +13,6 @@ namespace StoreManager.Model
         public IProduct Product { get; set; } 
         public int ProductId { get; set; }
         public int QuantityInStock { get; set; }
-        
-        public StockStatus StockStatus { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public StockStatus StockStatus { get; set; }
     }
 }

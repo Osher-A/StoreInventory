@@ -31,30 +31,42 @@ namespace StoreManager.Services.OrderServices
 
         public void SaveOrderDetails()
         {
-            FetchCustomer();
-            var customerid = SetAndOrGetCustomersId();
-            if (customerid != 0)
-                _newOrder.CustomerId = customerid;
+            SetExistingCustomerField();
+            CreateOrUpdateExistingCustomer();
 
             _orderRepository.AddingOrder((DTO.Order)_newOrder);
+
             RemoveProductsFromDb();
         }
-
-        private int SetAndOrGetCustomersId()
+        private void SetExistingCustomerField()
         {
-            if (_existingCustomer != null)
+            _existingCustomer = (ICustomer)_customerRepository.GetCustomers().FirstOrDefault
+                (c => !string.IsNullOrWhiteSpace(c.Email) && c.Email?.Trim() == _newOrder.Customer.Email?.Trim()
+            || (!string.IsNullOrWhiteSpace(c.Address?.Zip) && c.Address?.Zip == _newOrder.Customer?.Address?.Zip
+            && !string.IsNullOrWhiteSpace(c.Address?.House) && c.Address?.House?.Trim().ToLower() == _newOrder.Customer?.Address?.House?.Trim().ToLower())
+            || (!string.IsNullOrWhiteSpace(c.Address?.House) && c.Address?.House?.Trim().ToLower() == _newOrder.Customer?.Address?.House?.Trim().ToLower()
+            && !string.IsNullOrWhiteSpace(c.Address?.Street) && c.Address?.Street?.Trim().ToLower() == _newOrder.Customer?.Address?.Street));
+        }
+
+        private void CreateOrUpdateExistingCustomer()
+        {
+            if( _existingCustomer != null )
             {
+                GetExistingCustomerIdAndAddressId(); 
                 _customerRepository.UpdateCustomer(_newOrder.Customer);
-                return _existingCustomer.Id;
             }
-            else if (_existingCustomer == null && IsUniqueDetails())
+            else if(IsUniqueDetails())
             {
                 _customerRepository.AddNewCustomer(_newOrder.Customer);
-                return _customerRepository.GetLastCustomerId();
+                _newOrder.CustomerId = _customerRepository.GetLastCustomerId();
             }
-            return 0;
         }
-        
+        private void GetExistingCustomerIdAndAddressId()
+        {
+            _newOrder.Customer.Id = _existingCustomer.Id;
+            if (_newOrder.Customer?.Address != null && _existingCustomer.Address != null)
+                    _newOrder.Customer.Address.Id = _existingCustomer.Address.Id;
+        }
         private bool IsUniqueDetails()
         {
             if (_newOrder.Customer != null)
@@ -71,17 +83,6 @@ namespace StoreManager.Services.OrderServices
                 
             return false;
         }
-
-        private void FetchCustomer()
-        {
-            _existingCustomer = (ICustomer)_customerRepository.GetCustomers().FirstOrDefault
-                (c => !string.IsNullOrWhiteSpace(c.Email) && c.Email?.Trim() == _newOrder.Customer.Email?.Trim()
-            || (!string.IsNullOrWhiteSpace(c.Address.Zip) && c.Address?.Zip == _newOrder.Customer?.Address?.Zip
-            && !string.IsNullOrWhiteSpace(c.Address.House) && c.Address?.House?.Trim().ToLower() == _newOrder.Customer?.Address?.House?.Trim().ToLower())
-            || (!string.IsNullOrWhiteSpace(c.Address.House) && c.Address?.House?.Trim().ToLower() == _newOrder.Customer?.Address?.House?.Trim().ToLower()
-            && !string.IsNullOrWhiteSpace(c.Address.Street) && c.Address?.Street?.Trim().ToLower() == _newOrder.Customer?.Address?.Street));
-        }
-
         private void RemoveProductsFromDb()
         {
             List<IOrderProduct> orderProducts = CreateOrderProductsList();

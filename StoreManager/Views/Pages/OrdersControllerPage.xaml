@@ -12,6 +12,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="1000" d:DesignWidth="800"
       Title="OrdersControllerPage"
+      Height="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=ActualHeight}"
       VerticalAlignment="Top">
     <Page.Resources>
         <ResourceDictionary >
@@ -30,21 +31,21 @@
             <Style TargetType="StackPanel">
                 <Setter Property="Margin" Value="5"/>
             </Style>
-            <Style TargetType="Button" >
+            <Style TargetType="Button" BasedOn="{StaticResource  MahApps.Styles.Button.Flat}">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderThickness" Value="0"/>
             </Style>
         </ResourceDictionary>
     </Page.Resources>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer >
             <Viewbox Stretch="Uniform">
                 <Grid Style="{StaticResource MainGrid}">
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition Height="80"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="350"/>
                         <RowDefinition Height="30"/>
-                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="455"/>
                     </Grid.RowDefinitions>
 
                     <ToolBarPanel HorizontalAlignment="Center"     >
@@ -121,6 +122,7 @@
                             <Label Content="Owes:"/>
                             <TextBox Text="{Binding SelectedOrder.AmountOwed, Mode=TwoWay, Converter={StaticResource currencyconvr}, ConverterCulture='en-GB'}" IsEnabled="True"/>
                         </StackPanel>
+                        
                         <StackPanel Orientation="Horizontal" Margin="0,20,0,0" >
                             <Button Command="{Binding UpdateOrderCommand}">
                                 <Button.Content>

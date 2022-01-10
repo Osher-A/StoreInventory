@@ -12,14 +12,12 @@ namespace StoreManager.Services.OrderServices
     public class PaymentService
     {
         private readonly IMessageService _messageService;
-        private readonly ICustomer _customer;
 
         public bool IsDetailsValid { get; private set; }
 
-        public PaymentService(IMessageService messageService, ICustomer customer)
+        public PaymentService(IMessageService messageService)
         {
             _messageService = messageService;
-            _customer = customer;
         }
         public PaymentAmounts PaymentController(PaymentStatus? ps, float totalCost)
         {
@@ -36,10 +34,10 @@ namespace StoreManager.Services.OrderServices
             return pa;
         }
 
-        public void CustomersDetailsValidated(PaymentStatus? paymentStatus)
+        public void CustomersDetailsValidated(PaymentStatus? paymentStatus, ICustomer customer)
         {
-            if ((paymentStatus == PaymentStatus.NotPaid || paymentStatus == PaymentStatus.PartlyPaid) && ((string.IsNullOrWhiteSpace(_customer.Address.House) || string.IsNullOrWhiteSpace(_customer.Address.Zip))
-                && string.IsNullOrWhiteSpace(_customer.Email)))
+            if ((paymentStatus == PaymentStatus.NotPaid || paymentStatus == PaymentStatus.PartlyPaid) && ((string.IsNullOrWhiteSpace(customer.Address.House) || string.IsNullOrWhiteSpace(customer.Address.Zip))
+                && string.IsNullOrWhiteSpace(customer.Email)))
             {
                _messageService.CustomersAddressDetailsMissingAlert();
                 IsDetailsValid = false;

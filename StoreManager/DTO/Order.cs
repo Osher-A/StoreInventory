@@ -68,7 +68,7 @@ namespace StoreManager.DTO
             return new Order
             {
                 Id = order.Id,
-                Customer = (Customer)(Model.Customer)order.Customer,
+                Customer = (order.Customer != null) ? (Customer)(Model.Customer)order.Customer : null ,
                 CustomerId = order.CustomerId,
                 OrderDate = order.OrderDate,
                 Total = order.Total,
@@ -83,7 +83,7 @@ namespace StoreManager.DTO
             return new Model.Order
             {
                 OrderDate = order.OrderDate,
-                CustomerId = order.CustomerId,
+                CustomerId = order.Customer.Id,
                 //Total = order.Total, -- Set via db trigger
                 AmountPaid = order.AmountPaid,
                 OrdersProducts = GetIOrderProducts(order.OrdersProducts) as IEnumerable<Model.OrderProduct>

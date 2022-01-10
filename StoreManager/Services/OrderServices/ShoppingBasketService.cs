@@ -30,12 +30,7 @@ namespace StoreManager.Services.OrderServices
         {
             AddToBasket(product, quantity);
 
-            float runningTotal = 0;
-            foreach (var item in BasketItems)
-            {
-                runningTotal += item.Product.Price * item.Quantity;
-                item.RunningTotal = runningTotal;
-            }
+            SetRunningTotal();
         }
 
         public void RemoveItemFromBasket(IProduct product)
@@ -58,7 +53,7 @@ namespace StoreManager.Services.OrderServices
             var existingItem = BasketItems.SingleOrDefault(bi => bi.Product.Id == basketItem.Product.Id);
 
             if (existingItem != null)
-                existingItem.Quantity = quantity == 0 ? existingItem.Quantity + 1 : quantity;
+                existingItem.Quantity = (quantity == 0) ? existingItem.Quantity + 1 : quantity;
             else
                 BasketItems.Add(basketItem);
 
@@ -77,6 +72,16 @@ namespace StoreManager.Services.OrderServices
                     IStock modelProduct = _modelFullStock.Single(ms => ms.ProductId == item.Product.Id);
                     uiProduct.QuantityInStock = modelProduct.QuantityInStock - item.Quantity;
                 }
+            }
+        }
+
+        private void SetRunningTotal()
+        {
+            float runningTotal = 0;
+            foreach (var item in BasketItems)
+            {
+                runningTotal += item.Product.Price * item.Quantity;
+                item.RunningTotal = runningTotal;
             }
         }
 

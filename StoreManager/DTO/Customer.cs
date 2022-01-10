@@ -1,4 +1,5 @@
 ﻿using MyLibrary.Utilities;
+using StoreManager.DAL;
 using StoreManager.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -84,7 +85,8 @@ namespace StoreManager.DTO
                 LastName = customer.LastName,
                 PhoneNumber = customer.PhoneNumber,
                 Email = customer.Email,
-                Address = customer.Address
+                //Address = (customer.Address != null) ? (DTO.Address)(Model.Address)customer.Address : null,
+                Address = (customer.AddressId != 0) ? (DTO.Address)(Model.Address)GetModelAddress(customer.AddressId): null
             };
         }
        
@@ -94,12 +96,17 @@ namespace StoreManager.DTO
             {
                 FirstNames = customer.FirstNames,
                 LastName = customer.LastName,
-                Address = (Model.Address)(DTO.Address)customer.Address,
+                AddressId = customer.Address.Id,
                 PhoneNumber = customer.PhoneNumber,
                 Email = customer.Email
             };
         }
-
+        
+        private static IAddress GetModelAddress(int id)
+        {
+            var addressRepo = new AddressRepository();
+            return addressRepo.GetAddressById(id);
+        }
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

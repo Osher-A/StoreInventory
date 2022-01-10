@@ -37,6 +37,10 @@
                 <Setter Property="IsReadOnly" Value="True"/>
                 <Setter Property="AutoGenerateColumns" Value="False"/>
                 <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}"/>
+            </Style>
+            <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell.Azure}" >
+                <Setter Property="Focusable" Value="False" />
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -59,8 +63,8 @@
                     <DataGridTextColumn Header="Price" Binding="{Binding Product.Price, ConverterCulture=en-GB, StringFormat=' \{0:C\}'}" Width="*"/>
                 </DataGrid.Columns>
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseUp">
-                        <i:InvokeCommandAction Command="{Binding MyCommand, RelativeSource={RelativeSource AncestorType=local:GridUserControl}}"/>
+                    <i:EventTrigger EventName="MouseUp" >
+                        <i:InvokeCommandAction  Command="{Binding MyCommand, RelativeSource={RelativeSource AncestorType=local:GridUserControl}}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </DataGrid>

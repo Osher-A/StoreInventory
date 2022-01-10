@@ -12,8 +12,7 @@ namespace StoreManager.Services.MessageService
 
         public async Task CustomersAddressDetailsMissingAlert()
         {
-           await  OkMessageBoxEvent?.Invoke("Missing Details!", @"
-         In Order to proceed, you'll have to provide the customer's Address 
+           await  OkMessageBoxEvent?.Invoke("Missing Details!", @"In Order to proceed, you'll have to provide the customer's Address 
          (i.e. House Number & Post code), or Email! ");
         }
 

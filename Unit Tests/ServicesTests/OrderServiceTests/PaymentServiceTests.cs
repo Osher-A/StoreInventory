@@ -21,7 +21,7 @@ namespace UnitTests.ServicesTests.OrderServiceTests
         {
             _mockMessageService = new Mock<IMessageService>();
             _customer = new Customer() { Address = new Address { House = "10", Street = "Park Road", City = "Manchester", Zip = "M20 OLD" }, Email = "oa@gmail.com" };
-            _paymentService = new PaymentService(_mockMessageService.Object, _customer);
+            _paymentService = new PaymentService(_mockMessageService.Object);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace UnitTests.ServicesTests.OrderServiceTests
             _customer.Address.Zip = zip;
             _customer.Email = email;
 
-            _paymentService.CustomersDetailsValidated(paymentStaus);
+            _paymentService.CustomersDetailsValidated(paymentStaus, _customer);
 
             Assert.That(_paymentService.IsDetailsValid == false);
             _mockMessageService.Verify(mms => mms.CustomersAddressDetailsMissingAlert(), Times.Once);
@@ -81,7 +81,7 @@ namespace UnitTests.ServicesTests.OrderServiceTests
             _customer.Address.City = city;
             _customer.Email = email;
 
-            _paymentService.CustomersDetailsValidated(paymentStatus);
+            _paymentService.CustomersDetailsValidated(paymentStatus, _customer);
 
             Assert.That(_paymentService.IsDetailsValid == true);
             _mockMessageService.Verify(mms => mms.CustomersAddressDetailsMissingAlert(), Times.Never());
@@ -94,7 +94,7 @@ namespace UnitTests.ServicesTests.OrderServiceTests
             _customer.Address.Zip = "";
             _customer.Email = "";
 
-            _paymentService.CustomersDetailsValidated(PaymentStatus.FullyPaid);
+            _paymentService.CustomersDetailsValidated(PaymentStatus.FullyPaid, _customer);
 
             Assert.That(_paymentService.IsDetailsValid == true);
             _mockMessageService.Verify(mms => mms.CustomersAddressDetailsMissingAlert(), Times.Never());

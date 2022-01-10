@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using StoreManager.Interfaces;
 using StoreManager.Model;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace StoreManager.DAL
             {
                 return db.Customers
                          .ToList()
-                         .ElementAt(db.Customers.Count() - 1)
+                         .Last()
                          .Id;
             }
         }
@@ -50,6 +51,9 @@ namespace StoreManager.DAL
 
         public void AddNewCustomer(ICustomer newUiCustomer)
         {
+            if(newUiCustomer.Address != null)
+                newUiCustomer.Address.Id = NewAddressId(newUiCustomer.Address);
+
             Model.Customer modelCustomer = new Model.Customer();
             modelCustomer = (Model.Customer)(DTO.Customer)newUiCustomer;
             using (var db = new StoreContext())
@@ -89,15 +93,18 @@ namespace StoreManager.DAL
 
         private void UpdateAddress(Model.Customer modelCustomer, IAddress uiAddress)
         {
-            IAddress modelAddress;
-            if (modelCustomer.Address != null)
-            {
-                modelAddress = modelCustomer.Address;
-                modelAddress.House = (!string.IsNullOrWhiteSpace(uiAddress.House)) ? uiAddress.House : modelAddress.House;
-                modelAddress.Street = (!string.IsNullOrWhiteSpace(uiAddress.Street)) ? uiAddress.Street : modelAddress.Street;
-                modelAddress.Zip = (!string.IsNullOrWhiteSpace(uiAddress.Zip)) ? uiAddress.Zip : modelAddress.Zip;
-                modelAddress.City = (!string.IsNullOrWhiteSpace(uiAddress.Zip)) ? uiAddress.City : modelAddress.City;
-            }
+            var addressRepo = new AddressRepository();
+            if (modelCustomer.Address != null && uiAddress.Id != 0)
+                addressRepo.UpdateAddress(uiAddress);
+            else if (uiAddress != null)
+                modelCustomer.AddressId = NewAddressId(uiAddress);
+        }
+
+        private int NewAddressId(IAddress uiAddress)
+        {
+            var addressRepo = new AddressRepository();
+            addressRepo.AddAddress(uiAddress);
+            return addressRepo.GetLastAddressInserted();
         }
     }
 }

@@ -12,8 +12,6 @@ namespace StoreManager.Model
         public string Street { get; set; }
         public string  City { get; set; }
         public string Zip { get; set; }
-
         public ICustomer Customer { get; set; }
-        public int CustomerId { get; set; }
     }
 }

@@ -22,18 +22,17 @@ namespace StoreManager.Services.StockServices
         }
         public ObservableCollection<DTO.Product> SearchProducts(string searchInput)
         {
-            int id;
+            int id; List<DTO.Product> searchList;
             var isNumber = int.TryParse(searchInput, out id);
-            var searchList = (isNumber) ? AllProducts.Where(mp => mp.Id == id).ToList() : AllProducts
+            searchList = (isNumber) ? AllProducts.Where(mp => mp.Id == id).ToList() : AllProducts
                                                    .Where(mp => mp.Category.Name
                                                    .Contains(searchInput.Trim(), StringComparison.OrdinalIgnoreCase))
                                                    .OrderBy(mp => mp.Name)
                                                    .ToList();
                                                    
-            if (searchList.Count == 0)
-                searchList = AllProducts.Where(mp => mp.Name.Contains(searchInput, StringComparison.OrdinalIgnoreCase)).ToList();
+           searchList.AddRange(AllProducts.Where(mp => mp.Name.Contains(searchInput, StringComparison.OrdinalIgnoreCase)).ToList());
 
-            return searchList.ToObservableCollection();
+           return searchList.Distinct().ToObservableCollection();
         }
 
         private IEnumerable<DTO.Product> ToDTOProductList(List<IProduct> modelProducts)

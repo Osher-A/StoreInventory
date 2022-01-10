@@ -78,7 +78,7 @@ namespace StoreManager.ViewModel
 
         private bool CanSendEmail(object obj)
         {
-            return SelectedOrder.AmountOwed > 0;
+            return SelectedOrder?.AmountOwed > 0;
         }
 
         private void ClearFields(object obj)
@@ -88,7 +88,7 @@ namespace StoreManager.ViewModel
 
         private bool CanClearFields(object obj)
         {
-            return SelectedOrder.Id != 0;
+            return SelectedOrder?.Id != 0;
         }
 
         private void UpdateOrder(object obj)
@@ -100,7 +100,7 @@ namespace StoreManager.ViewModel
 
         private bool CanUpdateOrder(object obj)
         {
-           return SelectedOrder.Id != 0;
+           return SelectedOrder?.Id != 0;
         }
 
         private void SearchByDate(object obj)

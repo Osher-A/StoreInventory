@@ -17,7 +17,7 @@ using StoreManager.Services.MessageService;
 
 namespace StoreManager.ViewModel
 {
-    public class StockViewModel : INotifyPropertyChanged
+    public class InventoryViewModel : INotifyPropertyChanged
     {
         private IProductRepository _productRepository = new ProductRepository();
         private StockSearchService _stockSearchService = new StockSearchService(new StockRepository());
@@ -114,7 +114,7 @@ namespace StoreManager.ViewModel
         public ICommand SearchCommand { get; set; }
        
         
-        public StockViewModel()
+        public InventoryViewModel()
         {
             _getStocks = new ObservableCollection<Stock>();
             _productDataService = new ProductDataService(_productRepository, new MessageService()); ;
@@ -146,8 +146,11 @@ namespace StoreManager.ViewModel
 
         private bool CanDeleteProduct(object obj)
         {
-            if (SelectedStock.Product.Id != 0)
-                return true;
+            if (SelectedStock != null)
+                if (SelectedStock.Product.Id != 0)
+                    return true;
+                else
+                    return false;
             else
                 return false;
         }
@@ -161,7 +164,10 @@ namespace StoreManager.ViewModel
 
         private bool CanAddNewProduct(object obj)
         {
-            return !_productDataService.ExistingProduct(SelectedStock.Product);
+            if (SelectedStock != null)
+                return !_productDataService.ExistingProduct(SelectedStock.Product);
+            else
+                return false;
         }
 
         private void UpdateProduct(object obj)

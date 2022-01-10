@@ -23,6 +23,7 @@ namespace StoreManager.ViewModel
         private ShoppingBasketService _shoppingBasketService = new ShoppingBasketService(new StockRepository());
         private OrderViewService _orderViewService;
         private PaymentService _paymentService;
+
         private ICustomerRepository _customerRepository;
         private IOrderRepository _orderRepository;
         private IOrderProductRepository _orderProductRepository;
@@ -35,9 +36,9 @@ namespace StoreManager.ViewModel
         private int _productQuantity;
         private PaymentAmounts _paymentAmounts;
 
-        private ObservableCollection<Stock> searchProductsStocked;
+        private ObservableCollection<Stock> _searchProductsStocked;
         private ObservableCollection<BasketItem> basketProducts = new ObservableCollection<BasketItem>();
-        private PaymentStatus? _paymentStatus;
+        private PaymentStatus? _paymentStatus = Enums.PaymentStatus.NotPaid;
         private bool _isExpanded;
         private Order _newOrder = new Order { OrderDate = DateTime.Now, Customer = new Customer() { Address = new Address() } };
 
@@ -45,7 +46,7 @@ namespace StoreManager.ViewModel
             ICustomerRepository customerRepository, IOrderProductRepository orderProductRepository)
         {
             _orderViewService = new OrderViewService(_shoppingBasketService);
-            _paymentService = new PaymentService(messageService, NewOrder.Customer);
+            _paymentService = new PaymentService(messageService);
             _orderRepository = orderRepository;
             _customerRepository = customerRepository;
             _orderProductRepository = orderProductRepository;
@@ -56,9 +57,12 @@ namespace StoreManager.ViewModel
             PaymentCommand = new CustomCommand(ManagePayment, CanManagePayment);
             CheckOutCommand = new CustomCommand(CheckOut, CanCheckOut);
             BallanceCommand = new CustomCommand(ControllBalance, CanControllBalance);
+            CancelCommand = new CustomCommand(CancelOrder, CanCancelOrder);
             PaymentAmounts = new PaymentAmounts() { AmountOwed = NewOrder.Total };
             LoadData();
         }
+
+       
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -151,10 +155,10 @@ namespace StoreManager.ViewModel
         public ObservableCollection<string> Categories { get; private set; }
         public ObservableCollection<Stock> SearchProductsStocked
         {
-            get { return searchProductsStocked; }
+            get { return _searchProductsStocked; }
             set 
             { 
-                searchProductsStocked = value;
+                _searchProductsStocked = value;
                 OnPropertyChanged(nameof(SearchProductsStocked));
             }
         }
@@ -167,7 +171,6 @@ namespace StoreManager.ViewModel
             }
         }
 
-
         public ICommand SearchCommand { get; set; }
         public ICommand AddToBasketCommand { get; set; }
         public ICommand RemoveItemCommand { get; set; }
@@ -175,6 +178,7 @@ namespace StoreManager.ViewModel
         public ICommand PaymentCommand { get; set; }
         public ICommand CheckOutCommand { get; set; }
         public ICommand BallanceCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
 
         public event EventHandler ScrollUpEvent;
         private bool CanSearch(object obj)
@@ -188,19 +192,27 @@ namespace StoreManager.ViewModel
         }
         private bool CanAddToBasket(object obj)
         {
-            return SelectedStockProduct != null;
+            if (SelectedStockProduct != null)
+                if (SelectedStockProduct.QuantityInStock > 0 && SelectedStockProduct.QuantityInStock >= ProductQuantity) // To prevents adding when its out of stock
+                    return true;
+
+             return false;
         }
         private void AddToBasket(object obj)
         {
+            // The following needed for when txt box selected with no input 
+            if (_lastSelectedProduct == SelectedStockProduct && ProductQuantity == 0) 
+                return;
+
              _shoppingBasketService.AddToOrder(SelectedStockProduct.Product, ProductQuantity);
+            _lastSelectedProduct = SelectedStockProduct;
+
+            // Once the UpdateBasket method is called  the SearchProductsStocked list changes and the selectedStockProduct = null,
+            // which makes it impossible to change the qty through the text box. The solution is to save the selected product before SearchAllProducts is called.
             UpdateBasket(true);
+            SelectedStockProduct = _lastSelectedProduct;
 
-            // Once the SearchAllProducts method is called the SearchProductsStocked list changes and the selectedStockProduct = null, which makes it impossible to change the qty through the text box. The solution is to save the selected product before SearchAllProducts is called.
-
-            _lastSelectedProduct = SelectedStockProduct; 
-            SearchAllProducts(null);
             ProductQuantity = 0;
-            SelectedStockProduct = _lastSelectedProduct;   
         }
         private bool CanRemoveItem(object obj)
         {
@@ -243,7 +255,6 @@ namespace StoreManager.ViewModel
         private void ControllBalance(object obj)
         {
            PaymentAmounts.AmountOwed = _paymentService.OutStandingBallance(PaymentAmounts.AmountPaid, NewOrder.Total);
-            ValidateDetails();
         }
         private bool CanManagePayment(object obj)
         {
@@ -253,16 +264,16 @@ namespace StoreManager.ViewModel
         private void ManagePayment(object obj)
         {
              PaymentAmounts = _paymentService.PaymentController(PaymentStatus, NewOrder.Total);
-            ValidateDetails();
         }
         private bool CanCheckOut(object obj)
         {
-            return PaymentStatus != null;
+            return PaymentStatus != null && basketProducts.Count > 0;
         }
 
         private void CheckOut(object obj)
         {
-            if (ValidateDetails())
+
+            if (ValidDetails())
             {
                 NewOrder.AmountPaid = PaymentAmounts.AmountPaid;
                 var odService = new OrderDataService(_orderRepository, _customerRepository, _orderProductRepository ,NewOrder, BasketProducts.ToList());
@@ -271,19 +282,31 @@ namespace StoreManager.ViewModel
                 ClearAllInputs();
             }
         }
-
-        private bool ValidateDetails()
+        private bool CanCancelOrder(object obj)
         {
-             _paymentService.CustomersDetailsValidated(PaymentStatus);
+            return BasketProducts.Count >= 1;
+        }
+
+        private void CancelOrder(object obj)
+        {
+            ClearAllInputs();
+        }
+
+        private bool ValidDetails()
+        {
+             _paymentService.CustomersDetailsValidated(PaymentStatus, NewOrder.Customer);
             if (!_paymentService.IsDetailsValid)
             { 
                 ScrollUpEvent?.Invoke(this, new EventArgs());
                 IsExpanded = true;
                 return false;
             }
-
-            IsExpanded = false;
-            return true;
+           else
+            {
+                IsExpanded = false;
+                return true;
+            }
+            
         }
 
         private void ClearAllInputs()
@@ -291,8 +314,11 @@ namespace StoreManager.ViewModel
             NewOrder =  new Order { OrderDate = DateTime.Now , Customer = new Customer() { Address = new Address() } };
             LoadData();
             EmptyBasket(null);
-            PaymentAmounts = new PaymentAmounts() { AmountOwed = NewOrder.Total };
+            PaymentAmounts = new PaymentAmounts();
             PaymentStatus = Enums.PaymentStatus.NotPaid;
+            ProductQuantity = 0;
+            SelectedCategory.Name = Categories[0];
+            SelectedStockProduct = new Stock() { Product = new Product () };
         }
         private void LoadData() 
         {
