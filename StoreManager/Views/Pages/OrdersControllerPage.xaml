@@ -179,7 +179,7 @@
                                         </Style>
                                     </StackPanel.Resources>
                                     <Label Margin="2,0,3,0" Content="Date" />
-                                    <TextBox Text="{Binding Date , Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource dateConver}, ConverterCulture='en-GB'}" controls:TextBoxHelper.Watermark="dd/mm/yyyy" >
+                                    <TextBox Text="{Binding Date , Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource dateConver}, ConverterCulture='en-GB'}" controls:TextBoxHelper.Watermark="dd/mm/yyyy" ToolTip="Press Enter key to begin search" >
                                         <i:Interaction.Triggers>
                                             <is:KeyTrigger Key="Enter">
                                                 <i:InvokeCommandAction Command="{Binding SearchByDateCommand}"/>

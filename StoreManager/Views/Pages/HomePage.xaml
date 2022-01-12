@@ -40,11 +40,11 @@
     </Page.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Hidden">
         <Grid Height="600">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.3*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Viewbox Stretch="Uniform">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Viewbox Stretch="Uniform">
                 <TextBlock 
                 Margin="30,0"
                     Text="Store Manager"
@@ -53,10 +53,10 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                    Foreground="{StaticResource MahApps.Brushes.Accent}" />
-        </Viewbox>
-        
-        
-        <Viewbox Grid.Row="1" VerticalAlignment="Top">
+            </Viewbox>
+
+
+            <Viewbox Grid.Row="1" VerticalAlignment="Top">
 
                 <Border Width="770" Height="500"  BorderBrush="{StaticResource MahApps.Brushes.Accent}"  BorderThickness="15" Background="Black"
                     Margin="20">
@@ -103,6 +103,8 @@
                         </controls:Tile>
                         <controls:Tile 
                     Title="Manage Users"
+                     Name="Users" 
+                            Click="OnTileClick"
                       Style="{StaticResource LargeTileStyle}">
                             <icons:MaterialDesign Kind="People"
                                       Width="40"
@@ -110,6 +112,8 @@
                         </controls:Tile>
                         <controls:Tile 
                     Title="Settings"
+                            Name="Settings"
+                            Click="OnTileClick"
                       Style="{StaticResource LargeTileStyle}">
                             <icons:MaterialDesign Kind="Settings"
                                       Width="40"
@@ -117,6 +121,8 @@
                         </controls:Tile>
                         <controls:Tile 
                     Title="Reports "
+                            Name="Reports"
+                            Click="OnTileClick"
                       Style="{StaticResource SmallTileStyle}">
                             <icons:MaterialDesign Kind="Note"
                                       Width="40"
@@ -124,7 +130,7 @@
                         </controls:Tile>
                     </WrapPanel>
                 </Border>
-    </Viewbox>
+            </Viewbox>
         </Grid>
     </ScrollViewer>
 </Page>

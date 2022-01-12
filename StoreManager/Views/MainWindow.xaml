@@ -19,7 +19,7 @@
         ResizeMode="CanResizeWithGrip" HorizontalAlignment="Center" VerticalAlignment="Top" 
         >
    
-    <controls:MetroWindow.Flyouts>
+    <!--<controls:MetroWindow.Flyouts>
             <controls:FlyoutsControl x:Name="FlyoutControl">
                 <controls:Flyout x:Name="StockOutList"
                   HorizontalAlignment="Stretch"
@@ -54,7 +54,7 @@
                     </Grid>
                 </controls:Flyout>
             </controls:FlyoutsControl>
-        </controls:MetroWindow.Flyouts>
+        </controls:MetroWindow.Flyouts>-->
 
         <Grid Background="{StaticResource MahApps.Brushes.Accent4}" >
             <Frame Name="MainWindowFrame"

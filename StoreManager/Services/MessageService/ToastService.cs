@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace StoreManager.Services.MessageService
@@ -8,6 +9,7 @@ namespace StoreManager.Services.MessageService
     {
         public static Action ToastSuccessAction { get; set; }
         public static Action<string> ToastErrorAction { get; set;}
+        public static Action<string> ToastInfoAction { get; set; }  
 
         public static void SuccessToast()
         {
@@ -17,5 +19,6 @@ namespace StoreManager.Services.MessageService
         {
             ToastErrorAction?.Invoke(message);
         }
+
     }
 }

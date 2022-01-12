@@ -71,7 +71,7 @@ namespace StoreManager.Services.OrderControllerServices
               addressOrders = AllOrders.Where(ao => ao.Customer.Address != null).ToList();
 
                if(addressOrders.Any(ao => ((DTO.Address)ao.Customer.Address).WholeAddress.ToLower().Contains(address.ToLower())))
-                searchOrders = AllOrders.Where(ao => ((DTO.Address)ao.Customer.Address).WholeAddress.ToLower().Contains(address.ToLower()))
+                searchOrders = addressOrders.Where(ao => ((DTO.Address)ao.Customer.Address).WholeAddress.ToLower().Contains(address.ToLower()))
                     .OrderBy(ao => ((DTO.Customer)ao.Customer).FullName)
                     .ToObservableCollection();
 

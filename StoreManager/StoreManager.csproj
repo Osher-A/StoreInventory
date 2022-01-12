@@ -20,9 +20,6 @@
   <ItemGroup>
     <None Remove="Images\inventory.ico" />
     <None Remove="Images\product-48.ico" />
-    <None Remove="Images\Shop-interior.jpg" />
-    <None Remove="Images\smart_city.jpg" />
-    <None Remove="Images\Store.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,12 +40,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Images\inventory.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Images\product-48.ico">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 
@@ -97,10 +90,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\inventory.ico" />
-    <Resource Include="Images\Shop-interior.jpg" />
-    <Resource Include="Images\smart_city.jpg" />
-    <Resource Include="Images\Store.jpg" />
+    <Resource Include="Images\inventory.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   

@@ -1,3 +1,4 @@
+using Microsoft.CodeAnalysis.FlowAnalysis;
 using System;
 using System.ComponentModel;
 using System.Windows;
@@ -12,17 +13,15 @@ namespace StoreManager.ViewModel
 {
     public class ToastViewModel
     {
-        private readonly Notifier _notifier;
+        private Notifier _notifier;
+        private WindowPositionProvider _windowPositionProvider;
 
         public ToastViewModel()
         {
+            PositionToastAtTop();
             _notifier = new Notifier(cfg =>
             {
-                cfg.PositionProvider = new WindowPositionProvider(
-                    parentWindow: Application.Current.MainWindow,
-                    corner: Corner.TopRight,
-                    offsetX: 25,
-                    offsetY: 100);
+                cfg.PositionProvider = _windowPositionProvider; 
 
                 cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
                     notificationLifetime: TimeSpan.FromSeconds(6),
@@ -44,7 +43,9 @@ namespace StoreManager.ViewModel
 
         public void ShowInformation(string message)
         {
+            PositionToastAtBottom();
             _notifier.ShowInformation(message);
+            PositionToastAtTop();
         }
 
         public void ShowSuccess(string message)
@@ -60,6 +61,24 @@ namespace StoreManager.ViewModel
         public void ShowError(string message)
         {
             _notifier.ShowError(message);
+        }
+
+        private void PositionToastAtTop()
+        {
+            _windowPositionProvider = new WindowPositionProvider(
+                    parentWindow: Application.Current.MainWindow,
+                    corner: Corner.TopRight,
+                    offsetX: 25,
+                    offsetY: 100);
+        }
+
+        private void PositionToastAtBottom()
+        {
+            _windowPositionProvider = new WindowPositionProvider(
+                   parentWindow: Application.Current.MainWindow,
+                   corner: Corner.BottomCenter,
+                   offsetX: 25,
+                   offsetY: 100);
         }
 
     }

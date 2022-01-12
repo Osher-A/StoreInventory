@@ -46,7 +46,7 @@
     </UserControl.Resources>
 
         <Grid>
-        <ScrollViewer   VerticalScrollBarVisibility="Auto" Style="{StaticResource MahApps.Styles.ScrollViewer}" >
+        <ScrollViewer  Style="{StaticResource MahApps.Styles.ScrollViewer}" >
             <DataGrid 
                         x:Name="DataGrid"
                         MaxHeight="500"

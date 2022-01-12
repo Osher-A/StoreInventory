@@ -32,6 +32,7 @@
             </Style>
 
             <Style TargetType="ScrollViewer" BasedOn="{StaticResource MahApps.Styles.ScrollViewer}">
+                <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
             </Style>
             
             <Style TargetType="GroupBox" BasedOn="{StaticResource MahApps.Styles.GroupBox}">
@@ -115,6 +116,13 @@
             </Style>
 
             <Style TargetType="RadioButton" BasedOn="{StaticResource MahApps.Styles.RadioButton.Win10}"/>
+
+            <Style TargetType="ToolTip" BasedOn="{StaticResource MahApps.Styles.ToolTip}">
+                <Setter Property="BorderBrush" Value="White"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Gray4}"/>
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
 
         </ResourceDictionary>
     </Application.Resources>

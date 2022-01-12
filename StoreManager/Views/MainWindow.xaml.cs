@@ -72,6 +72,11 @@ namespace StoreManager.Views
                 case "ordercontroller":
                     MainWindowFrame.Content = _orderControllerPage;
                     break;
+                case "users":
+                case "settings":
+                case "reports":
+                    NotImplementedToast();
+                    break;
                     default:
                     MainWindowFrame.Content = _homePage;
                     break;
@@ -86,8 +91,13 @@ namespace StoreManager.Views
             _toastVm = new ToastViewModel();
             ToastService.ToastSuccessAction += ShowSuccess;
             ToastService.ToastErrorAction += ShowError;
+            ToastService.ToastInfoAction += ShowInfo;
         }
 
+        private void NotImplementedToast()
+        {
+            ShowInfo("This page has not been implemented yet!");
+        }
         private async Task MahAppsOKMessageBox(string heading, string message)
         {
             await this.ShowMessageAsync(heading, message, MessageDialogStyle.Affirmative);
@@ -108,6 +118,11 @@ namespace StoreManager.Views
         private void ShowSuccess()
         {
             _toastVm.ShowSuccess("Email Sent!");
+        }
+
+        private void ShowInfo(string message)
+        {
+            _toastVm.ShowInformation(message);
         }
 
         private void MainWindowFrame_Loaded(object sender, RoutedEventArgs e)
