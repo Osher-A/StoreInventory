@@ -1,5 +1,5 @@
 # StoreManagement Overview
->StoreMangaement is a desktop applicationave that can be used to manage a store, control the store's inventory, submit orders, and keep track of the status of all orders. This App isn't (yet) complete, however, all the core feathers have been implemented. 
+>StoreMangaement is a desktop application that can be used to manage a store, control the store's inventory, submit orders, and keep track of the status of all orders. This App isn't (yet) complete, however, all the core feathers have been implemented. 
 
 ## Core Features
 * Add Products to inventory
